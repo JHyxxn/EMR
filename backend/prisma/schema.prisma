@@ -1,0 +1,467 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// =========================
+// Prisma config (기존 유지)
+// =========================
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL") // e.g. "file:./dev.db"
+}
+
+// =========================
+// Enums  (멀티라인 표준 형태)
+// =========================
+enum Sex {
+  M
+  F
+  OTHER
+}
+
+enum EncounterType {
+  OPD
+  IPD
+  ER
+}
+
+enum ObsCategory {
+  vital
+  lab
+  imaging
+}
+
+enum AppointmentStatus {
+  proposed
+  booked
+  arrived
+  fulfilled
+  cancelled
+  noshow
+}
+
+enum MedRequestStatus {
+  active
+  on_hold
+  cancelled
+  completed
+}
+
+enum AttachmentType {
+  pdf
+  dicom
+  img
+  other
+}
+
+// =========================
+// Identity & RBAC
+// =========================
+model User {
+  id           Int     @id @default(autoincrement())
+  username     String  @unique
+  email        String? @unique
+  passwordHash String
+  status       String  @default("active")
+
+  practitioner Practitioner?
+  patient      Patient?
+  roles        UserRole[]
+  auditLogs    AuditLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id          Int              @id @default(autoincrement())
+  code        String           @unique
+  name        String
+  users       UserRole[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id    Int              @id @default(autoincrement())
+  code  String           @unique
+  name  String
+  roles RolePermission[]
+}
+
+model UserRole {
+  userId Int
+  roleId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+model RolePermission {
+  roleId       Int
+  permissionId Int
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+// =========================
+/**
+ * Master Data
+ */
+// =========================
+model Organization {
+  id        Int            @id @default(autoincrement())
+  name      String
+  type      String?
+  phone     String?
+  locations Location[]
+  practs    Practitioner[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Location {
+  id             Int     @id @default(autoincrement())
+  organizationId Int
+  name           String
+  type           String?
+  floor          String?
+
+  organization Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  encounters   Encounter[]
+  appointments Appointment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+model Practitioner {
+  id             Int     @id @default(autoincrement())
+  organizationId Int?
+  licenseNo      String? @unique
+  name           String
+  specialty      String?
+  phone          String?
+
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  user         User?         @relation(fields: [userId], references: [id])
+  userId       Int?          @unique // 1:1 보장
+
+  encounters   Encounter[]
+  appointments Appointment[]
+  slots        Slot[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+// =========================
+/**
+ * Patient Chart
+ */
+// =========================
+model Patient {
+  id          Int       @id @default(autoincrement())
+  mrn         String    @unique
+  name        String
+  birthDate   DateTime?
+  sex         Sex?
+  phone       String?
+  email       String?
+  address     String?
+  insuranceNo String?
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?  @unique // 1:1 보장
+
+  encounters         Encounter[]
+  conditions         Condition[]
+  observations       Observation[]
+  procedures         Procedure[]
+  allergies          AllergyIntolerance[]
+  medicationRequests MedicationRequest[]
+  appointments       Appointment[]
+  attachments        Attachment[]
+
+  // ↔ opposite relation for ServiceRequest/DiagnosticReport
+  serviceRequests   ServiceRequest[]
+  diagnosticReports DiagnosticReport[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([mrn])
+}
+
+model Encounter {
+  id             Int           @id @default(autoincrement())
+  patientId      Int
+  practitionerId Int?
+  locationId     Int?
+  type           EncounterType
+  startAt        DateTime
+  endAt          DateTime?
+  reason         String?
+
+  patient      Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  practitioner Practitioner? @relation(fields: [practitionerId], references: [id])
+  location     Location?     @relation(fields: [locationId], references: [id])
+
+  conditions         Condition[]
+  observations       Observation[]
+  procedures         Procedure[]
+  medicationRequests MedicationRequest[]
+  serviceRequests    ServiceRequest[]
+  attachments        Attachment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([practitionerId])
+  @@index([locationId])
+}
+
+model Condition {
+  id             Int       @id @default(autoincrement())
+  patientId      Int
+  encounterId    Int?
+  codeIcd10      String
+  clinicalStatus String?
+  onsetDate      DateTime?
+
+  patient   Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  encounter Encounter? @relation(fields: [encounterId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([encounterId])
+  @@index([codeIcd10])
+}
+
+model Observation {
+  id          Int         @id @default(autoincrement())
+  patientId   Int
+  encounterId Int?
+  category    ObsCategory
+  codeLoinc   String?
+  value       String?
+  unit        String?
+  refRange    String?
+  effectiveAt DateTime
+
+  patient   Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  encounter Encounter? @relation(fields: [encounterId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([encounterId])
+  @@index([category])
+}
+
+model Procedure {
+  id          Int       @id @default(autoincrement())
+  patientId   Int
+  encounterId Int?
+  code        String?
+  description String?
+  performedAt DateTime?
+
+  patient   Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  encounter Encounter? @relation(fields: [encounterId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([encounterId])
+}
+
+model AllergyIntolerance {
+  id          Int       @id @default(autoincrement())
+  patientId   Int
+  substance   String
+  criticality String?
+  reaction    String?
+  recordedAt  DateTime? @default(now())
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+}
+
+model Medication {
+  id       Int                 @id @default(autoincrement())
+  codeAtc  String?
+  name     String
+  form     String?
+  strength String?
+  requests MedicationRequest[]
+}
+
+model MedicationRequest {
+  id           Int              @id @default(autoincrement())
+  patientId    Int
+  encounterId  Int?
+  medicationId Int
+  dose         String?
+  route        String?
+  frequency    String?
+  durationDays Int?
+  status       MedRequestStatus @default(active)
+
+  patient    Patient    @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  encounter  Encounter? @relation(fields: [encounterId], references: [id])
+  medication Medication @relation(fields: [medicationId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([encounterId])
+  @@index([medicationId])
+}
+
+// =========================
+/**
+ * Scheduling & Orders
+ */
+// =========================
+model Appointment {
+  id             Int               @id @default(autoincrement())
+  patientId      Int
+  practitionerId Int?
+  locationId     Int?
+  status         AppointmentStatus @default(proposed)
+  startAt        DateTime
+  endAt          DateTime
+  reason         String?
+
+  patient      Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  practitioner Practitioner? @relation(fields: [practitionerId], references: [id])
+  location     Location?     @relation(fields: [locationId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([practitionerId])
+  @@index([locationId])
+  @@index([startAt])
+}
+
+model Slot {
+  id             Int      @id @default(autoincrement())
+  practitionerId Int
+  startAt        DateTime
+  endAt          DateTime
+  capacity       Int      @default(1)
+
+  practitioner Practitioner @relation(fields: [practitionerId], references: [id], onDelete: Cascade)
+
+  @@index([practitionerId, startAt])
+}
+
+model ServiceRequest {
+  id          Int      @id @default(autoincrement())
+  patientId   Int
+  encounterId Int?
+  category    String // lab | imaging | procedure
+  code        String?
+  priority    String?
+  requestedAt DateTime @default(now())
+
+  patient   Patient            @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  encounter Encounter?         @relation(fields: [encounterId], references: [id])
+  reports   DiagnosticReport[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([encounterId])
+}
+
+model DiagnosticReport {
+  id               Int      @id @default(autoincrement())
+  patientId        Int
+  serviceRequestId Int
+  conclusion       String?
+  issuedAt         DateTime @default(now())
+
+  patient        Patient        @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  serviceRequest ServiceRequest @relation(fields: [serviceRequestId], references: [id], onDelete: Cascade)
+  labResults     LabResult[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([serviceRequestId])
+}
+
+model LabResult {
+  id                 Int     @id @default(autoincrement())
+  diagnosticReportId Int
+  codeLoinc          String?
+  value              String?
+  unit               String?
+  refRange           String?
+  abnormalFlag       String?
+
+  report DiagnosticReport @relation(fields: [diagnosticReportId], references: [id], onDelete: Cascade)
+
+  @@index([diagnosticReportId])
+}
+
+// =========================
+/**
+ * Ops
+ */
+// =========================
+model Attachment {
+  id          Int            @id @default(autoincrement())
+  patientId   Int?
+  encounterId Int?
+  type        AttachmentType @default(other)
+  url         String
+  title       String?
+  createdAt   DateTime       @default(now())
+
+  patient   Patient?   @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  encounter Encounter? @relation(fields: [encounterId], references: [id], onDelete: SetNull)
+
+  @@index([patientId])
+  @@index([encounterId])
+}
+
+model AuditLog {
+  id           Int      @id @default(autoincrement())
+  userId       Int?
+  action       String
+  resourceType String
+  resourceId   Int?
+  ip           String?
+  createdAt    DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+}

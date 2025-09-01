@@ -1,0 +1,10 @@
+/* src/index.css — 최소 구성 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* (선택) 전역 바탕색 정도만 가볍게 */
+html, body, #root {
+    min-height: 100%;
+    height: 100%;
+}
