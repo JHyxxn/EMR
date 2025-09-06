@@ -10,10 +10,14 @@
 
 #### **터미널 단축키 설정 (선택사항)**
 ```bash
-# 터미널 단축키 설정
-alias emr-ai-dev="cd /path/to/your/project"
+# 터미널 단축키 설정 (프로젝트 폴더로 이동)
+alias emr-dev="cd /path/to/your/3-1.EMR"
 
-# 사용법: 터미널에서 "emr-ai-dev" 입력하면 프로젝트 폴더로 이동
+# 사용법: 터미널에서 "emr-dev" 입력하면 프로젝트 폴더로 이동
+# 그 후 아래 명령어로 서비스 실행:
+# npm run dev:back    # Backend만 실행
+# npm run dev:ai      # AI Gateway만 실행  
+# npm run dev:front   # Frontend만 실행
 ```
 
 ### 2) 모든 의존성 설치 (한 번에)
