@@ -1,47 +1,187 @@
 # 🚀 개발 환경 설정 가이드
 
-## 📋 사전 요구사항
+## 📋 설치 순서 (중요도 순)
 
-### 필수 소프트웨어
-- **Node.js 18+** (LTS 버전 권장)
-- **Git** (버전 관리)
-- **npm** 또는 **pnpm** (패키지 관리자)
-
-### 권장 개발 도구
-- **VS Code** (코드 에디터)
-- **Postman** (API 테스트)
-- **GitHub Desktop** (Git GUI, 선택사항)
-
-## 🔧 환경 설정 단계
-
-### 1) Node.js 설치 확인
-```bash
-# Node.js 버전 확인
-node --version
-# v18.0.0 이상이어야 함
-
-# npm 버전 확인
-npm --version
-# v8.0.0 이상이어야 함
+### **1단계: Node.js 설치 (필수)**
+```
+JavaScript 실행 환경
 ```
 
-### 2) Git 설정
+#### **설치 방법:**
+1. **공식 사이트** 접속: https://nodejs.org/
+2. **LTS 버전** 다운로드 (안정적인 버전)
+3. **설치 파일 실행** → Next → Next → Install
+4. **설치 완료** 확인
+
+#### **설치 확인:**
 ```bash
-# Git 사용자 정보 설정
+node --version
+npm --version
+```
+
+---
+
+### **2단계: Git 설치 (필수)**
+```
+코드 관리 도구
+```
+
+#### **설치 방법:**
+1. **공식 사이트** 접속: https://git-scm.com/
+2. **OS별 설치 파일** 다운로드
+3. **설치 파일 실행** → 기본 설정으로 설치
+4. **설치 완료** 확인
+
+#### **설치 확인:**
+```bash
+git --version
+```
+
+#### **초기 설정:**
+```bash
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
-
-# SSH 키 생성 (GitHub 연동용)
-ssh-keygen -t ed25519 -C "your.email@example.com"
 ```
 
-### 3) VS Code 확장 프로그램 설치
-- **ES7+ React/Redux/React-Native snippets**
-- **Prettier - Code formatter**
-- **ESLint**
-- **GitLens**
-- **Auto Rename Tag**
-- **Bracket Pair Colorizer**
+---
+
+### **3단계: GitHub Desktop 설치 (필수)**
+```
+GitHub GUI 도구
+```
+
+#### **설치 방법:**
+1. **공식 사이트** 접속: https://desktop.github.com/
+2. **다운로드** 버튼 클릭
+3. **설치 파일 실행** → 설치 완료
+4. **GitHub 계정** 로그인
+
+#### **설치 확인:**
+- **GitHub Desktop** 실행
+- **계정 연결** 확인
+
+---
+
+### **4단계: Cursor 설치 (추천)**
+```
+AI 코딩 어시스턴트
+```
+
+#### **설치 방법:**
+1. **공식 사이트** 접속: https://cursor.sh/
+2. **다운로드** 버튼 클릭
+3. **OS별 설치 파일** 다운로드
+4. **설치 파일 실행** → 설치 완료
+
+#### **설치 확인:**
+- **Cursor** 실행
+- **프로젝트 열기** 테스트
+
+---
+
+### **5단계: VS Code 설치 (선택사항)**
+```
+코드 에디터 (Cursor 대신 사용 가능)
+```
+
+#### **설치 방법:**
+1. **공식 사이트** 접속: https://code.visualstudio.com/
+2. **다운로드** 버튼 클릭
+3. **설치 파일 실행** → 설치 완료
+
+---
+
+## **설치 순서 요약**
+
+### **필수 설치 (반드시):**
+1. **Node.js** → JavaScript 실행 환경
+2. **Git** → 코드 관리 도구
+3. **GitHub Desktop** → GitHub GUI 도구
+
+### **추천 설치:**
+4. **Cursor** → AI 코딩 어시스턴트
+
+### **선택사항:**
+5. **VS Code** → 코드 에디터 (Cursor 대신)
+
+---
+
+## **설치 후 확인사항**
+
+### **1. Node.js 확인:**
+```bash
+node --version
+# v18.x.x 이상이어야 함
+
+npm --version
+# 9.x.x 이상이어야 함
+```
+
+### **2. Git 확인:**
+```bash
+git --version
+# 2.x.x 이상이어야 함
+```
+
+### **3. GitHub Desktop 확인:**
+- **실행** → GitHub 계정 로그인
+- **프로젝트 클론** 테스트
+
+### **4. Cursor 확인:**
+- **실행** → 프로젝트 폴더 열기
+- **AI 어시스턴트** 테스트 (`Ctrl+Shift+L`)
+
+---
+
+## **설치 시 주의사항**
+
+### **Node.js:**
+- **LTS 버전** 선택 (안정적)
+- **PATH 환경변수** 자동 설정됨
+- **npm**도 함께 설치됨
+
+### **Git:**
+- **기본 설정**으로 설치
+- **사용자 정보** 설정 필요
+- **SSH 키** 설정 (선택사항)
+
+### **GitHub Desktop:**
+- **GitHub 계정** 필요
+- **2단계 인증** 설정 권장
+- **프로젝트 클론** 테스트
+
+### **Cursor:**
+- **무료 버전**으로도 충분
+- **GitHub 연동** 가능
+- **AI 기능** 사용 가능
+
+---
+
+## **설치 완료 후 다음 단계**
+
+### **1. 프로젝트 클론:**
+- **GitHub Desktop**으로 프로젝트 다운로드
+- **프로젝트 폴더** 확인
+
+### **2. 의존성 설치:**
+```bash
+cd /path/to/your/3-1.EMR
+npm install
+```
+
+### **3. 서비스 실행:**
+```bash
+npm run dev:back    # Backend
+npm run dev:ai      # AI Gateway
+npm run dev:front   # Frontend
+```
+
+### **4. 접속 확인:**
+- **Frontend**: http://localhost:5173
+- **Backend**: http://localhost:4000
+- **AI Gateway**: http://localhost:5001
+
+---
 
 ## 📁 프로젝트 구조
 
@@ -56,32 +196,11 @@ ssh-keygen -t ed25519 -C "your.email@example.com"
 └── LICENSE             # MIT 라이선스
 ```
 
-## 🔑 환경변수 설정
-
-### AI Gateway
-```bash
-cd ai-gateway
-cp .env.example .env
-# .env 파일에 필요한 API 키 설정
-```
-
-### Backend
-```bash
-cd backend
-cp .env.example .env
-# .env 파일에 데이터베이스 연결 정보 설정
-```
-
-### Frontend
-```bash
-cd frontend
-cp .env.example .env
-# .env 파일에 API 엔드포인트 설정
-```
+---
 
 ## 🚨 문제 해결
 
-### Node.js 버전 문제
+### **Node.js 버전 문제:**
 ```bash
 # nvm 사용 시
 nvm install 18
@@ -91,14 +210,14 @@ nvm use 18
 # https://nodejs.org/
 ```
 
-### 권한 문제 (macOS/Linux)
+### **권한 문제 (macOS/Linux):**
 ```bash
 # npm 글로벌 패키지 권한 문제
 sudo chown -R $USER:$GROUP ~/.npm
 sudo chown -R $USER:$GROUP ~/.config
 ```
 
-### Git 연결 문제
+### **Git 연결 문제:**
 ```bash
 # SSH 키 등록 확인
 ssh -T git@github.com
@@ -106,6 +225,8 @@ ssh -T git@github.com
 # HTTPS 사용 시
 git remote set-url origin https://github.com/JHyxxn/emr-demo.git
 ```
+
+---
 
 ## 📚 추가 리소스
 
