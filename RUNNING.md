@@ -3,9 +3,17 @@
 ## 🚀 빠른 시작 (Quick Start)
 
 ### 1) 프로젝트 클론
+
+#### **GitHub Desktop 사용 (추천)**
+- **`TEAM_WORKFLOW.md`** 참조: GitHub Desktop 설치 및 사용법
+- **GUI로 쉽게** 프로젝트 클론 및 관리
+
+#### **터미널 단축키 설정 (선택사항)**
 ```bash
-git clone https://github.com/JHyxxn/emr-demo.git
-cd 3-1.EMR
+# 터미널 단축키 설정
+alias emr-ai-dev="cd /path/to/your/project"
+
+# 사용법: 터미널에서 "emr-ai-dev" 입력하면 프로젝트 폴더로 이동
 ```
 
 ### 2) 모든 의존성 설치 (한 번에)
