@@ -189,7 +189,7 @@ cd frontend && npm run dev
 ```
 
 #### 6. 웹 브라우저에서 접속
-- **Frontend**: http://localhost:3000
+- **Frontend**: http://localhost:5173 (Vite 기본 포트)
 - **Backend API**: http://localhost:4000
 - **AI Gateway**: http://localhost:5001
 
