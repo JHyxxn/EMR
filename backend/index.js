@@ -262,3 +262,53 @@ app.post('/api/ai/lab-summary', async (req, res) => {
         res.status(502).json({ error: 'ai_gateway_unavailable' })
     }
 })
+
+// 증상 분석 AI 프록시
+app.post('/api/ai/symptom-analysis', async (req, res) => {
+    try {
+        const url = new URL(`${AI_GATEWAY_URL}/insight/symptom-analysis`)
+        Object.entries(req.query).forEach(([k, v]) => url.searchParams.set(k, String(v)))
+
+        const r = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(req.body)
+        })
+        const data = await r.json()
+        res.status(r.status).json(data)
+    } catch (e) {
+        console.error(e)
+        res.status(502).json({ error: 'ai_gateway_unavailable' })
+    }
+})
+
+// 처방 가이드 프록시
+app.post('/api/ai/prescription-guide', async (req, res) => {
+    try {
+        const url = new URL(`${AI_GATEWAY_URL}/insight/prescription-guide`)
+        Object.entries(req.query).forEach(([k, v]) => url.searchParams.set(k, String(v)))
+
+        const r = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(req.body)
+        })
+        const data = await r.json()
+        res.status(r.status).json(data)
+    } catch (e) {
+        console.error(e)
+        res.status(502).json({ error: 'ai_gateway_unavailable' })
+    }
+})
+
+// AI 모델 상태 확인 프록시
+app.get('/api/ai/models/status', async (req, res) => {
+    try {
+        const r = await fetch(`${AI_GATEWAY_URL}/models/status`)
+        const data = await r.json()
+        res.status(r.status).json(data)
+    } catch (e) {
+        console.error(e)
+        res.status(502).json({ error: 'ai_gateway_unavailable' })
+    }
+})
