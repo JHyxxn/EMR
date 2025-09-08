@@ -1,8 +1,8 @@
 # 🚀 개발 환경 설정 가이드
 
-## 📋 설치 순서 (중요도 순)
+## 📋 설치 순서
 
-### **1단계: Node.js 설치 (필수)**
+### **1단계: Node.js 설치 **
 ```
 JavaScript 실행 환경
 ```
@@ -21,7 +21,7 @@ npm --version
 
 ---
 
-### **2단계: Git 설치 (필수)**
+### **2단계: Git 설치 **
 ```
 코드 관리 도구
 ```
@@ -45,7 +45,7 @@ git config --global user.email "your.email@example.com"
 
 ---
 
-### **3단계: GitHub Desktop 설치 (필수)**
+### **3단계: GitHub Desktop 설치 **
 ```
 GitHub GUI 도구
 ```
@@ -62,7 +62,7 @@ GitHub GUI 도구
 
 ---
 
-### **4단계: Cursor 설치 (필수)**
+### **4단계: Cursor 설치 **
 ```
 AI 코딩 어시스턴트
 ```
@@ -79,9 +79,8 @@ AI 코딩 어시스턴트
 
 ---
 
-## **설치 순서 요약**
+## **설치 요약**
 
-### **필수 설치 (반드시):**
 1. **Node.js** → JavaScript 실행 환경
 2. **Git** → 코드 관리 도구
 3. **GitHub Desktop** → GitHub GUI 도구
