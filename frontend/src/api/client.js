@@ -165,6 +165,21 @@ export const apiUpload = async (endpoint, formData) => {
     });
 };
 
+/**
+ * 쿼리 스트링 생성 함수
+ * @param {Object} params 쿼리 파라미터 객체
+ * @returns {string} 쿼리 스트링
+ */
+export const qs = (params = {}) => {
+    const searchParams = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+        if (params[key] !== undefined && params[key] !== null) {
+            searchParams.append(key, params[key]);
+        }
+    });
+    return searchParams.toString() ? `?${searchParams.toString()}` : '';
+};
+
 // API 클라이언트 기본 내보내기
 export default {
     get: apiGet,

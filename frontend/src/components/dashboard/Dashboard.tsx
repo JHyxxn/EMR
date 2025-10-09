@@ -57,9 +57,10 @@ interface DashboardProps {
         revisitRecommendation: string;
         createdAt: string;
     }>>>;
+    onTestButton: (patient: WaitingPatient) => void;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient, onAddToWaitingList, waitingPatients, setWaitingPatients, prescriptions, setPrescriptions }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient, onAddToWaitingList, waitingPatients, setWaitingPatients, prescriptions, setPrescriptions, onTestButton }) => {
     // 현재 시간 상태 관리
     const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -699,23 +700,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
         return (totalParts === 0 || matchCount === totalParts) || conditionMatch;
     };
 
-        // 1시간 경과 환자 제거 및 검색어에 따른 환자 필터링
+        // 검색어에 따른 환자 필터링 (시간 필터링 제거)
     const filteredWaitingPatients = waitingPatients
         .filter(patient => {
-            // 1시간 경과 환자 제거
-            const patientTime = new Date();
-            const [hours, minutes] = patient.time.split(':').map(Number);
-            patientTime.setHours(hours, minutes, 0, 0);
-            
-            const currentTimeDate = new Date();
-            const timeDiff = currentTimeDate.getTime() - patientTime.getTime();
-            const hoursDiff = timeDiff / (1000 * 60 * 60);
-            
-            // 1시간이 지났고 완료되지 않은 환자는 제거
-            if (hoursDiff >= 1 && (patientStatus[patient.id] || 'waiting') !== 'completed') {
-                return false;
-            }
-            
             return matchesComplexSearch(patient, searchQuery);
         })
         .sort((a, b) => {
@@ -773,8 +760,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
                     display: "grid",
                     gap: "12px"
                 }}>
-                    {filteredWaitingPatients.map((patient) => (
-                        <div key={patient.id} style={{
+                    {filteredWaitingPatients.map((patient, index) => (
+                        <div key={`${patient.id}-${index}`} style={{
                             padding: "16px",
                             background: (patientStatus[patient.id] || 'waiting') === 'completed' 
                                 ? "#f8f9fa" // 완료된 환자는 회색 배경
@@ -803,7 +790,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
                                         {patient.time}
                                     </span>
                                     <span style={{ marginLeft: "12px" }}>
-                                        {patient.name} ({calculateAge(patient.birthDate)}세, {patient.visitType}) - {(patient.condition || '').includes("검사 완료") ? "검사 완료" : (patient.condition || '')}
+                                        {patient.name} ({patient.age || '?'}세, {patient.visitType}) - {(patient.condition || '').includes("검사 완료") ? "검사 완료" : (patient.condition || '')}
                                     </span>
                                 </div>
                                 {patient.alert && (patient.condition || '').includes("검사 완료") && (
@@ -1299,7 +1286,26 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
                                 {selectedPrescription.tests.length > 0 && (
                                     <button
                                         onClick={() => {
-                                            alert('검사 대시보드로 이동합니다.');
+                                            // 처방 데이터에서 직접 환자 정보 생성 (검사 정보 포함)
+                                            const patient: WaitingPatient = {
+                                                id: parseInt(selectedPrescription.patientId) || 0,
+                                                time: new Date().toTimeString().slice(0, 5),
+                                                name: selectedPrescription.patientName,
+                                                birthDate: '',
+                                                age: null,
+                                                phone: '',
+                                                condition: selectedPrescription.notes || '검사 필요',
+                                                visitType: '재진',
+                                                alert: null,
+                                                alertType: null,
+                                                buttonText: '진료 시작',
+                                                visitOrigin: 'walkin',
+                                                // 검사 정보 추가
+                                                prescriptionTests: selectedPrescription.tests
+                                            };
+                                            
+                                            console.log('🔬 처방 데이터에서 생성된 환자 정보:', patient);
+                                            onTestButton(patient);
                                             setPrescriptionModalOpen(false);
                                         }}
                                         style={{

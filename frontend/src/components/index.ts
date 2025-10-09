@@ -18,3 +18,6 @@ export * from './auth';
 
 // 환자 차트 관련 컴포넌트들
 export * from './patient-chart';
+
+// AI 지원 관련 컴포넌트들
+export * from './ai-support';

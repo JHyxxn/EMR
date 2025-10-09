@@ -14,9 +14,10 @@ interface HeaderProps {
     onSearchChange: (query: string) => void;
     onNewPatient: () => void;
     onLogout: () => void;
+    dataSource?: 'backend' | 'local';
 }
 
-export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange, onNewPatient, onLogout }) => {
+export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange, onNewPatient, onLogout, dataSource }) => {
     return (
         <header style={{
             display: "flex",
@@ -28,8 +29,20 @@ export const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchChange, onN
             boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
         }}>
             {/* 시스템 로고 및 제목 */}
-            <div style={{ fontSize: 28, fontWeight: 700, color: "#253E52", minWidth: "200px", marginRight: "40px" }}>
-                Dr.App · 오늘
+            <div style={{ minWidth: "200px", marginRight: "40px" }}>
+                <div style={{ fontSize: 28, fontWeight: 700, color: "#253E52" }}>
+                    Dr.App · 오늘
+                </div>
+                {dataSource && (
+                    <div style={{ 
+                        fontSize: 12, 
+                        color: dataSource === 'backend' ? '#10b981' : '#f59e0b',
+                        fontWeight: 500,
+                        marginTop: 2
+                    }}>
+                        {dataSource === 'backend' ? '🟢 백엔드 데이터' : '🟡 로컬 데이터'}
+                    </div>
+                )}
             </div>
             
             {/* 중앙 영역: 검색바와 신규 환자 등록 버튼 */}

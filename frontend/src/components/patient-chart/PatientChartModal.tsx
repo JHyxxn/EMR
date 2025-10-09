@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { WaitingPatient } from '../../data/waitingPatientsData';
-import { RevisitPatient } from '../../data/revisitPatientsData';
 import { getPatientHistory, addVisitRecord, updatePatientInfo, PatientHistory } from '../../data/patientHistoryData';
+import { clinicalNote } from '../../api/ai';
+import { updatePatient } from '../../api/patients';
 
 
 interface PatientChartModalProps {
@@ -55,6 +56,7 @@ interface ChartData {
     notes: string;
     testNotes: string;
     revisitRecommendation: string;
+    freeformNotes: string;
     nurseInfo?: {
         symptoms: string;
         bloodPressure: string | {
@@ -73,6 +75,21 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
     onSave,
     setPrescriptions
 }) => {
+    // 나이 계산 함수
+    const calculateAge = (birthDate: string) => {
+        if (!birthDate) return '?';
+        const today = new Date();
+        const birth = new Date(birthDate);
+        if (isNaN(birth.getTime())) return '?';
+        
+        let age = today.getFullYear() - birth.getFullYear();
+        const monthDiff = today.getMonth() - birth.getMonth();
+        
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+            age--;
+        }
+        return age;
+    };
     const [chartData, setChartData] = useState<ChartData>({
         patientId: patient.id,
         visitDate: new Date().toISOString().split('T')[0],
@@ -88,24 +105,39 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
         notes: '',
         testNotes: '',
         revisitRecommendation: '',
-        nurseInfo: patient.nurseInfo || {
+        freeformNotes: '',
+        nurseInfo: patient.nurseInfo ? {
+            ...patient.nurseInfo,
+            bloodPressure: patient.nurseInfo.bloodPressure || ''
+        } : {
             symptoms: '',
             bloodPressure: '',
-            notes: ''
+            notes: '',
+            registeredBy: '',
+            registeredAt: ''
         }
     });
 
     const [activeTab, setActiveTab] = useState<'chart' | 'prescription' | 'test'>('chart');
     const [expandedVisits, setExpandedVisits] = useState<Set<string>>(new Set());
     const [patientHistory, setPatientHistory] = useState<PatientHistory | undefined>(undefined);
+    
+    
+    // 탭별 AI 요약 상태
+    const [prescriptionSummary, setPrescriptionSummary] = useState<string | null>(null);
+    const [testSummary, setTestSummary] = useState<string | null>(null);
+    const [isLoadingPrescriptionSummary, setIsLoadingPrescriptionSummary] = useState(false);
+    const [isLoadingTestSummary, setIsLoadingTestSummary] = useState(false);
 
-    // AI 제안 내용 생성
+
+    // AI 제안 내용 생성 (기본 템플릿만)
     const generateAISuggestions = () => {
+        // 의사가 직접 작성할 수 있도록 빈 상태로 시작
         const suggestions = {
-            subjective: `${patient.condition} 관련 증상 문진, 약물 복용 순응도 확인`,
-            objective: `혈압 측정, 맥박 측정, 체온 측정, 전반적 상태 관찰`,
-            assessment: `${patient.condition} 상태 평가, 합병증 위험도 판정`,
-            plan: `${patient.condition} 치료 계획, 생활습관 개선 교육, 다음 방문 일정`
+            subjective: '',
+            objective: '',
+            assessment: '',
+            plan: ''
         };
 
         setChartData(prev => ({
@@ -113,6 +145,103 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
             soap: suggestions
         }));
     };
+
+
+    // 자유형 메모를 SOAP 형식으로 정리
+    const organizeFreeformNotes = async () => {
+        console.log('AI 정리 버튼 클릭됨');
+        
+        if (!chartData.freeformNotes.trim()) {
+            alert('정리할 메모를 입력해주세요.');
+            return;
+        }
+
+        try {
+            const patientInfo = {
+                name: patient.name,
+                age: patient.birthDate ? new Date().getFullYear() - new Date(patient.birthDate).getFullYear() : null,
+                sex: 'unknown'
+            };
+
+            // AI를 통해 자유형 메모를 SOAP 형식으로 정리
+            const response = await clinicalNote({
+                text: chartData.freeformNotes, // 자유형 메모를 text로 전달
+                patient: patientInfo
+            });
+
+            if (response.summary) {
+                // AI 응답을 SOAP 형식으로 파싱하여 각 필드에 자동 입력
+                const soapData = parseAIToSOAP(response.summary);
+                
+                setChartData(prev => ({
+                    ...prev,
+                    soap: {
+                        ...prev.soap,
+                        subjective: soapData.subjective || prev.soap.subjective,
+                        objective: soapData.objective || prev.soap.objective,
+                        assessment: soapData.assessment || prev.soap.assessment,
+                        plan: soapData.plan || prev.soap.plan,
+                        summary: response.summary
+                    }
+                }));
+
+                // AI 응답에서 처방/검사 추천 추출
+                const lines = response.summary.split('\n');
+                const prescriptionStart = lines.findIndex((line: string) => line.includes('추천 처방'));
+                const testStart = lines.findIndex((line: string) => line.includes('추천 검사'));
+                
+                // 처방 추천 추출
+                if (prescriptionStart !== -1) {
+                    const prescriptionEnd = testStart !== -1 ? testStart : lines.length;
+                    const prescriptionPart = lines.slice(prescriptionStart, prescriptionEnd).join('\n');
+                    setPrescriptionSummary(prescriptionPart);
+                }
+                
+                // 검사 추천 추출
+                if (testStart !== -1) {
+                    const testPart = lines.slice(testStart).join('\n');
+                    setTestSummary(testPart);
+                }
+
+                alert('자유형 메모가 SOAP 형식으로 정리되었고, 처방/검사 추천이 생성되었습니다.');
+            }
+        } catch (error) {
+            console.error('메모 정리 오류:', error);
+            alert('메모 정리 중 오류가 발생했습니다.');
+        }
+    };
+
+    // AI 응답을 SOAP 형식으로 파싱하는 함수
+    const parseAIToSOAP = (aiResponse: string) => {
+        const lines = aiResponse.split('\n');
+        const soapData = {
+            subjective: '',
+            objective: '',
+            assessment: '',
+            plan: ''
+        };
+
+        let currentSection = '';
+        
+        for (const line of lines) {
+            const trimmedLine = line.trim();
+            
+            if (trimmedLine.includes('주관적') || trimmedLine.includes('Subjective') || trimmedLine.includes('증상')) {
+                currentSection = 'subjective';
+            } else if (trimmedLine.includes('객관적') || trimmedLine.includes('Objective') || trimmedLine.includes('진찰')) {
+                currentSection = 'objective';
+            } else if (trimmedLine.includes('평가') || trimmedLine.includes('Assessment') || trimmedLine.includes('진단')) {
+                currentSection = 'assessment';
+            } else if (trimmedLine.includes('계획') || trimmedLine.includes('Plan') || trimmedLine.includes('치료')) {
+                currentSection = 'plan';
+            } else if (trimmedLine && currentSection) {
+                soapData[currentSection as keyof typeof soapData] += trimmedLine + '\n';
+            }
+        }
+
+        return soapData;
+    };
+
 
     useEffect(() => {
         if (isOpen) {
@@ -123,13 +252,27 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
         }
     }, [isOpen, patient]);
 
-    const handleSave = () => {
-        // 환자 정보 업데이트
-        updatePatientInfo(patient.id, patient.name, patient.birthDate, patient.phone);
+
+    // SOAP 기록이 변경될 때마다 요약 생성
+
+    const handleSave = async () => {
+        try {
+            // 백엔드에 환자 정보 업데이트
+            await updatePatient(patient.id, {
+                name: patient.name,
+                birthDate: patient.birthDate,
+                phone: patient.phone
+            });
+            
+            // 로컬 환자 정보도 업데이트
+            updatePatientInfo(patient.id, patient.name, patient.birthDate, patient.phone);
         
         // 기존 환자 내역에서 오늘 방문 기록 찾기
         const existingHistory = getPatientHistory(patient.id);
         const today = new Date().toISOString().split('T')[0];
+        
+        // 방문 유형 결정: 이전 방문 이력이 있으면 재진, 없으면 초진
+        const visitType = existingHistory && existingHistory.visits && existingHistory.visits.length > 0 ? '재진' : '초진';
         
         if (existingHistory) {
             // 오늘 방문 기록이 있는지 확인
@@ -157,7 +300,7 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
             } else {
                 // 새로운 오늘 방문 기록 추가
                 const todayVisitRecord = {
-                    visitType: patient.visitType as '초진' | '재진',
+                    visitType: visitType as '초진' | '재진',
                     diagnosis: patient.condition,
                     medicalRecord: {
                         symptoms: chartData.soap.subjective,
@@ -181,7 +324,7 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
         } else {
             // 환자 내역이 없는 경우 새로 생성
             const todayVisitRecord = {
-                visitType: patient.visitType as '초진' | '재진',
+                visitType: visitType as '초진' | '재진',
                 diagnosis: patient.condition,
                 medicalRecord: {
                     symptoms: chartData.soap.subjective,
@@ -223,8 +366,12 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
             setPrescriptions(prev => [...prev, newPrescription]);
         }
         
-        onSave(chartData);
-        onClose();
+            onSave(chartData);
+            // 정보 저장은 창을 닫지 않음 (임시저장 역할)
+        } catch (error) {
+            console.error('환자 정보 저장 실패:', error);
+            alert('환자 정보 저장에 실패했습니다. 다시 시도해주세요.');
+        }
     };
 
     const handleTemporarySave = () => {
@@ -328,7 +475,7 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
                             marginBottom: '16px'
                         }}>
                             <div style={{ marginBottom: '8px' }}>
-                                <strong>생년월일:</strong> {patient.birthDate} ({new Date().getFullYear() - new Date(patient.birthDate).getFullYear()}세)
+                                <strong>생년월일:</strong> {patient.birthDate} ({patient.birthDate ? calculateAge(patient.birthDate) : '?'}세)
                             </div>
                             <div style={{ marginBottom: '8px' }}>
                                 <strong>전화번호:</strong> {patient.phone}
@@ -567,137 +714,87 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
                                     </div>
                                 )}
 
-                                <h3 style={{
-                                    margin: '0 0 16px 0',
-                                    fontSize: '16px',
-                                    fontWeight: 600,
-                                    color: '#374151'
+                                {/* 진료 기록 */}
+                                <div style={{
+                                    border: '1px solid #d1d5db',
+                                    borderRadius: '8px',
+                                    padding: '20px',
+                                    backgroundColor: '#f8fafc',
+                                    marginBottom: '20px'
                                 }}>
-                                    SOAP 진료 기록
-                                </h3>
-
-                                {/* S - Subjective */}
-                                <div style={{ marginBottom: '12px' }}>
-                                    <label style={{
-                                        display: 'block',
+                                    <h3 style={{
+                                        margin: '0 0 12px 0',
+                                        fontSize: '16px',
                                         fontWeight: 600,
-                                        marginBottom: '6px',
                                         color: '#374151'
                                     }}>
-                                        S (Subjective) - 주관적 증상
-                                    </label>
+                                        진료 기록
+                                    </h3>
+                                    <p style={{
+                                        margin: '0 0 12px 0',
+                                        fontSize: '14px',
+                                        color: '#6b7280'
+                                    }}>
+                                        진료하면서 생각나는 내용을 자유롭게 작성하세요. AI가 SOAP 형식으로 정리해드립니다.
+                                    </p>
                                     <textarea
-                                        value={chartData.soap.subjective}
+                                        value={chartData.freeformNotes}
                                         onChange={(e) => setChartData(prev => ({
                                             ...prev,
-                                            soap: { ...prev.soap, subjective: e.target.value }
+                                            freeformNotes: e.target.value
                                         }))}
                                         style={{
                                             width: '100%',
-                                            minHeight: '80px',
-                                            height: '80px',
-                                            padding: '20px',
+                                            height: '72px',
+                                            padding: '8px 12px',
                                             border: '1px solid #d1d5db',
-                                            borderRadius: '4px',
-                                            resize: 'none',
+                                            borderRadius: '6px',
+                                            fontSize: '14px',
+                                            resize: 'vertical',
+                                            fontFamily: 'inherit',
                                             boxSizing: 'border-box'
                                         }}
-                                        placeholder="환자의 주관적 증상을 입력하세요..."
+                                        placeholder="예: 환자가 두통을 호소하고 있음. 혈압 140/90. 진통제 처방하고 내일 재방문 예약..."
                                     />
+                                    <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                                        <button
+                                            onClick={() => setChartData(prev => ({ ...prev, freeformNotes: '' }))}
+                                            style={{
+                                                padding: '8px 16px',
+                                                backgroundColor: 'white',
+                                                color: '#374151',
+                                                border: '1px solid #d1d5db',
+                                                borderRadius: '6px',
+                                                fontSize: '14px',
+                                                fontWeight: 500,
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            지우기
+                                        </button>
+                                        <button
+                                            onClick={organizeFreeformNotes}
+                                            disabled={!chartData.freeformNotes.trim()}
+                                            style={{
+                                                padding: '8px 16px',
+                                                backgroundColor: '#374151',
+                                                color: 'white',
+                                                border: 'none',
+                                                borderRadius: '6px',
+                                                fontSize: '14px',
+                                                fontWeight: 500,
+                                                cursor: chartData.freeformNotes.trim() ? 'pointer' : 'not-allowed',
+                                                opacity: chartData.freeformNotes.trim() ? 1 : 0.6
+                                            }}
+                                        >
+                                            AI 정리
+                                        </button>
+                                    </div>
                                 </div>
 
-                                {/* O - Objective */}
-                                <div style={{ marginBottom: '12px' }}>
-                                    <label style={{
-                                        display: 'block',
-                                        fontWeight: 600,
-                                        marginBottom: '6px',
-                                        color: '#374151'
-                                    }}>
-                                        O (Objective) - 객관적 소견
-                                    </label>
-                                    <textarea
-                                        value={chartData.soap.objective}
-                                        onChange={(e) => setChartData(prev => ({
-                                            ...prev,
-                                            soap: { ...prev.soap, objective: e.target.value }
-                                        }))}
-                                        style={{
-                                            width: '100%',
-                                            minHeight: '80px',
-                                            height: '80px',
-                                            padding: '20px',
-                                            border: '1px solid #d1d5db',
-                                            borderRadius: '4px',
-                                            resize: 'none',
-                                            boxSizing: 'border-box'
-                                        }}
-                                        placeholder="의사의 진찰 소견을 입력하세요..."
-                                    />
-                                </div>
-
-                                {/* A - Assessment */}
-                                <div style={{ marginBottom: '12px' }}>
-                                    <label style={{
-                                        display: 'block',
-                                        fontWeight: 600,
-                                        marginBottom: '6px',
-                                        color: '#374151'
-                                    }}>
-                                        A (Assessment) - 평가
-                                    </label>
-                                    <textarea
-                                        value={chartData.soap.assessment}
-                                        onChange={(e) => setChartData(prev => ({
-                                            ...prev,
-                                            soap: { ...prev.soap, assessment: e.target.value }
-                                        }))}
-                                        style={{
-                                            width: '100%',
-                                            minHeight: '80px',
-                                            height: '80px',
-                                            padding: '20px',
-                                            border: '1px solid #d1d5db',
-                                            borderRadius: '4px',
-                                            resize: 'none',
-                                            boxSizing: 'border-box'
-                                        }}
-                                        placeholder="진단 및 평가를 입력하세요..."
-                                    />
-                                </div>
-
-                                {/* P - Plan */}
-                                <div style={{ marginBottom: '12px' }}>
-                                    <label style={{
-                                        display: 'block',
-                                        fontWeight: 600,
-                                        marginBottom: '6px',
-                                        color: '#374151'
-                                    }}>
-                                        P (Plan) - 계획
-                                    </label>
-                                    <textarea
-                                        value={chartData.soap.plan}
-                                        onChange={(e) => setChartData(prev => ({
-                                            ...prev,
-                                            soap: { ...prev.soap, plan: e.target.value }
-                                        }))}
-                                        style={{
-                                            width: '100%',
-                                            minHeight: '80px',
-                                            height: '80px',
-                                            padding: '20px',
-                                            border: '1px solid #d1d5db',
-                                            borderRadius: '4px',
-                                            resize: 'none',
-                                            boxSizing: 'border-box'
-                                        }}
-                                        placeholder="치료 계획을 입력하세요..."
-                                    />
-                                </div>
 
                                 {/* 처방/오더 보드 */}
-                                <div style={{ marginBottom: '12px' }}>
+                                <div style={{ marginTop: '20px', marginBottom: '12px' }}>
                                     <label style={{
                                         display: 'block',
                                         fontWeight: 600,
@@ -723,7 +820,7 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
                                 </div>
 
                                 {/* 메모 */}
-                                <div style={{ marginBottom: '12px' }}>
+                                <div style={{ marginTop: '20px', marginBottom: '12px' }}>
                                     <label style={{
                                         display: 'block',
                                         fontWeight: 600,
@@ -756,19 +853,45 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
 
                         {activeTab === 'prescription' && (
                             <div style={{ flex: 1, overflowY: 'auto' }}>
-                                <h3 style={{
-                                    margin: '0 0 16px 0',
-                                    fontSize: '16px',
-                                    fontWeight: 600,
-                                    color: '#374151'
-                                }}>
-                                    처방
-                                </h3>
+                                {/* AI 처방 요약 */}
+                                {prescriptionSummary && (
+                                    <div style={{
+                                        backgroundColor: '#f0f9ff',
+                                        border: '1px solid #0ea5e9',
+                                        borderRadius: '8px',
+                                        padding: '12px',
+                                        marginBottom: '16px'
+                                    }}>
+                                        <h4 style={{
+                                            margin: '0 0 12px 0',
+                                            fontSize: '14px',
+                                            fontWeight: 600,
+                                            color: '#0c4a6e'
+                                        }}>
+                                            AI 진료 요약
+                                        </h4>
+                                        
+                                        {isLoadingPrescriptionSummary ? (
+                                            <div style={{ fontSize: '13px', color: '#0c4a6e' }}>
+                                                AI 분석 중...
+                                            </div>
+                                        ) : (
+                                            <div style={{ 
+                                                fontSize: '13px', 
+                                                color: '#374151', 
+                                                lineHeight: '1.4',
+                                                whiteSpace: 'pre-line'
+                                            }}>
+                                                {prescriptionSummary}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                                 
                                 {/* 처방 목록 */}
                                 <div style={{ marginBottom: '16px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                                        <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 600, color: '#374151' }}>
+                                        <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#374151' }}>
                                             처방 약물
                                         </h4>
                                         <button
@@ -936,13 +1059,15 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
                                     ))}
                                 </div>
                                 
+
                                 {/* 재방문 권고사항 */}
-                                <div style={{ marginBottom: '12px' }}>
+                                <div style={{ marginTop: '20px', marginBottom: '12px' }}>
                                     <label style={{
                                         display: 'block',
                                         fontWeight: 600,
                                         marginBottom: '8px',
-                                        color: '#374151'
+                                        color: '#374151',
+                                        fontSize: '16px'
                                     }}>
                                         재방문 권고사항
                                     </label>
@@ -972,19 +1097,45 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
 
                         {activeTab === 'test' && (
                             <div style={{ flex: 1, overflowY: 'auto' }}>
-                                <h3 style={{
-                                    margin: '0 0 16px 0',
-                                    fontSize: '16px',
-                                    fontWeight: 600,
-                                    color: '#374151'
-                                }}>
-                                    검사 오더
-                                </h3>
+                                {/* AI 검사 요약 */}
+                                {testSummary && (
+                                    <div style={{
+                                        backgroundColor: '#f0f9ff',
+                                        border: '1px solid #0ea5e9',
+                                        borderRadius: '8px',
+                                        padding: '12px',
+                                        marginBottom: '16px'
+                                    }}>
+                                        <h4 style={{
+                                            margin: '0 0 12px 0',
+                                            fontSize: '14px',
+                                            fontWeight: 600,
+                                            color: '#0c4a6e'
+                                        }}>
+                                            AI 진료 요약
+                                        </h4>
+                                        
+                                        {isLoadingTestSummary ? (
+                                            <div style={{ fontSize: '13px', color: '#0c4a6e' }}>
+                                                AI 분석 중...
+                                            </div>
+                                        ) : (
+                                            <div style={{ 
+                                                fontSize: '13px', 
+                                                color: '#374151', 
+                                                lineHeight: '1.4',
+                                                whiteSpace: 'pre-line'
+                                            }}>
+                                                {testSummary}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                                 
                                 {/* 검사 목록 */}
                                 <div style={{ marginBottom: '16px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                                        <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 600, color: '#374151' }}>
+                                        <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#374151' }}>
                                             검사 항목
                                         </h4>
                                         <button
@@ -1100,12 +1251,13 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
                                 </div>
                                 
                                 {/* 검사 관련 메모 */}
-                                <div style={{ marginBottom: '12px' }}>
+                                <div style={{ marginTop: '20px', marginBottom: '12px' }}>
                                     <label style={{
                                         display: 'block',
                                         fontWeight: 600,
                                         marginBottom: '8px',
-                                        color: '#374151'
+                                        color: '#374151',
+                                        fontSize: '16px'
                                     }}>
                                         검사 관련 메모
                                     </label>
@@ -1155,7 +1307,10 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
                         임시저장
                     </button>
                     <button
-                        onClick={handleSave}
+                        onClick={() => {
+                            handleSave();
+                            onClose();
+                        }}
                         style={{
                             padding: '8px 16px',
                             border: '1px solid #3b82f6',

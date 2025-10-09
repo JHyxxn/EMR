@@ -4,6 +4,7 @@ import cors from 'cors'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { PrismaClient } from '@prisma/client'
+import drugDatabase from './src/drugDatabase.js'
 
 // ---------- 공통 임계치 규칙 ----------
 function calcFlagsForObservation(obs) {
@@ -29,7 +30,13 @@ function calcFlagsForObservation(obs) {
 
 const app = express()
 const prisma = new PrismaClient()
-app.use(cors())
+
+// CORS 설정 - 프론트엔드 도메인 허용
+app.use(cors({
+    origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://127.0.0.1:3000', 'http://127.0.0.1:5173', 'http://127.0.0.1:5174'],
+    credentials: true
+}))
+
 app.use(express.json())
 
 const PORT = Number(process.env.PORT ?? 4000)
@@ -142,7 +149,7 @@ app.get('/api/patients', async (req, res) => {
     const list = await prisma.patient.findMany({
         where,
         orderBy: { id: 'desc' },
-        select: { id: true, mrn: true, name: true, birthDate: true, sex: true }
+        select: { id: true, mrn: true, name: true, birthDate: true, sex: true, phone: true, email: true, address: true }
     })
     res.json(list)
 })
@@ -220,6 +227,70 @@ app.get('/api/alerts/patient/:id', async (req, res) => {
     }))
 
     res.json({ hasAlert: summary.length > 0, count: summary.length, summary })
+})
+
+// ========== Drug Database APIs ==========
+// 약물 검색
+app.get('/api/drugs/search', (req, res) => {
+    try {
+        const { query } = req.query
+        if (!query) {
+            return res.status(400).json({ error: 'query parameter is required' })
+        }
+
+        const results = drugDatabase.searchDrugs(query)
+        res.json({
+            query,
+            results,
+            total: results.length
+        })
+    } catch (error) {
+        console.error('약물 검색 오류:', error)
+        res.status(500).json({ error: 'drug_search_failed' })
+    }
+})
+
+// 약물 상호작용 검사
+app.post('/api/drugs/interactions', (req, res) => {
+    try {
+        const { medications, patient } = req.body
+        if (!medications || !Array.isArray(medications)) {
+            return res.status(400).json({ error: 'medications array is required' })
+        }
+
+        const interactionCheck = drugDatabase.checkDrugInteractions(medications)
+        res.json(interactionCheck)
+    } catch (error) {
+        console.error('약물 상호작용 검사 오류:', error)
+        res.status(500).json({ error: 'interaction_check_failed' })
+    }
+})
+
+// 처방 가이드 생성
+app.post('/api/drugs/prescription-guide', (req, res) => {
+    try {
+        const { medications, patient } = req.body
+        if (!medications || !Array.isArray(medications)) {
+            return res.status(400).json({ error: 'medications array is required' })
+        }
+
+        const guide = drugDatabase.generatePrescriptionGuide(medications, patient)
+        res.json(guide)
+    } catch (error) {
+        console.error('처방 가이드 생성 오류:', error)
+        res.status(500).json({ error: 'prescription_guide_failed' })
+    }
+})
+
+// 약물 데이터베이스 상태
+app.get('/api/drugs/status', (req, res) => {
+    try {
+        const status = drugDatabase.getStatus()
+        res.json(status)
+    } catch (error) {
+        console.error('약물 데이터베이스 상태 확인 오류:', error)
+        res.status(500).json({ error: 'status_check_failed' })
+    }
 })
 
 // ========== AI 프록시 (쿼리 그대로 전달) ==========

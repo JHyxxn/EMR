@@ -11,9 +11,12 @@ import React, { useState, useEffect } from 'react';
 import { NewPatientModal } from './components/patient-registration';
 import { Dashboard, Calendar, QuickActions, AlertsSection } from './components/dashboard';
 import { PatientChart } from './pages/PatientChart';
+import { ExamManagement } from './pages/ExamManagement';
 import { Header, Sidebar } from './components/layout';
 import { WaitingPatient, waitingPatientsData } from './data/waitingPatientsData';
-import { addBulkPatientHistory, addVisitRecord, updatePatientInfo } from './data/patientHistoryData';
+import { addBulkPatientHistory, addVisitRecord, updatePatientInfo, getPatientHistory, createDefaultVisitRecord } from './data/patientHistoryData';
+import { getPatients, createPatient } from './api/patients';
+import { getCurrentUser, isAuthenticated as checkAuth } from './api/auth';
 import './App.css';
 
 export default function App() {
@@ -32,6 +35,19 @@ export default function App() {
 
     // 대기 환자 목록 상태 관리
     const [waitingPatients, setWaitingPatients] = useState<WaitingPatient[]>(waitingPatientsData);
+    const [isUsingBackendData, setIsUsingBackendData] = useState(false);
+    
+    // 검사 하기 버튼 연동을 위한 상태 관리
+    const [selectedPatientForTest, setSelectedPatientForTest] = useState<WaitingPatient | null>(null);
+    
+    // 검사 하기 버튼 핸들러 함수
+    const handleTestButton = (patient: WaitingPatient) => {
+        // 1. 선택된 환자 정보 저장
+        setSelectedPatientForTest(patient);
+        
+        // 2. 검사 대시보드로 페이지 변경
+        setCurrentPage('exam');
+    };
     
     // 처방/오더 상태 관리
     const [prescriptions, setPrescriptions] = useState<Array<{
@@ -151,22 +167,91 @@ export default function App() {
         }
     ]);
     
-    // 컴포넌트 마운트 시 로컬 스토리지에서 토큰 확인하여 인증 상태 설정
-    // 컴포넌트 마운트 시 로컬 스토리지에서 토큰 확인하여 인증 상태 설정
+    // 컴포넌트 마운트 시 인증 상태 확인 및 환자 데이터 로드
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            setIsAuthenticated(true);
-        } else {
-            // 테스트용: 토큰이 없어도 자동으로 로그인 상태로 설정
-            localStorage.setItem('token', 'temp-token');
-            setIsAuthenticated(true);
-        }
-        setLoading(false);
-        
-        // 대량 환자 내역 데이터 초기화
-        addBulkPatientHistory();
+        const initializeApp = async () => {
+            try {
+                // 인증 상태 확인
+                if (checkAuth()) {
+                    setIsAuthenticated(true);
+                    // 백엔드에서 환자 데이터 가져오기
+                    await loadPatientsFromBackend();
+                } else {
+                    // 테스트용: 토큰이 없어도 자동으로 로그인 상태로 설정
+                    localStorage.setItem('token', 'temp-token');
+                    setIsAuthenticated(true);
+                    // 백엔드에서 환자 데이터 가져오기 (강제 테스트)
+                    await loadPatientsFromBackend();
+                }
+            } catch (error) {
+                console.error('앱 초기화 실패:', error);
+                // 백엔드 연결 실패 시 로컬 데이터 사용
+                setWaitingPatients(waitingPatientsData);
+            } finally {
+                setLoading(false);
+                // 대량 환자 내역 데이터 초기화
+                addBulkPatientHistory();
+            }
+        };
+
+        initializeApp();
     }, []);
+
+    // 백엔드에서 환자 데이터 로드
+    const loadPatientsFromBackend = async () => {
+        try {
+            console.log('백엔드에서 환자 데이터 로드 시작...');
+            const patients = await getPatients();
+            console.log('백엔드에서 받은 환자 데이터:', patients);
+            // 백엔드 데이터를 WaitingPatient 형식으로 변환
+            const waitingPatientsData = patients.map(patient => {
+                // 환자의 이전 방문 내역 확인
+                const patientHistory = getPatientHistory(patient.id);
+                const hasPreviousVisits = patientHistory && patientHistory.visits && patientHistory.visits.length > 0;
+                
+                // 오늘 방문 이유 가져오기 (가장 최근 방문 기록 사용)
+                const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD 형식
+                const todayVisit = patientHistory?.visits?.find(visit => visit.date === today);
+                const latestVisit = patientHistory?.visits?.[0]; // 가장 최근 방문 기록
+                const todaySymptoms = todayVisit?.medicalRecord?.symptoms || latestVisit?.medicalRecord?.symptoms || '대기 중';
+                
+                // 나이 계산
+                const calculatedAge = patient.birthDate ? 
+                    new Date().getFullYear() - new Date(patient.birthDate).getFullYear() : 
+                    null;
+                
+                return {
+                    id: patient.id,
+                    name: patient.name,
+                    mrn: patient.mrn,
+                    age: calculatedAge,
+                    sex: patient.sex === 'M' ? '남성' : patient.sex === 'F' ? '여성' : '기타',
+                    phone: patient.phone || '',
+                    visitType: hasPreviousVisits ? '재진' : '초진', // 실제 내역 기반으로 결정
+                    symptoms: todaySymptoms, // 오늘 방문 이유
+                    condition: todaySymptoms, // 대시보드에 표시될 병명
+                    time: new Date().toTimeString().slice(0, 5), // 현재 시간 설정
+                    estimatedTime: '10분',
+                    priority: 'normal',
+                nurseInfo: {
+                    symptoms: '',
+                    bloodPressure: '',
+                    notes: '',
+                    registeredBy: '간호사',
+                    registeredAt: new Date().toISOString()
+                }
+                };
+            });
+            setWaitingPatients(waitingPatientsData);
+            setIsUsingBackendData(true);
+        } catch (error) {
+            console.error('❌ 환자 데이터 로드 실패:', error);
+            // 백엔드 연결 실패 시 로컬 데이터 사용
+            setWaitingPatients(waitingPatientsData);
+            setIsUsingBackendData(false);
+            console.log('⚠️ 로컬 데이터 사용 중');
+        }
+    };
     
     // 로딩 중인 경우 로딩 화면 표시
     if (loading) {
@@ -252,6 +337,7 @@ export default function App() {
                     localStorage.removeItem('token');
                     setIsAuthenticated(false);
                 }}
+                dataSource={isUsingBackendData ? 'backend' : 'local'}
             />
             
             {/* 메인 콘텐츠 영역: 좌측 사이드바 + 중앙 콘텐츠 + 우측 패널 */}
@@ -271,6 +357,7 @@ export default function App() {
                         setWaitingPatients={setWaitingPatients}
                         prescriptions={prescriptions}
                         setPrescriptions={setPrescriptions}
+                        onTestButton={handleTestButton}
                     />}
                     {currentPage === 'chart' && <PatientChart 
                         searchQuery={searchQuery} 
@@ -328,10 +415,10 @@ export default function App() {
                         }}
                     />}
                     {currentPage === 'exam' && (
-                        <div style={{ textAlign: "center", padding: "40px" }}>
-                            <h2>검사 관리</h2>
-                            <p>검사 관련 기능이 여기에 표시됩니다.</p>
-                        </div>
+                        <ExamManagement 
+                            selectedPatient={selectedPatientForTest}
+                            onPatientClear={() => setSelectedPatientForTest(null)}
+                        />
                     )}
                     {currentPage === 'appointment' && (
                         <div style={{ textAlign: "center", padding: "40px" }}>

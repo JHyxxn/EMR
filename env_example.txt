@@ -1,0 +1,6 @@
+# 한국 식품의약품안전처 API 키
+# data.go.kr에서 발급받은 API 키를 입력하세요
+DATA_GO_KR_API_KEY=your_api_key_here
+
+# 예시:
+# DATA_GO_KR_API_KEY=abcd1234efgh5678ijkl9012mnop3456qrst7890

@@ -176,7 +176,7 @@ export const RevisitPatientModal: React.FC<RevisitPatientModalProps> = ({
                         }}>
                             {filteredPatients.map((patient, index) => (
                                 <div
-                                    key={index}
+                                    key={`${patient.id}-${index}`}
                                     onClick={() => handlePatientSelect(patient)}
                                     style={{
                                         padding: "12px",
