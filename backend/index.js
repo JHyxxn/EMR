@@ -5,6 +5,9 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { PrismaClient } from '@prisma/client'
 import drugDatabase from './src/drugDatabase.js'
+import DocumentManagement from './src/documentManagement.js'
+import TestManagement from './src/testManagement.js'
+import PrescriptionManagement from './src/prescriptionManagement.js'
 
 // ---------- 공통 임계치 규칙 ----------
 function calcFlagsForObservation(obs) {
@@ -30,6 +33,11 @@ function calcFlagsForObservation(obs) {
 
 const app = express()
 const prisma = new PrismaClient()
+
+// 관리 시스템 인스턴스 생성
+const documentManagement = new DocumentManagement()
+const testManagement = new TestManagement()
+const prescriptionManagement = new PrescriptionManagement()
 
 // CORS 설정 - 프론트엔드 도메인 허용
 app.use(cors({
@@ -381,5 +389,239 @@ app.get('/api/ai/models/status', async (req, res) => {
     } catch (e) {
         console.error(e)
         res.status(502).json({ error: 'ai_gateway_unavailable' })
+    }
+})
+
+// ===== 문서 관리 시스템 API =====
+
+// 소견서 생성
+app.post('/api/documents/opinion', async (req, res) => {
+    try {
+        const { patientData, opinionData } = req.body
+        
+        const opinion = documentManagement.generateOpinion(patientData, opinionData)
+        const filename = `opinion_${patientData.mrn}_${Date.now()}.txt`
+        const filePath = documentManagement.saveDocument(opinion, filename)
+        
+        res.json({
+            success: true,
+            document: opinion,
+            filePath: filePath
+        })
+    } catch (error) {
+        console.error('소견서 생성 오류:', error)
+        res.status(500).json({ error: '소견서 생성 실패' })
+    }
+})
+
+// 진료 보고서 생성
+app.post('/api/documents/medical-report', async (req, res) => {
+    try {
+        const { patientData, visitData } = req.body
+        
+        const report = documentManagement.generateMedicalReport(patientData, visitData)
+        const filename = `medical_report_${patientData.mrn}_${Date.now()}.txt`
+        const filePath = documentManagement.saveDocument(report, filename)
+        
+        res.json({
+            success: true,
+            document: report,
+            filePath: filePath
+        })
+    } catch (error) {
+        console.error('진료 보고서 생성 오류:', error)
+        res.status(500).json({ error: '진료 보고서 생성 실패' })
+    }
+})
+
+// 처방전 생성
+app.post('/api/documents/prescription', async (req, res) => {
+    try {
+        const { patientData, prescriptionData } = req.body
+        
+        const prescription = documentManagement.generatePrescription(patientData, prescriptionData)
+        const filename = `prescription_${patientData.mrn}_${Date.now()}.txt`
+        const filePath = documentManagement.saveDocument(prescription, filename)
+        
+        res.json({
+            success: true,
+            document: prescription,
+            filePath: filePath
+        })
+    } catch (error) {
+        console.error('처방전 생성 오류:', error)
+        res.status(500).json({ error: '처방전 생성 실패' })
+    }
+})
+
+// 검사 요청서 생성
+app.post('/api/documents/test-request', async (req, res) => {
+    try {
+        const { patientData, testData } = req.body
+        
+        const testRequest = documentManagement.generateTestRequest(patientData, testData)
+        const filename = `test_request_${patientData.mrn}_${Date.now()}.txt`
+        const filePath = documentManagement.saveDocument(testRequest, filename)
+        
+        res.json({
+            success: true,
+            document: testRequest,
+            filePath: filePath
+        })
+    } catch (error) {
+        console.error('검사 요청서 생성 오류:', error)
+        res.status(500).json({ error: '검사 요청서 생성 실패' })
+    }
+})
+
+// 문서 목록 조회
+app.get('/api/documents', async (req, res) => {
+    try {
+        const documents = documentManagement.getDocumentList()
+        res.json({
+            success: true,
+            documents: documents
+        })
+    } catch (error) {
+        console.error('문서 목록 조회 오류:', error)
+        res.status(500).json({ error: '문서 목록 조회 실패' })
+    }
+})
+
+// ===== 검사 관리 시스템 API =====
+
+// 검사 요청 생성
+app.post('/api/tests/request', async (req, res) => {
+    try {
+        const { patientData, testData } = req.body
+        
+        const testRequest = testManagement.createTestRequest(patientData, testData)
+        
+        res.json({
+            success: true,
+            testRequest: testRequest
+        })
+    } catch (error) {
+        console.error('검사 요청 생성 오류:', error)
+        res.status(500).json({ error: '검사 요청 생성 실패' })
+    }
+})
+
+// 검사 일정 생성
+app.post('/api/tests/schedule', async (req, res) => {
+    try {
+        const { testRequest, availableSlots } = req.body
+        
+        const schedule = testManagement.scheduleTest(testRequest, availableSlots)
+        
+        res.json({
+            success: true,
+            schedule: schedule
+        })
+    } catch (error) {
+        console.error('검사 일정 생성 오류:', error)
+        res.status(500).json({ error: '검사 일정 생성 실패' })
+    }
+})
+
+// 검사 결과 입력
+app.post('/api/tests/results', async (req, res) => {
+    try {
+        const { testRequestId, results } = req.body
+        
+        const testResults = testManagement.inputTestResults(testRequestId, results)
+        
+        res.json({
+            success: true,
+            testResults: testResults
+        })
+    } catch (error) {
+        console.error('검사 결과 입력 오류:', error)
+        res.status(500).json({ error: '검사 결과 입력 실패' })
+    }
+})
+
+// 검사 통계 조회
+app.get('/api/tests/statistics', async (req, res) => {
+    try {
+        const statistics = testManagement.generateTestStatistics()
+        
+        res.json({
+            success: true,
+            statistics: statistics
+        })
+    } catch (error) {
+        console.error('검사 통계 조회 오류:', error)
+        res.status(500).json({ error: '검사 통계 조회 실패' })
+    }
+})
+
+// ===== 처방 관리 시스템 API =====
+
+// 처방전 생성
+app.post('/api/prescriptions', async (req, res) => {
+    try {
+        const { patientData, prescriptionData } = req.body
+        
+        const prescription = prescriptionManagement.createPrescription(patientData, prescriptionData)
+        const filePath = prescriptionManagement.savePrescription(prescription)
+        
+        res.json({
+            success: true,
+            prescription: prescription,
+            filePath: filePath
+        })
+    } catch (error) {
+        console.error('처방전 생성 오류:', error)
+        res.status(500).json({ error: '처방전 생성 실패' })
+    }
+})
+
+// 약물 상호작용 검사
+app.post('/api/prescriptions/check-interactions', async (req, res) => {
+    try {
+        const { medications } = req.body
+        
+        const interactions = prescriptionManagement.checkInteractions(medications)
+        
+        res.json({
+            success: true,
+            interactions: interactions
+        })
+    } catch (error) {
+        console.error('약물 상호작용 검사 오류:', error)
+        res.status(500).json({ error: '약물 상호작용 검사 실패' })
+    }
+})
+
+// 처방 이력 조회
+app.get('/api/prescriptions/history/:patientId', async (req, res) => {
+    try {
+        const { patientId } = req.params
+        
+        const history = prescriptionManagement.getPrescriptionHistory(patientId)
+        
+        res.json({
+            success: true,
+            history: history
+        })
+    } catch (error) {
+        console.error('처방 이력 조회 오류:', error)
+        res.status(500).json({ error: '처방 이력 조회 실패' })
+    }
+})
+
+// 처방 통계 조회
+app.get('/api/prescriptions/statistics', async (req, res) => {
+    try {
+        const statistics = prescriptionManagement.generatePrescriptionStatistics()
+        
+        res.json({
+            success: true,
+            statistics: statistics
+        })
+    } catch (error) {
+        console.error('처방 통계 조회 오류:', error)
+        res.status(500).json({ error: '처방 통계 조회 실패' })
     }
 })

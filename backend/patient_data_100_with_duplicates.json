@@ -1,0 +1,3995 @@
+{
+  "metadata": {
+    "generated_at": "2025-10-09T09:40:27.259Z",
+    "total_patients": 100,
+    "description": "EMR 시스템용 환자 데이터 (100명) - 동명이인 케이스 포함",
+    "duplicate_cases": {
+      "total_duplicates": 6,
+      "name_only_duplicates": 3,
+      "name_birthdate_duplicates": 3
+    }
+  },
+  "patients": [
+    {
+      "id": 1,
+      "mrn": "MRN20250001",
+      "name": "김민수",
+      "birthDate": "1980-05-15",
+      "sex": "M",
+      "age": 44,
+      "phone": "010-1234-5678",
+      "email": "kimminsu1@gmail.com",
+      "address": "서울특별시 강남구 테헤란로 123번길 45호",
+      "insuranceNo": "1234567890",
+      "allergies": [
+        "페니실린"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-03-06",
+          "disease": "고혈압",
+          "symptom": "어지러움",
+          "medication": "다이아벡스정",
+          "notes": "고혈압 진료, 어지러움 증상으로 다이아벡스정 처방"
+        },
+        {
+          "date": "2025-01-09",
+          "disease": "위염",
+          "symptom": "기침",
+          "medication": "메토프롤롤정",
+          "notes": "위염 진료, 기침 증상으로 메토프롤롤정 처방"
+        }
+      ],
+      "duplicateType": "동명이인",
+      "duplicateNote": "김민수 (1980년생) - 1번째",
+      "createdAt": "2025-10-09T09:40:27.255Z",
+      "updatedAt": "2025-10-09T09:40:27.255Z"
+    },
+    {
+      "id": 2,
+      "mrn": "MRN20250002",
+      "name": "김민수",
+      "birthDate": "1980-05-15",
+      "sex": "M",
+      "age": 44,
+      "phone": "010-9876-5432",
+      "email": "kimminsu2@naver.com",
+      "address": "부산광역시 해운대구 해운대로 456번길 78호",
+      "insuranceNo": "0987654321",
+      "allergies": [
+        "아스피린"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-08-07",
+          "disease": "간질환",
+          "symptom": "관절통",
+          "medication": "디곡신",
+          "notes": "간질환 진료, 관절통 증상으로 디곡신 처방"
+        },
+        {
+          "date": "2025-05-07",
+          "disease": "골다공증",
+          "symptom": "관절통",
+          "medication": "메토프롤롤정",
+          "notes": "골다공증 진료, 관절통 증상으로 메토프롤롤정 처방"
+        },
+        {
+          "date": "2025-04-27",
+          "disease": "불안장애",
+          "symptom": "소화불량",
+          "medication": "프레드니솔론",
+          "notes": "불안장애 진료, 소화불량 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2025-02-06",
+          "disease": "갑상선질환",
+          "symptom": "어지러움",
+          "medication": "로라타딘",
+          "notes": "갑상선질환 진료, 어지러움 증상으로 로라타딘 처방"
+        },
+        {
+          "date": "2024-10-14",
+          "disease": "관절염",
+          "symptom": "불면",
+          "medication": "아세트아미노펜",
+          "notes": "관절염 진료, 불면 증상으로 아세트아미노펜 처방"
+        }
+      ],
+      "duplicateType": "동명이인+생년월일동일",
+      "duplicateNote": "김민수 (1980년생) - 2번째 - 생년월일 동일",
+      "createdAt": "2025-10-09T09:40:27.255Z",
+      "updatedAt": "2025-10-09T09:40:27.255Z"
+    },
+    {
+      "id": 3,
+      "mrn": "MRN20250003",
+      "name": "이영희",
+      "birthDate": "1975-03-20",
+      "sex": "F",
+      "age": 49,
+      "phone": "010-1111-2222",
+      "email": "leeyounghee1@daum.net",
+      "address": "대구광역시 중구 중앙대로 789번길 12호",
+      "insuranceNo": "1111111111",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-06-26",
+          "disease": "위염",
+          "symptom": "식욕부진",
+          "medication": "하이드로코르티손",
+          "notes": "위염 진료, 식욕부진 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2025-04-24",
+          "disease": "신장질환",
+          "symptom": "설사",
+          "medication": "인슐린",
+          "notes": "신장질환 진료, 설사 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2025-03-19",
+          "disease": "불안장애",
+          "symptom": "기침",
+          "medication": "아몰디핀정",
+          "notes": "불안장애 진료, 기침 증상으로 아몰디핀정 처방"
+        },
+        {
+          "date": "2025-02-27",
+          "disease": "류마티스",
+          "symptom": "구토",
+          "medication": "아스피린",
+          "notes": "류마티스 진료, 구토 증상으로 아스피린 처방"
+        }
+      ],
+      "duplicateType": "동명이인",
+      "duplicateNote": "이영희 (1975년생) - 1번째",
+      "createdAt": "2025-10-09T09:40:27.255Z",
+      "updatedAt": "2025-10-09T09:40:27.255Z"
+    },
+    {
+      "id": 4,
+      "mrn": "MRN20250004",
+      "name": "이영희",
+      "birthDate": "1975-03-20",
+      "sex": "F",
+      "age": 49,
+      "phone": "010-3333-4444",
+      "email": "leeyounghee2@hanmail.net",
+      "address": "인천광역시 연수구 컨벤시아대로 345번길 67호",
+      "insuranceNo": "2222222222",
+      "allergies": [
+        "설폰아미드"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-08-03",
+          "disease": "당뇨병",
+          "symptom": "어지러움",
+          "medication": "세티리진",
+          "notes": "당뇨병 진료, 어지러움 증상으로 세티리진 처방"
+        },
+        {
+          "date": "2025-04-26",
+          "disease": "심장질환",
+          "symptom": "구토",
+          "medication": "시타글립틴정",
+          "notes": "심장질환 진료, 구토 증상으로 시타글립틴정 처방"
+        },
+        {
+          "date": "2025-01-10",
+          "disease": "갑상선질환",
+          "symptom": "요통",
+          "medication": "하이드로코르티손",
+          "notes": "갑상선질환 진료, 요통 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2024-12-07",
+          "disease": "요통",
+          "symptom": "어지러움",
+          "medication": "디곡신",
+          "notes": "요통 진료, 어지러움 증상으로 디곡신 처방"
+        }
+      ],
+      "duplicateType": "동명이인+생년월일동일",
+      "duplicateNote": "이영희 (1975년생) - 2번째 - 생년월일 동일",
+      "createdAt": "2025-10-09T09:40:27.255Z",
+      "updatedAt": "2025-10-09T09:40:27.255Z"
+    },
+    {
+      "id": 5,
+      "mrn": "MRN20250005",
+      "name": "박철수",
+      "birthDate": "1990-08-10",
+      "sex": "M",
+      "age": 34,
+      "phone": "010-5555-6666",
+      "email": "parkcheolsu1@yahoo.com",
+      "address": "광주광역시 서구 상무대로 901번길 23호",
+      "insuranceNo": "3333333333",
+      "allergies": [
+        "세파클로르"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-04-13",
+          "disease": "고혈압",
+          "symptom": "호흡곤란",
+          "medication": "발사르탄정",
+          "notes": "고혈압 진료, 호흡곤란 증상으로 발사르탄정 처방"
+        }
+      ],
+      "duplicateType": "동명이인",
+      "duplicateNote": "박철수 (1990년생) - 1번째",
+      "createdAt": "2025-10-09T09:40:27.255Z",
+      "updatedAt": "2025-10-09T09:40:27.255Z"
+    },
+    {
+      "id": 6,
+      "mrn": "MRN20250006",
+      "name": "박철수",
+      "birthDate": "1990-08-10",
+      "sex": "M",
+      "age": 34,
+      "phone": "010-7777-8888",
+      "email": "parkcheolsu2@gmail.com",
+      "address": "대전광역시 유성구 대학로 234번길 56호",
+      "insuranceNo": "4444444444",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-08-08",
+          "disease": "관절염",
+          "symptom": "발열",
+          "medication": "다이아벡스정",
+          "notes": "관절염 진료, 발열 증상으로 다이아벡스정 처방"
+        },
+        {
+          "date": "2025-07-10",
+          "disease": "두통",
+          "symptom": "소화불량",
+          "medication": "글리메피리드정",
+          "notes": "두통 진료, 소화불량 증상으로 글리메피리드정 처방"
+        },
+        {
+          "date": "2024-11-29",
+          "disease": "요통",
+          "symptom": "피로감",
+          "medication": "로라타딘",
+          "notes": "요통 진료, 피로감 증상으로 로라타딘 처방"
+        }
+      ],
+      "duplicateType": "동명이인+생년월일동일",
+      "duplicateNote": "박철수 (1990년생) - 2번째 - 생년월일 동일",
+      "createdAt": "2025-10-09T09:40:27.255Z",
+      "updatedAt": "2025-10-09T09:40:27.255Z"
+    },
+    {
+      "id": 7,
+      "mrn": "MRN20250007",
+      "name": "한영수",
+      "birthDate": "1952-11-30",
+      "sex": "F",
+      "age": 73,
+      "phone": "011-1468-3743",
+      "email": "한영수276@naver.com",
+      "address": "광주광역시 광진구 논현로 122번길 72호",
+      "insuranceNo": "3090449016",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-08-15",
+          "disease": "파킨슨병",
+          "symptom": "식욕부진",
+          "medication": "프레드니솔론",
+          "notes": "파킨슨병 진료, 식욕부진 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2024-10-25",
+          "disease": "고혈압",
+          "symptom": "구토",
+          "medication": "하이드로코르티손",
+          "notes": "고혈압 진료, 구토 증상으로 하이드로코르티손 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 8,
+      "mrn": "MRN20250008",
+      "name": "장철수",
+      "birthDate": "1955-09-27",
+      "sex": "M",
+      "age": 70,
+      "phone": "018-1139-2261",
+      "email": "장철수361@naver.com",
+      "address": "광주광역시 광진구 봉은사로 85번길 13호",
+      "insuranceNo": "2930079394",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-02-01",
+          "disease": "위염",
+          "symptom": "요통",
+          "medication": "로사르탄정",
+          "notes": "위염 진료, 요통 증상으로 로사르탄정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 9,
+      "mrn": "MRN20250009",
+      "name": "김준영",
+      "birthDate": "1999-03-02",
+      "sex": "M",
+      "age": 26,
+      "phone": "010-1441-7344",
+      "email": "김준영812@hanmail.net",
+      "address": "부산광역시 노원구 서초대로 26번길 85호",
+      "insuranceNo": "3860456143",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-09-16",
+          "disease": "요통",
+          "symptom": "기침",
+          "medication": "하이드로코르티손",
+          "notes": "요통 진료, 기침 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2025-08-08",
+          "disease": "우울증",
+          "symptom": "어지러움",
+          "medication": "글리메피리드정",
+          "notes": "우울증 진료, 어지러움 증상으로 글리메피리드정 처방"
+        },
+        {
+          "date": "2025-05-28",
+          "disease": "갑상선질환",
+          "symptom": "인후통",
+          "medication": "로라타딘",
+          "notes": "갑상선질환 진료, 인후통 증상으로 로라타딘 처방"
+        },
+        {
+          "date": "2024-12-03",
+          "disease": "요통",
+          "symptom": "복통",
+          "medication": "프레드니솔론",
+          "notes": "요통 진료, 복통 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2024-10-28",
+          "disease": "우울증",
+          "symptom": "인후통",
+          "medication": "다이아벡스정",
+          "notes": "우울증 진료, 인후통 증상으로 다이아벡스정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 10,
+      "mrn": "MRN20250010",
+      "name": "최철민",
+      "birthDate": "1978-01-07",
+      "sex": "M",
+      "age": 47,
+      "phone": "016-1205-4001",
+      "email": "최철민807@gmail.com",
+      "address": "울산광역시 강동구 서초대로 71번길 82호",
+      "insuranceNo": "9761461576",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-09-22",
+          "disease": "우울증",
+          "symptom": "피로감",
+          "medication": "란소프라졸",
+          "notes": "우울증 진료, 피로감 증상으로 란소프라졸 처방"
+        },
+        {
+          "date": "2025-08-31",
+          "disease": "위염",
+          "symptom": "요통",
+          "medication": "다이아벡스정",
+          "notes": "위염 진료, 요통 증상으로 다이아벡스정 처방"
+        },
+        {
+          "date": "2024-11-25",
+          "disease": "심장질환",
+          "symptom": "피로감",
+          "medication": "로라타딘",
+          "notes": "심장질환 진료, 피로감 증상으로 로라타딘 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 11,
+      "mrn": "MRN20250011",
+      "name": "조순숙",
+      "birthDate": "1970-12-15",
+      "sex": "F",
+      "age": 55,
+      "phone": "019-7902-5164",
+      "email": "조순숙749@naver.com",
+      "address": "인천광역시 광진구 강남대로 4번길 54호",
+      "insuranceNo": "9954288292",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-10-08",
+          "disease": "류마티스",
+          "symptom": "두통",
+          "medication": "인슐린",
+          "notes": "류마티스 진료, 두통 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2025-05-14",
+          "disease": "우울증",
+          "symptom": "식욕부진",
+          "medication": "캅토프릴정",
+          "notes": "우울증 진료, 식욕부진 증상으로 캅토프릴정 처방"
+        },
+        {
+          "date": "2025-04-11",
+          "disease": "치매",
+          "symptom": "관절통",
+          "medication": "디곡신",
+          "notes": "치매 진료, 관절통 증상으로 디곡신 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 12,
+      "mrn": "MRN20250012",
+      "name": "신순희",
+      "birthDate": "1971-08-25",
+      "sex": "F",
+      "age": 54,
+      "phone": "011-7833-2603",
+      "email": "신순희279@hanmail.net",
+      "address": "부산광역시 구로구 테헤란로 52번길 61호",
+      "insuranceNo": "1939388752",
+      "allergies": [
+        "에리트로마이신",
+        "설폰아미드",
+        "세파클로르"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-06-19",
+          "disease": "골다공증",
+          "symptom": "두통",
+          "medication": "발사르탄정",
+          "notes": "골다공증 진료, 두통 증상으로 발사르탄정 처방"
+        },
+        {
+          "date": "2025-06-18",
+          "disease": "우울증",
+          "symptom": "기침",
+          "medication": "아세트아미노펜",
+          "notes": "우울증 진료, 기침 증상으로 아세트아미노펜 처방"
+        },
+        {
+          "date": "2025-04-20",
+          "disease": "알레르기",
+          "symptom": "관절통",
+          "medication": "글리메피리드정",
+          "notes": "알레르기 진료, 관절통 증상으로 글리메피리드정 처방"
+        },
+        {
+          "date": "2024-12-17",
+          "disease": "불안장애",
+          "symptom": "근육통",
+          "medication": "로라타딘",
+          "notes": "불안장애 진료, 근육통 증상으로 로라타딘 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 13,
+      "mrn": "MRN20250013",
+      "name": "임영호",
+      "birthDate": "1997-03-07",
+      "sex": "M",
+      "age": 28,
+      "phone": "017-4531-1829",
+      "email": "임영호193@yahoo.com",
+      "address": "울산광역시 광진구 강남대로 107번길 62호",
+      "insuranceNo": "1488553224",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-09-28",
+          "disease": "위염",
+          "symptom": "호흡곤란",
+          "medication": "이부프로펜",
+          "notes": "위염 진료, 호흡곤란 증상으로 이부프로펜 처방"
+        },
+        {
+          "date": "2025-01-15",
+          "disease": "요통",
+          "symptom": "기침",
+          "medication": "인슐린",
+          "notes": "요통 진료, 기침 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2025-01-05",
+          "disease": "류마티스",
+          "symptom": "요통",
+          "medication": "아몰디핀정",
+          "notes": "류마티스 진료, 요통 증상으로 아몰디핀정 처방"
+        },
+        {
+          "date": "2024-11-15",
+          "disease": "우울증",
+          "symptom": "가슴통증",
+          "medication": "세티리진",
+          "notes": "우울증 진료, 가슴통증 증상으로 세티리진 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 14,
+      "mrn": "MRN20250014",
+      "name": "전동수",
+      "birthDate": "2004-01-02",
+      "sex": "M",
+      "age": 21,
+      "phone": "016-3837-3355",
+      "email": "전동수860@daum.net",
+      "address": "서울특별시 구로구 반포대로 58번길 60호",
+      "insuranceNo": "3320086272",
+      "allergies": [
+        "세파클로르"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-05-26",
+          "disease": "불안장애",
+          "symptom": "콧물",
+          "medication": "아세트아미노펜",
+          "notes": "불안장애 진료, 콧물 증상으로 아세트아미노펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 15,
+      "mrn": "MRN20250015",
+      "name": "김현철",
+      "birthDate": "2001-06-24",
+      "sex": "M",
+      "age": 24,
+      "phone": "016-4204-7805",
+      "email": "김현철894@hanmail.net",
+      "address": "광주광역시 관악구 반포대로 36번길 53호",
+      "insuranceNo": "8448479774",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-10-03",
+          "disease": "감기",
+          "symptom": "소화불량",
+          "medication": "아몰디핀정",
+          "notes": "감기 진료, 소화불량 증상으로 아몰디핀정 처방"
+        },
+        {
+          "date": "2025-04-29",
+          "disease": "감기",
+          "symptom": "인후통",
+          "medication": "아세트아미노펜",
+          "notes": "감기 진료, 인후통 증상으로 아세트아미노펜 처방"
+        },
+        {
+          "date": "2025-03-26",
+          "disease": "갑상선질환",
+          "symptom": "가슴통증",
+          "medication": "프레드니솔론",
+          "notes": "갑상선질환 진료, 가슴통증 증상으로 프레드니솔론 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 16,
+      "mrn": "MRN20250016",
+      "name": "윤순희",
+      "birthDate": "1994-12-09",
+      "sex": "F",
+      "age": 31,
+      "phone": "010-4677-9116",
+      "email": "윤순희167@daum.net",
+      "address": "서울특별시 노원구 서초대로 5번길 41호",
+      "insuranceNo": "9180617699",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-06-05",
+          "disease": "심장질환",
+          "symptom": "두통",
+          "medication": "하이드로코르티손",
+          "notes": "심장질환 진료, 두통 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2025-05-16",
+          "disease": "파킨슨병",
+          "symptom": "복통",
+          "medication": "로라타딘",
+          "notes": "파킨슨병 진료, 복통 증상으로 로라타딘 처방"
+        },
+        {
+          "date": "2025-04-06",
+          "disease": "알레르기",
+          "symptom": "요통",
+          "medication": "세티리진",
+          "notes": "알레르기 진료, 요통 증상으로 세티리진 처방"
+        },
+        {
+          "date": "2024-10-21",
+          "disease": "관절염",
+          "symptom": "관절통",
+          "medication": "란소프라졸",
+          "notes": "관절염 진료, 관절통 증상으로 란소프라졸 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 17,
+      "mrn": "MRN20250017",
+      "name": "신순주",
+      "birthDate": "1996-06-01",
+      "sex": "F",
+      "age": 29,
+      "phone": "017-9352-1171",
+      "email": "신순주665@yahoo.com",
+      "address": "광주광역시 강북구 역삼로 139번길 71호",
+      "insuranceNo": "4670270097",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-09-09",
+          "disease": "두통",
+          "symptom": "구토",
+          "medication": "다이아벡스정",
+          "notes": "두통 진료, 구토 증상으로 다이아벡스정 처방"
+        },
+        {
+          "date": "2025-03-01",
+          "disease": "알레르기",
+          "symptom": "소화불량",
+          "medication": "이부프로펜",
+          "notes": "알레르기 진료, 소화불량 증상으로 이부프로펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 18,
+      "mrn": "MRN20250018",
+      "name": "박민경",
+      "birthDate": "2006-04-27",
+      "sex": "F",
+      "age": 19,
+      "phone": "010-8416-9724",
+      "email": "박민경674@naver.com",
+      "address": "부산광역시 강서구 삼성로 14번길 99호",
+      "insuranceNo": "2379702526",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-10-06",
+          "disease": "두통",
+          "symptom": "콧물",
+          "medication": "인슐린",
+          "notes": "두통 진료, 콧물 증상으로 인슐린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 19,
+      "mrn": "MRN20250019",
+      "name": "한민숙",
+      "birthDate": "1978-12-17",
+      "sex": "F",
+      "age": 47,
+      "phone": "016-1801-7438",
+      "email": "한민숙437@yahoo.com",
+      "address": "대구광역시 강남구 강남대로 119번길 70호",
+      "insuranceNo": "5671096324",
+      "allergies": [
+        "설폰아미드"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-03-18",
+          "disease": "두통",
+          "symptom": "식욕부진",
+          "medication": "로라타딘",
+          "notes": "두통 진료, 식욕부진 증상으로 로라타딘 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 20,
+      "mrn": "MRN20250020",
+      "name": "정영경",
+      "birthDate": "2000-05-27",
+      "sex": "F",
+      "age": 25,
+      "phone": "016-6220-7453",
+      "email": "정영경383@hanmail.net",
+      "address": "울산광역시 광진구 삼성로 108번길 39호",
+      "insuranceNo": "3938544583",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-09-30",
+          "disease": "파킨슨병",
+          "symptom": "인후통",
+          "medication": "글리메피리드정",
+          "notes": "파킨슨병 진료, 인후통 증상으로 글리메피리드정 처방"
+        },
+        {
+          "date": "2025-06-26",
+          "disease": "갑상선질환",
+          "symptom": "인후통",
+          "medication": "세티리진",
+          "notes": "갑상선질환 진료, 인후통 증상으로 세티리진 처방"
+        },
+        {
+          "date": "2025-02-01",
+          "disease": "치매",
+          "symptom": "오한",
+          "medication": "로사르탄정",
+          "notes": "치매 진료, 오한 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2024-12-01",
+          "disease": "감기",
+          "symptom": "오한",
+          "medication": "프레드니솔론",
+          "notes": "감기 진료, 오한 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2024-11-05",
+          "disease": "요통",
+          "symptom": "요통",
+          "medication": "발사르탄정",
+          "notes": "요통 진료, 요통 증상으로 발사르탄정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 21,
+      "mrn": "MRN20250021",
+      "name": "정정자",
+      "birthDate": "1957-04-20",
+      "sex": "F",
+      "age": 68,
+      "phone": "017-5290-1038",
+      "email": "정정자190@yahoo.com",
+      "address": "대구광역시 노원구 삼성로 89번길 71호",
+      "insuranceNo": "2936455253",
+      "allergies": [
+        "세파클로르"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-08-05",
+          "disease": "고혈압",
+          "symptom": "오한",
+          "medication": "캅토프릴정",
+          "notes": "고혈압 진료, 오한 증상으로 캅토프릴정 처방"
+        },
+        {
+          "date": "2025-04-26",
+          "disease": "불안장애",
+          "symptom": "식욕부진",
+          "medication": "발사르탄정",
+          "notes": "불안장애 진료, 식욕부진 증상으로 발사르탄정 처방"
+        },
+        {
+          "date": "2025-02-07",
+          "disease": "요통",
+          "symptom": "어지러움",
+          "medication": "아스피린",
+          "notes": "요통 진료, 어지러움 증상으로 아스피린 처방"
+        },
+        {
+          "date": "2024-12-11",
+          "disease": "파킨슨병",
+          "symptom": "식욕부진",
+          "medication": "아스피린",
+          "notes": "파킨슨병 진료, 식욕부진 증상으로 아스피린 처방"
+        },
+        {
+          "date": "2024-12-10",
+          "disease": "관절염",
+          "symptom": "두통",
+          "medication": "다이아벡스정",
+          "notes": "관절염 진료, 두통 증상으로 다이아벡스정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 22,
+      "mrn": "MRN20250022",
+      "name": "황영경",
+      "birthDate": "2002-10-13",
+      "sex": "F",
+      "age": 23,
+      "phone": "016-1198-1583",
+      "email": "황영경714@hanmail.net",
+      "address": "광주광역시 강동구 봉은사로 19번길 56호",
+      "insuranceNo": "3261569262",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-05-06",
+          "disease": "요통",
+          "symptom": "피로감",
+          "medication": "글리피지드정",
+          "notes": "요통 진료, 피로감 증상으로 글리피지드정 처방"
+        },
+        {
+          "date": "2025-04-27",
+          "disease": "당뇨병",
+          "symptom": "오한",
+          "medication": "발사르탄정",
+          "notes": "당뇨병 진료, 오한 증상으로 발사르탄정 처방"
+        },
+        {
+          "date": "2024-12-27",
+          "disease": "천식",
+          "symptom": "불면",
+          "medication": "로라타딘",
+          "notes": "천식 진료, 불면 증상으로 로라타딘 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 23,
+      "mrn": "MRN20250023",
+      "name": "안민수",
+      "birthDate": "1950-12-22",
+      "sex": "F",
+      "age": 75,
+      "phone": "018-5596-3434",
+      "email": "안민수305@naver.com",
+      "address": "서울특별시 도봉구 삼성로 43번길 52호",
+      "insuranceNo": "5850992434",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-07-20",
+          "disease": "파킨슨병",
+          "symptom": "변비",
+          "medication": "메토프롤롤정",
+          "notes": "파킨슨병 진료, 변비 증상으로 메토프롤롤정 처방"
+        },
+        {
+          "date": "2024-12-20",
+          "disease": "치매",
+          "symptom": "관절통",
+          "medication": "이부프로펜",
+          "notes": "치매 진료, 관절통 증상으로 이부프로펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 24,
+      "mrn": "MRN20250024",
+      "name": "강민현",
+      "birthDate": "1964-12-17",
+      "sex": "M",
+      "age": 61,
+      "phone": "016-9153-3089",
+      "email": "강민현663@naver.com",
+      "address": "부산광역시 강서구 논현로 15번길 50호",
+      "insuranceNo": "4981453059",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-03-28",
+          "disease": "천식",
+          "symptom": "관절통",
+          "medication": "인슐린",
+          "notes": "천식 진료, 관절통 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2025-03-14",
+          "disease": "심장질환",
+          "symptom": "변비",
+          "medication": "아세트아미노펜",
+          "notes": "심장질환 진료, 변비 증상으로 아세트아미노펜 처방"
+        },
+        {
+          "date": "2025-03-04",
+          "disease": "파킨슨병",
+          "symptom": "복통",
+          "medication": "세티리진",
+          "notes": "파킨슨병 진료, 복통 증상으로 세티리진 처방"
+        },
+        {
+          "date": "2025-02-20",
+          "disease": "두통",
+          "symptom": "소화불량",
+          "medication": "아세트아미노펜",
+          "notes": "두통 진료, 소화불량 증상으로 아세트아미노펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 25,
+      "mrn": "MRN20250025",
+      "name": "서철민",
+      "birthDate": "1993-07-31",
+      "sex": "M",
+      "age": 32,
+      "phone": "011-4473-8556",
+      "email": "서철민829@yahoo.com",
+      "address": "울산광역시 강서구 논현로 11번길 98호",
+      "insuranceNo": "5093912913",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-02-15",
+          "disease": "요통",
+          "symptom": "관절통",
+          "medication": "란소프라졸",
+          "notes": "요통 진료, 관절통 증상으로 란소프라졸 처방"
+        },
+        {
+          "date": "2025-01-03",
+          "disease": "우울증",
+          "symptom": "요통",
+          "medication": "발사르탄정",
+          "notes": "우울증 진료, 요통 증상으로 발사르탄정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 26,
+      "mrn": "MRN20250026",
+      "name": "고동수",
+      "birthDate": "1952-10-22",
+      "sex": "M",
+      "age": 73,
+      "phone": "018-8725-1596",
+      "email": "고동수405@gmail.com",
+      "address": "부산광역시 구로구 강남대로 133번길 72호",
+      "insuranceNo": "4415514437",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-07-31",
+          "disease": "심장질환",
+          "symptom": "발열",
+          "medication": "인슐린",
+          "notes": "심장질환 진료, 발열 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2025-04-22",
+          "disease": "심장질환",
+          "symptom": "요통",
+          "medication": "아몰디핀정",
+          "notes": "심장질환 진료, 요통 증상으로 아몰디핀정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 27,
+      "mrn": "MRN20250027",
+      "name": "전영주",
+      "birthDate": "2010-12-08",
+      "sex": "F",
+      "age": 15,
+      "phone": "019-3024-4132",
+      "email": "전영주208@gmail.com",
+      "address": "대전광역시 노원구 반포대로 96번길 24호",
+      "insuranceNo": "3655854552",
+      "allergies": [
+        "세파클로르",
+        "에리트로마이신"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-07-28",
+          "disease": "두통",
+          "symptom": "어지러움",
+          "medication": "아세트아미노펜",
+          "notes": "두통 진료, 어지러움 증상으로 아세트아미노펜 처방"
+        },
+        {
+          "date": "2025-02-23",
+          "disease": "관절염",
+          "symptom": "발열",
+          "medication": "다이아벡스정",
+          "notes": "관절염 진료, 발열 증상으로 다이아벡스정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 28,
+      "mrn": "MRN20250028",
+      "name": "송민희",
+      "birthDate": "1975-01-31",
+      "sex": "F",
+      "age": 50,
+      "phone": "016-7986-1711",
+      "email": "송민희932@hanmail.net",
+      "address": "광주광역시 강북구 서초대로 154번길 87호",
+      "insuranceNo": "5816763961",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-09-01",
+          "disease": "심장질환",
+          "symptom": "복통",
+          "medication": "다이아벡스정",
+          "notes": "심장질환 진료, 복통 증상으로 다이아벡스정 처방"
+        },
+        {
+          "date": "2025-03-30",
+          "disease": "불면증",
+          "symptom": "두통",
+          "medication": "세티리진",
+          "notes": "불면증 진료, 두통 증상으로 세티리진 처방"
+        },
+        {
+          "date": "2024-12-02",
+          "disease": "관절염",
+          "symptom": "호흡곤란",
+          "medication": "디곡신",
+          "notes": "관절염 진료, 호흡곤란 증상으로 디곡신 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 29,
+      "mrn": "MRN20250029",
+      "name": "안성수",
+      "birthDate": "1953-12-01",
+      "sex": "M",
+      "age": 72,
+      "phone": "018-5350-6721",
+      "email": "안성수168@daum.net",
+      "address": "대구광역시 강서구 반포대로 35번길 30호",
+      "insuranceNo": "3125886793",
+      "allergies": [
+        "설폰아미드"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-06-27",
+          "disease": "심장질환",
+          "symptom": "요통",
+          "medication": "로사르탄정",
+          "notes": "심장질환 진료, 요통 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2024-10-31",
+          "disease": "감기",
+          "symptom": "구토",
+          "medication": "아몰디핀정",
+          "notes": "감기 진료, 구토 증상으로 아몰디핀정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 30,
+      "mrn": "MRN20250030",
+      "name": "안영미",
+      "birthDate": "1952-05-05",
+      "sex": "F",
+      "age": 73,
+      "phone": "011-9327-5744",
+      "email": "안영미228@naver.com",
+      "address": "광주광역시 강남구 강남대로 65번길 8호",
+      "insuranceNo": "8847512248",
+      "allergies": [
+        "설폰아미드",
+        "페니실린"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-02-04",
+          "disease": "심장질환",
+          "symptom": "근육통",
+          "medication": "발사르탄정",
+          "notes": "심장질환 진료, 근육통 증상으로 발사르탄정 처방"
+        },
+        {
+          "date": "2025-01-21",
+          "disease": "두통",
+          "symptom": "가슴통증",
+          "medication": "글리메피리드정",
+          "notes": "두통 진료, 가슴통증 증상으로 글리메피리드정 처방"
+        },
+        {
+          "date": "2024-12-19",
+          "disease": "감기",
+          "symptom": "피로감",
+          "medication": "디곡신",
+          "notes": "감기 진료, 피로감 증상으로 디곡신 처방"
+        },
+        {
+          "date": "2024-11-24",
+          "disease": "우울증",
+          "symptom": "근육통",
+          "medication": "아스피린",
+          "notes": "우울증 진료, 근육통 증상으로 아스피린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 31,
+      "mrn": "MRN20250031",
+      "name": "한순희",
+      "birthDate": "1992-02-18",
+      "sex": "F",
+      "age": 33,
+      "phone": "016-9869-8827",
+      "email": "한순희48@gmail.com",
+      "address": "광주광역시 강동구 반포대로 76번길 29호",
+      "insuranceNo": "5029756380",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-03-03",
+          "disease": "위염",
+          "symptom": "불면",
+          "medication": "디곡신",
+          "notes": "위염 진료, 불면 증상으로 디곡신 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 32,
+      "mrn": "MRN20250032",
+      "name": "윤준영",
+      "birthDate": "2005-07-23",
+      "sex": "M",
+      "age": 20,
+      "phone": "019-4932-7212",
+      "email": "윤준영763@yahoo.com",
+      "address": "울산광역시 금천구 서초대로 33번길 53호",
+      "insuranceNo": "7799808223",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-07-13",
+          "disease": "관절염",
+          "symptom": "인후통",
+          "medication": "오메프라졸",
+          "notes": "관절염 진료, 인후통 증상으로 오메프라졸 처방"
+        },
+        {
+          "date": "2025-03-03",
+          "disease": "심장질환",
+          "symptom": "인후통",
+          "medication": "이부프로펜",
+          "notes": "심장질환 진료, 인후통 증상으로 이부프로펜 처방"
+        },
+        {
+          "date": "2024-11-01",
+          "disease": "갑상선질환",
+          "symptom": "소화불량",
+          "medication": "이부프로펜",
+          "notes": "갑상선질환 진료, 소화불량 증상으로 이부프로펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 33,
+      "mrn": "MRN20250033",
+      "name": "박민숙",
+      "birthDate": "1972-07-02",
+      "sex": "F",
+      "age": 53,
+      "phone": "010-6113-3013",
+      "email": "박민숙509@yahoo.com",
+      "address": "부산광역시 관악구 강남대로 95번길 80호",
+      "insuranceNo": "2412452931",
+      "allergies": [
+        "아스피린"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-09-11",
+          "disease": "두통",
+          "symptom": "관절통",
+          "medication": "발사르탄정",
+          "notes": "두통 진료, 관절통 증상으로 발사르탄정 처방"
+        },
+        {
+          "date": "2025-09-08",
+          "disease": "갑상선질환",
+          "symptom": "불면",
+          "medication": "오메프라졸",
+          "notes": "갑상선질환 진료, 불면 증상으로 오메프라졸 처방"
+        },
+        {
+          "date": "2025-03-04",
+          "disease": "신장질환",
+          "symptom": "변비",
+          "medication": "아스피린",
+          "notes": "신장질환 진료, 변비 증상으로 아스피린 처방"
+        },
+        {
+          "date": "2025-01-08",
+          "disease": "불안장애",
+          "symptom": "관절통",
+          "medication": "하이드로코르티손",
+          "notes": "불안장애 진료, 관절통 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2024-10-20",
+          "disease": "위염",
+          "symptom": "관절통",
+          "medication": "글리메피리드정",
+          "notes": "위염 진료, 관절통 증상으로 글리메피리드정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 34,
+      "mrn": "MRN20250034",
+      "name": "최민호",
+      "birthDate": "1971-05-20",
+      "sex": "M",
+      "age": 54,
+      "phone": "010-5968-4810",
+      "email": "최민호515@hanmail.net",
+      "address": "서울특별시 구로구 삼성로 62번길 89호",
+      "insuranceNo": "1642494888",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-07-02",
+          "disease": "당뇨병",
+          "symptom": "피로감",
+          "medication": "란소프라졸",
+          "notes": "당뇨병 진료, 피로감 증상으로 란소프라졸 처방"
+        },
+        {
+          "date": "2025-05-10",
+          "disease": "류마티스",
+          "symptom": "콧물",
+          "medication": "다이아벡스정",
+          "notes": "류마티스 진료, 콧물 증상으로 다이아벡스정 처방"
+        },
+        {
+          "date": "2024-10-20",
+          "disease": "위염",
+          "symptom": "두통",
+          "medication": "아세트아미노펜",
+          "notes": "위염 진료, 두통 증상으로 아세트아미노펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.256Z",
+      "updatedAt": "2025-10-09T09:40:27.256Z"
+    },
+    {
+      "id": 35,
+      "mrn": "MRN20250035",
+      "name": "최민희",
+      "birthDate": "1971-12-08",
+      "sex": "F",
+      "age": 54,
+      "phone": "010-9947-3515",
+      "email": "최민희116@hanmail.net",
+      "address": "부산광역시 금천구 강남대로 187번길 33호",
+      "insuranceNo": "7871788715",
+      "allergies": [
+        "에리트로마이신",
+        "페니실린"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-08-17",
+          "disease": "천식",
+          "symptom": "소화불량",
+          "medication": "란소프라졸",
+          "notes": "천식 진료, 소화불량 증상으로 란소프라졸 처방"
+        },
+        {
+          "date": "2025-07-10",
+          "disease": "불안장애",
+          "symptom": "가슴통증",
+          "medication": "란소프라졸",
+          "notes": "불안장애 진료, 가슴통증 증상으로 란소프라졸 처방"
+        },
+        {
+          "date": "2025-06-29",
+          "disease": "고혈압",
+          "symptom": "인후통",
+          "medication": "프레드니솔론",
+          "notes": "고혈압 진료, 인후통 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2025-02-05",
+          "disease": "불면증",
+          "symptom": "어지러움",
+          "medication": "로사르탄정",
+          "notes": "불면증 진료, 어지러움 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2024-10-18",
+          "disease": "위염",
+          "symptom": "구토",
+          "medication": "하이드로코르티손",
+          "notes": "위염 진료, 구토 증상으로 하이드로코르티손 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 36,
+      "mrn": "MRN20250036",
+      "name": "안민애",
+      "birthDate": "1964-02-20",
+      "sex": "F",
+      "age": 61,
+      "phone": "017-8215-5934",
+      "email": "안민애746@gmail.com",
+      "address": "대구광역시 관악구 테헤란로 15번길 3호",
+      "insuranceNo": "6194140276",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-04-08",
+          "disease": "갑상선질환",
+          "symptom": "어지러움",
+          "medication": "아세트아미노펜",
+          "notes": "갑상선질환 진료, 어지러움 증상으로 아세트아미노펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 37,
+      "mrn": "MRN20250037",
+      "name": "신영희",
+      "birthDate": "2007-10-18",
+      "sex": "F",
+      "age": 18,
+      "phone": "018-1116-7159",
+      "email": "신영희76@yahoo.com",
+      "address": "인천광역시 노원구 테헤란로 133번길 77호",
+      "insuranceNo": "8493747116",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-08-25",
+          "disease": "감기",
+          "symptom": "변비",
+          "medication": "아스피린",
+          "notes": "감기 진료, 변비 증상으로 아스피린 처방"
+        },
+        {
+          "date": "2025-08-07",
+          "disease": "관절염",
+          "symptom": "소화불량",
+          "medication": "오메프라졸",
+          "notes": "관절염 진료, 소화불량 증상으로 오메프라졸 처방"
+        },
+        {
+          "date": "2025-04-16",
+          "disease": "요통",
+          "symptom": "호흡곤란",
+          "medication": "아세트아미노펜",
+          "notes": "요통 진료, 호흡곤란 증상으로 아세트아미노펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 38,
+      "mrn": "MRN20250038",
+      "name": "박철수",
+      "birthDate": "1984-04-21",
+      "sex": "M",
+      "age": 41,
+      "phone": "019-5418-4155",
+      "email": "박철수303@naver.com",
+      "address": "대구광역시 강동구 논현로 154번길 87호",
+      "insuranceNo": "4677776987",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-06-30",
+          "disease": "감기",
+          "symptom": "가슴통증",
+          "medication": "오메프라졸",
+          "notes": "감기 진료, 가슴통증 증상으로 오메프라졸 처방"
+        },
+        {
+          "date": "2025-06-17",
+          "disease": "치매",
+          "symptom": "변비",
+          "medication": "란소프라졸",
+          "notes": "치매 진료, 변비 증상으로 란소프라졸 처방"
+        },
+        {
+          "date": "2025-05-24",
+          "disease": "알레르기",
+          "symptom": "기침",
+          "medication": "하이드로코르티손",
+          "notes": "알레르기 진료, 기침 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2025-05-04",
+          "disease": "신장질환",
+          "symptom": "가슴통증",
+          "medication": "프레드니솔론",
+          "notes": "신장질환 진료, 가슴통증 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2024-10-25",
+          "disease": "감기",
+          "symptom": "구토",
+          "medication": "세티리진",
+          "notes": "감기 진료, 구토 증상으로 세티리진 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 39,
+      "mrn": "MRN20250039",
+      "name": "서성민",
+      "birthDate": "2004-01-31",
+      "sex": "M",
+      "age": 21,
+      "phone": "019-1516-7564",
+      "email": "서성민404@gmail.com",
+      "address": "부산광역시 광진구 서초대로 81번길 86호",
+      "insuranceNo": "5141693193",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-07-31",
+          "disease": "고혈압",
+          "symptom": "식욕부진",
+          "medication": "글리메피리드정",
+          "notes": "고혈압 진료, 식욕부진 증상으로 글리메피리드정 처방"
+        },
+        {
+          "date": "2025-02-17",
+          "disease": "알레르기",
+          "symptom": "소화불량",
+          "medication": "발사르탄정",
+          "notes": "알레르기 진료, 소화불량 증상으로 발사르탄정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 40,
+      "mrn": "MRN20250040",
+      "name": "황순주",
+      "birthDate": "2000-01-06",
+      "sex": "F",
+      "age": 25,
+      "phone": "011-3739-2932",
+      "email": "황순주547@yahoo.com",
+      "address": "대구광역시 광진구 강남대로 9번길 51호",
+      "insuranceNo": "2484016047",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-10-02",
+          "disease": "류마티스",
+          "symptom": "변비",
+          "medication": "캅토프릴정",
+          "notes": "류마티스 진료, 변비 증상으로 캅토프릴정 처방"
+        },
+        {
+          "date": "2025-10-01",
+          "disease": "천식",
+          "symptom": "근육통",
+          "medication": "프레드니솔론",
+          "notes": "천식 진료, 근육통 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2025-09-12",
+          "disease": "불면증",
+          "symptom": "피로감",
+          "medication": "하이드로코르티손",
+          "notes": "불면증 진료, 피로감 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2025-01-11",
+          "disease": "불면증",
+          "symptom": "콧물",
+          "medication": "아몰디핀정",
+          "notes": "불면증 진료, 콧물 증상으로 아몰디핀정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 41,
+      "mrn": "MRN20250041",
+      "name": "김민철",
+      "birthDate": "1973-02-17",
+      "sex": "M",
+      "age": 52,
+      "phone": "010-3207-2512",
+      "email": "김민철529@gmail.com",
+      "address": "서울특별시 강남구 강남대로 197번길 87호",
+      "insuranceNo": "3110518977",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2024-12-15",
+          "disease": "신장질환",
+          "symptom": "오한",
+          "medication": "디곡신",
+          "notes": "신장질환 진료, 오한 증상으로 디곡신 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 42,
+      "mrn": "MRN20250042",
+      "name": "최민자",
+      "birthDate": "1960-01-21",
+      "sex": "F",
+      "age": 65,
+      "phone": "018-9645-1573",
+      "email": "최민자923@yahoo.com",
+      "address": "부산광역시 관악구 테헤란로 119번길 100호",
+      "insuranceNo": "2279295292",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-07-18",
+          "disease": "갑상선질환",
+          "symptom": "변비",
+          "medication": "다이아벡스정",
+          "notes": "갑상선질환 진료, 변비 증상으로 다이아벡스정 처방"
+        },
+        {
+          "date": "2025-05-24",
+          "disease": "불안장애",
+          "symptom": "가슴통증",
+          "medication": "세티리진",
+          "notes": "불안장애 진료, 가슴통증 증상으로 세티리진 처방"
+        },
+        {
+          "date": "2025-03-14",
+          "disease": "치매",
+          "symptom": "두통",
+          "medication": "오메프라졸",
+          "notes": "치매 진료, 두통 증상으로 오메프라졸 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 43,
+      "mrn": "MRN20250043",
+      "name": "강순희",
+      "birthDate": "1996-06-01",
+      "sex": "F",
+      "age": 29,
+      "phone": "018-8842-1506",
+      "email": "강순희35@yahoo.com",
+      "address": "광주광역시 강남구 테헤란로 142번길 39호",
+      "insuranceNo": "1175538974",
+      "allergies": [
+        "아스피린",
+        "세파클로르"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-10-03",
+          "disease": "파킨슨병",
+          "symptom": "기침",
+          "medication": "로라타딘",
+          "notes": "파킨슨병 진료, 기침 증상으로 로라타딘 처방"
+        },
+        {
+          "date": "2025-09-22",
+          "disease": "신장질환",
+          "symptom": "변비",
+          "medication": "발사르탄정",
+          "notes": "신장질환 진료, 변비 증상으로 발사르탄정 처방"
+        },
+        {
+          "date": "2025-08-01",
+          "disease": "위염",
+          "symptom": "오한",
+          "medication": "하이드로코르티손",
+          "notes": "위염 진료, 오한 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2025-07-29",
+          "disease": "치매",
+          "symptom": "어지러움",
+          "medication": "아스피린",
+          "notes": "치매 진료, 어지러움 증상으로 아스피린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 44,
+      "mrn": "MRN20250044",
+      "name": "장영주",
+      "birthDate": "2009-05-11",
+      "sex": "F",
+      "age": 16,
+      "phone": "019-9486-8794",
+      "email": "장영주28@yahoo.com",
+      "address": "인천광역시 강북구 강남대로 14번길 43호",
+      "insuranceNo": "6194455077",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-08-01",
+          "disease": "관절염",
+          "symptom": "기침",
+          "medication": "아스피린",
+          "notes": "관절염 진료, 기침 증상으로 아스피린 처방"
+        },
+        {
+          "date": "2025-05-19",
+          "disease": "불안장애",
+          "symptom": "가슴통증",
+          "medication": "로라타딘",
+          "notes": "불안장애 진료, 가슴통증 증상으로 로라타딘 처방"
+        },
+        {
+          "date": "2024-10-30",
+          "disease": "파킨슨병",
+          "symptom": "두통",
+          "medication": "로사르탄정",
+          "notes": "파킨슨병 진료, 두통 증상으로 로사르탄정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 45,
+      "mrn": "MRN20250045",
+      "name": "정순자",
+      "birthDate": "1983-02-28",
+      "sex": "F",
+      "age": 42,
+      "phone": "018-8233-3934",
+      "email": "정순자767@hanmail.net",
+      "address": "광주광역시 도봉구 반포대로 55번길 85호",
+      "insuranceNo": "5935045760",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-01-27",
+          "disease": "치매",
+          "symptom": "식욕부진",
+          "medication": "세티리진",
+          "notes": "치매 진료, 식욕부진 증상으로 세티리진 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 46,
+      "mrn": "MRN20250046",
+      "name": "안영미",
+      "birthDate": "1977-02-08",
+      "sex": "F",
+      "age": 48,
+      "phone": "019-1490-7197",
+      "email": "안영미880@daum.net",
+      "address": "서울특별시 금천구 강남대로 87번길 31호",
+      "insuranceNo": "3179818255",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-07-28",
+          "disease": "관절염",
+          "symptom": "발열",
+          "medication": "메토프롤롤정",
+          "notes": "관절염 진료, 발열 증상으로 메토프롤롤정 처방"
+        },
+        {
+          "date": "2025-05-19",
+          "disease": "고혈압",
+          "symptom": "요통",
+          "medication": "메토프롤롤정",
+          "notes": "고혈압 진료, 요통 증상으로 메토프롤롤정 처방"
+        },
+        {
+          "date": "2025-02-26",
+          "disease": "감기",
+          "symptom": "불면",
+          "medication": "인슐린",
+          "notes": "감기 진료, 불면 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2024-12-22",
+          "disease": "파킨슨병",
+          "symptom": "불면",
+          "medication": "하이드로코르티손",
+          "notes": "파킨슨병 진료, 불면 증상으로 하이드로코르티손 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 47,
+      "mrn": "MRN20250047",
+      "name": "이준영",
+      "birthDate": "1982-04-10",
+      "sex": "M",
+      "age": 43,
+      "phone": "016-1652-3612",
+      "email": "이준영629@gmail.com",
+      "address": "대전광역시 관악구 강남대로 25번길 19호",
+      "insuranceNo": "1152244680",
+      "allergies": [
+        "설폰아미드"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-09-17",
+          "disease": "알레르기",
+          "symptom": "관절통",
+          "medication": "아몰디핀정",
+          "notes": "알레르기 진료, 관절통 증상으로 아몰디핀정 처방"
+        },
+        {
+          "date": "2025-08-14",
+          "disease": "두통",
+          "symptom": "복통",
+          "medication": "글리메피리드정",
+          "notes": "두통 진료, 복통 증상으로 글리메피리드정 처방"
+        },
+        {
+          "date": "2025-03-08",
+          "disease": "치매",
+          "symptom": "불면",
+          "medication": "로라타딘",
+          "notes": "치매 진료, 불면 증상으로 로라타딘 처방"
+        },
+        {
+          "date": "2025-01-25",
+          "disease": "감기",
+          "symptom": "설사",
+          "medication": "디곡신",
+          "notes": "감기 진료, 설사 증상으로 디곡신 처방"
+        },
+        {
+          "date": "2025-01-20",
+          "disease": "골다공증",
+          "symptom": "근육통",
+          "medication": "하이드로코르티손",
+          "notes": "골다공증 진료, 근육통 증상으로 하이드로코르티손 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 48,
+      "mrn": "MRN20250048",
+      "name": "박순희",
+      "birthDate": "1966-03-06",
+      "sex": "F",
+      "age": 59,
+      "phone": "017-9908-8411",
+      "email": "박순희164@hanmail.net",
+      "address": "대전광역시 관악구 논현로 163번길 13호",
+      "insuranceNo": "8264735347",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-02-14",
+          "disease": "두통",
+          "symptom": "어지러움",
+          "medication": "로라타딘",
+          "notes": "두통 진료, 어지러움 증상으로 로라타딘 처방"
+        },
+        {
+          "date": "2025-01-21",
+          "disease": "당뇨병",
+          "symptom": "복통",
+          "medication": "글리피지드정",
+          "notes": "당뇨병 진료, 복통 증상으로 글리피지드정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 49,
+      "mrn": "MRN20250049",
+      "name": "황지호",
+      "birthDate": "1998-03-13",
+      "sex": "M",
+      "age": 27,
+      "phone": "018-2667-5863",
+      "email": "황지호523@daum.net",
+      "address": "대전광역시 강서구 삼성로 120번길 100호",
+      "insuranceNo": "6631004679",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-06-15",
+          "disease": "고혈압",
+          "symptom": "피로감",
+          "medication": "인슐린",
+          "notes": "고혈압 진료, 피로감 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2025-04-28",
+          "disease": "신장질환",
+          "symptom": "피로감",
+          "medication": "프레드니솔론",
+          "notes": "신장질환 진료, 피로감 증상으로 프레드니솔론 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 50,
+      "mrn": "MRN20250050",
+      "name": "서정숙",
+      "birthDate": "1987-09-07",
+      "sex": "F",
+      "age": 38,
+      "phone": "018-9357-8468",
+      "email": "서정숙752@gmail.com",
+      "address": "서울특별시 구로구 삼성로 20번길 56호",
+      "insuranceNo": "9177634679",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-03-28",
+          "disease": "감기",
+          "symptom": "소화불량",
+          "medication": "발사르탄정",
+          "notes": "감기 진료, 소화불량 증상으로 발사르탄정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 51,
+      "mrn": "MRN20250051",
+      "name": "장민희",
+      "birthDate": "1956-02-06",
+      "sex": "F",
+      "age": 69,
+      "phone": "017-3396-6301",
+      "email": "장민희338@yahoo.com",
+      "address": "부산광역시 강북구 서초대로 130번길 58호",
+      "insuranceNo": "7841324065",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-01-16",
+          "disease": "알레르기",
+          "symptom": "어지러움",
+          "medication": "글리피지드정",
+          "notes": "알레르기 진료, 어지러움 증상으로 글리피지드정 처방"
+        },
+        {
+          "date": "2024-11-22",
+          "disease": "당뇨병",
+          "symptom": "관절통",
+          "medication": "메토프롤롤정",
+          "notes": "당뇨병 진료, 관절통 증상으로 메토프롤롤정 처방"
+        },
+        {
+          "date": "2024-10-19",
+          "disease": "관절염",
+          "symptom": "콧물",
+          "medication": "인슐린",
+          "notes": "관절염 진료, 콧물 증상으로 인슐린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 52,
+      "mrn": "MRN20250052",
+      "name": "황정경",
+      "birthDate": "2002-07-19",
+      "sex": "F",
+      "age": 23,
+      "phone": "010-1885-4863",
+      "email": "황정경809@naver.com",
+      "address": "인천광역시 금천구 봉은사로 118번길 59호",
+      "insuranceNo": "1835972353",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-09-29",
+          "disease": "천식",
+          "symptom": "불면",
+          "medication": "오메프라졸",
+          "notes": "천식 진료, 불면 증상으로 오메프라졸 처방"
+        },
+        {
+          "date": "2024-12-10",
+          "disease": "고혈압",
+          "symptom": "피로감",
+          "medication": "글리피지드정",
+          "notes": "고혈압 진료, 피로감 증상으로 글리피지드정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 53,
+      "mrn": "MRN20250053",
+      "name": "황정숙",
+      "birthDate": "1956-03-04",
+      "sex": "F",
+      "age": 69,
+      "phone": "018-1038-9810",
+      "email": "황정숙510@hanmail.net",
+      "address": "서울특별시 광진구 논현로 9번길 55호",
+      "insuranceNo": "4915504170",
+      "allergies": [
+        "아스피린"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-09-23",
+          "disease": "류마티스",
+          "symptom": "호흡곤란",
+          "medication": "로사르탄정",
+          "notes": "류마티스 진료, 호흡곤란 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2024-11-10",
+          "disease": "감기",
+          "symptom": "소화불량",
+          "medication": "이부프로펜",
+          "notes": "감기 진료, 소화불량 증상으로 이부프로펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 54,
+      "mrn": "MRN20250054",
+      "name": "박지훈",
+      "birthDate": "1987-06-26",
+      "sex": "M",
+      "age": 38,
+      "phone": "016-4590-7480",
+      "email": "박지훈848@daum.net",
+      "address": "부산광역시 도봉구 강남대로 39번길 99호",
+      "insuranceNo": "4914973546",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-09-28",
+          "disease": "요통",
+          "symptom": "설사",
+          "medication": "디곡신",
+          "notes": "요통 진료, 설사 증상으로 디곡신 처방"
+        },
+        {
+          "date": "2025-08-14",
+          "disease": "파킨슨병",
+          "symptom": "호흡곤란",
+          "medication": "로사르탄정",
+          "notes": "파킨슨병 진료, 호흡곤란 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2025-05-10",
+          "disease": "갑상선질환",
+          "symptom": "구토",
+          "medication": "아스피린",
+          "notes": "갑상선질환 진료, 구토 증상으로 아스피린 처방"
+        },
+        {
+          "date": "2025-05-01",
+          "disease": "불안장애",
+          "symptom": "오한",
+          "medication": "인슐린",
+          "notes": "불안장애 진료, 오한 증상으로 인슐린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 55,
+      "mrn": "MRN20250055",
+      "name": "임순숙",
+      "birthDate": "1981-01-09",
+      "sex": "F",
+      "age": 44,
+      "phone": "011-3943-3905",
+      "email": "임순숙791@gmail.com",
+      "address": "울산광역시 강북구 삼성로 112번길 24호",
+      "insuranceNo": "5674151532",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2024-12-04",
+          "disease": "알레르기",
+          "symptom": "관절통",
+          "medication": "로사르탄정",
+          "notes": "알레르기 진료, 관절통 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2024-11-29",
+          "disease": "관절염",
+          "symptom": "관절통",
+          "medication": "디곡신",
+          "notes": "관절염 진료, 관절통 증상으로 디곡신 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 56,
+      "mrn": "MRN20250056",
+      "name": "임영애",
+      "birthDate": "1961-03-17",
+      "sex": "F",
+      "age": 64,
+      "phone": "010-8070-8401",
+      "email": "임영애874@hanmail.net",
+      "address": "대구광역시 도봉구 봉은사로 141번길 15호",
+      "insuranceNo": "4742365770",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-07-10",
+          "disease": "불안장애",
+          "symptom": "관절통",
+          "medication": "란소프라졸",
+          "notes": "불안장애 진료, 관절통 증상으로 란소프라졸 처방"
+        },
+        {
+          "date": "2025-05-24",
+          "disease": "감기",
+          "symptom": "호흡곤란",
+          "medication": "로사르탄정",
+          "notes": "감기 진료, 호흡곤란 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2025-04-20",
+          "disease": "당뇨병",
+          "symptom": "콧물",
+          "medication": "디곡신",
+          "notes": "당뇨병 진료, 콧물 증상으로 디곡신 처방"
+        },
+        {
+          "date": "2025-03-06",
+          "disease": "갑상선질환",
+          "symptom": "구토",
+          "medication": "캅토프릴정",
+          "notes": "갑상선질환 진료, 구토 증상으로 캅토프릴정 처방"
+        },
+        {
+          "date": "2025-02-06",
+          "disease": "알레르기",
+          "symptom": "호흡곤란",
+          "medication": "인슐린",
+          "notes": "알레르기 진료, 호흡곤란 증상으로 인슐린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 57,
+      "mrn": "MRN20250057",
+      "name": "한영희",
+      "birthDate": "1984-07-02",
+      "sex": "F",
+      "age": 41,
+      "phone": "018-8906-5367",
+      "email": "한영희88@gmail.com",
+      "address": "울산광역시 금천구 봉은사로 8번길 3호",
+      "insuranceNo": "5276672096",
+      "allergies": [
+        "설폰아미드",
+        "에리트로마이신"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-08-03",
+          "disease": "갑상선질환",
+          "symptom": "소화불량",
+          "medication": "다이아벡스정",
+          "notes": "갑상선질환 진료, 소화불량 증상으로 다이아벡스정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 58,
+      "mrn": "MRN20250058",
+      "name": "김준영",
+      "birthDate": "1980-10-06",
+      "sex": "M",
+      "age": 45,
+      "phone": "017-1579-7120",
+      "email": "김준영967@naver.com",
+      "address": "부산광역시 강남구 반포대로 46번길 45호",
+      "insuranceNo": "8979336561",
+      "allergies": [
+        "페니실린"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-08-28",
+          "disease": "고혈압",
+          "symptom": "가슴통증",
+          "medication": "오메프라졸",
+          "notes": "고혈압 진료, 가슴통증 증상으로 오메프라졸 처방"
+        },
+        {
+          "date": "2025-07-05",
+          "disease": "파킨슨병",
+          "symptom": "어지러움",
+          "medication": "인슐린",
+          "notes": "파킨슨병 진료, 어지러움 증상으로 인슐린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 59,
+      "mrn": "MRN20250059",
+      "name": "안지훈",
+      "birthDate": "1981-12-25",
+      "sex": "M",
+      "age": 44,
+      "phone": "019-8194-1113",
+      "email": "안지훈460@naver.com",
+      "address": "대구광역시 강북구 봉은사로 193번길 25호",
+      "insuranceNo": "7167833621",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-07-22",
+          "disease": "관절염",
+          "symptom": "변비",
+          "medication": "프레드니솔론",
+          "notes": "관절염 진료, 변비 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2025-05-31",
+          "disease": "골다공증",
+          "symptom": "피로감",
+          "medication": "로사르탄정",
+          "notes": "골다공증 진료, 피로감 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2025-04-23",
+          "disease": "우울증",
+          "symptom": "발열",
+          "medication": "이부프로펜",
+          "notes": "우울증 진료, 발열 증상으로 이부프로펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 60,
+      "mrn": "MRN20250060",
+      "name": "최준영",
+      "birthDate": "1995-02-06",
+      "sex": "M",
+      "age": 30,
+      "phone": "018-3004-2686",
+      "email": "최준영965@yahoo.com",
+      "address": "서울특별시 구로구 봉은사로 38번길 94호",
+      "insuranceNo": "5265651215",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-09-27",
+          "disease": "치매",
+          "symptom": "두통",
+          "medication": "세티리진",
+          "notes": "치매 진료, 두통 증상으로 세티리진 처방"
+        },
+        {
+          "date": "2025-08-22",
+          "disease": "관절염",
+          "symptom": "호흡곤란",
+          "medication": "인슐린",
+          "notes": "관절염 진료, 호흡곤란 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2025-05-31",
+          "disease": "감기",
+          "symptom": "기침",
+          "medication": "글리피지드정",
+          "notes": "감기 진료, 기침 증상으로 글리피지드정 처방"
+        },
+        {
+          "date": "2025-04-27",
+          "disease": "위염",
+          "symptom": "어지러움",
+          "medication": "글리피지드정",
+          "notes": "위염 진료, 어지러움 증상으로 글리피지드정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 61,
+      "mrn": "MRN20250061",
+      "name": "한지철",
+      "birthDate": "1963-06-21",
+      "sex": "M",
+      "age": 62,
+      "phone": "019-8399-2056",
+      "email": "한지철666@yahoo.com",
+      "address": "울산광역시 강북구 테헤란로 77번길 32호",
+      "insuranceNo": "5586124190",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-10-08",
+          "disease": "심장질환",
+          "symptom": "가슴통증",
+          "medication": "하이드로코르티손",
+          "notes": "심장질환 진료, 가슴통증 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2025-05-27",
+          "disease": "골다공증",
+          "symptom": "오한",
+          "medication": "아세트아미노펜",
+          "notes": "골다공증 진료, 오한 증상으로 아세트아미노펜 처방"
+        },
+        {
+          "date": "2025-05-10",
+          "disease": "파킨슨병",
+          "symptom": "호흡곤란",
+          "medication": "다이아벡스정",
+          "notes": "파킨슨병 진료, 호흡곤란 증상으로 다이아벡스정 처방"
+        },
+        {
+          "date": "2025-03-05",
+          "disease": "우울증",
+          "symptom": "복통",
+          "medication": "글리메피리드정",
+          "notes": "우울증 진료, 복통 증상으로 글리메피리드정 처방"
+        },
+        {
+          "date": "2024-11-08",
+          "disease": "위염",
+          "symptom": "어지러움",
+          "medication": "세티리진",
+          "notes": "위염 진료, 어지러움 증상으로 세티리진 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 62,
+      "mrn": "MRN20250062",
+      "name": "장영수",
+      "birthDate": "1981-06-15",
+      "sex": "F",
+      "age": 44,
+      "phone": "019-5213-5837",
+      "email": "장영수634@yahoo.com",
+      "address": "서울특별시 강동구 삼성로 33번길 35호",
+      "insuranceNo": "6476325281",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-08-06",
+          "disease": "류마티스",
+          "symptom": "요통",
+          "medication": "오메프라졸",
+          "notes": "류마티스 진료, 요통 증상으로 오메프라졸 처방"
+        },
+        {
+          "date": "2025-07-12",
+          "disease": "우울증",
+          "symptom": "관절통",
+          "medication": "글리피지드정",
+          "notes": "우울증 진료, 관절통 증상으로 글리피지드정 처방"
+        },
+        {
+          "date": "2025-05-27",
+          "disease": "감기",
+          "symptom": "근육통",
+          "medication": "인슐린",
+          "notes": "감기 진료, 근육통 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2025-04-15",
+          "disease": "골다공증",
+          "symptom": "두통",
+          "medication": "메토프롤롤정",
+          "notes": "골다공증 진료, 두통 증상으로 메토프롤롤정 처방"
+        },
+        {
+          "date": "2025-02-06",
+          "disease": "당뇨병",
+          "symptom": "콧물",
+          "medication": "발사르탄정",
+          "notes": "당뇨병 진료, 콧물 증상으로 발사르탄정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.257Z",
+      "updatedAt": "2025-10-09T09:40:27.257Z"
+    },
+    {
+      "id": 63,
+      "mrn": "MRN20250063",
+      "name": "오정수",
+      "birthDate": "1986-09-30",
+      "sex": "F",
+      "age": 39,
+      "phone": "018-4873-3681",
+      "email": "오정수140@yahoo.com",
+      "address": "광주광역시 도봉구 역삼로 38번길 72호",
+      "insuranceNo": "7413433345",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-08-14",
+          "disease": "신장질환",
+          "symptom": "기침",
+          "medication": "메토프롤롤정",
+          "notes": "신장질환 진료, 기침 증상으로 메토프롤롤정 처방"
+        },
+        {
+          "date": "2025-07-13",
+          "disease": "천식",
+          "symptom": "어지러움",
+          "medication": "캅토프릴정",
+          "notes": "천식 진료, 어지러움 증상으로 캅토프릴정 처방"
+        },
+        {
+          "date": "2025-06-01",
+          "disease": "두통",
+          "symptom": "복통",
+          "medication": "인슐린",
+          "notes": "두통 진료, 복통 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2025-02-14",
+          "disease": "골다공증",
+          "symptom": "콧물",
+          "medication": "로사르탄정",
+          "notes": "골다공증 진료, 콧물 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2024-12-25",
+          "disease": "고혈압",
+          "symptom": "변비",
+          "medication": "캅토프릴정",
+          "notes": "고혈압 진료, 변비 증상으로 캅토프릴정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 64,
+      "mrn": "MRN20250064",
+      "name": "강민호",
+      "birthDate": "1990-08-19",
+      "sex": "M",
+      "age": 35,
+      "phone": "019-3777-1611",
+      "email": "강민호886@gmail.com",
+      "address": "광주광역시 관악구 역삼로 18번길 10호",
+      "insuranceNo": "8640168933",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-08-16",
+          "disease": "고혈압",
+          "symptom": "불면",
+          "medication": "메토프롤롤정",
+          "notes": "고혈압 진료, 불면 증상으로 메토프롤롤정 처방"
+        },
+        {
+          "date": "2025-03-18",
+          "disease": "감기",
+          "symptom": "구토",
+          "medication": "인슐린",
+          "notes": "감기 진료, 구토 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2024-11-06",
+          "disease": "두통",
+          "symptom": "피로감",
+          "medication": "메토프롤롤정",
+          "notes": "두통 진료, 피로감 증상으로 메토프롤롤정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 65,
+      "mrn": "MRN20250065",
+      "name": "전동민",
+      "birthDate": "1968-07-21",
+      "sex": "M",
+      "age": 57,
+      "phone": "017-2236-1220",
+      "email": "전동민418@yahoo.com",
+      "address": "부산광역시 금천구 테헤란로 55번길 44호",
+      "insuranceNo": "5926816042",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-01-12",
+          "disease": "관절염",
+          "symptom": "설사",
+          "medication": "인슐린",
+          "notes": "관절염 진료, 설사 증상으로 인슐린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 66,
+      "mrn": "MRN20250066",
+      "name": "최성민",
+      "birthDate": "1955-04-17",
+      "sex": "M",
+      "age": 70,
+      "phone": "010-3819-5595",
+      "email": "최성민227@naver.com",
+      "address": "대구광역시 강남구 서초대로 169번길 37호",
+      "insuranceNo": "3813888270",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-02-26",
+          "disease": "치매",
+          "symptom": "설사",
+          "medication": "이부프로펜",
+          "notes": "치매 진료, 설사 증상으로 이부프로펜 처방"
+        },
+        {
+          "date": "2025-01-13",
+          "disease": "신장질환",
+          "symptom": "복통",
+          "medication": "인슐린",
+          "notes": "신장질환 진료, 복통 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2024-12-10",
+          "disease": "고혈압",
+          "symptom": "인후통",
+          "medication": "하이드로코르티손",
+          "notes": "고혈압 진료, 인후통 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2024-12-01",
+          "disease": "갑상선질환",
+          "symptom": "두통",
+          "medication": "메토프롤롤정",
+          "notes": "갑상선질환 진료, 두통 증상으로 메토프롤롤정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 67,
+      "mrn": "MRN20250067",
+      "name": "권순숙",
+      "birthDate": "1990-11-05",
+      "sex": "F",
+      "age": 35,
+      "phone": "011-1088-4919",
+      "email": "권순숙755@hanmail.net",
+      "address": "서울특별시 노원구 강남대로 191번길 82호",
+      "insuranceNo": "4277092545",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2024-11-11",
+          "disease": "갑상선질환",
+          "symptom": "어지러움",
+          "medication": "하이드로코르티손",
+          "notes": "갑상선질환 진료, 어지러움 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2024-10-28",
+          "disease": "불안장애",
+          "symptom": "구토",
+          "medication": "로사르탄정",
+          "notes": "불안장애 진료, 구토 증상으로 로사르탄정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 68,
+      "mrn": "MRN20250068",
+      "name": "장민자",
+      "birthDate": "2006-05-13",
+      "sex": "F",
+      "age": 19,
+      "phone": "011-7390-2237",
+      "email": "장민자86@gmail.com",
+      "address": "서울특별시 강서구 삼성로 10번길 32호",
+      "insuranceNo": "3597194742",
+      "allergies": [
+        "설폰아미드"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-09-20",
+          "disease": "고혈압",
+          "symptom": "두통",
+          "medication": "이부프로펜",
+          "notes": "고혈압 진료, 두통 증상으로 이부프로펜 처방"
+        },
+        {
+          "date": "2025-03-25",
+          "disease": "고혈압",
+          "symptom": "복통",
+          "medication": "아몰디핀정",
+          "notes": "고혈압 진료, 복통 증상으로 아몰디핀정 처방"
+        },
+        {
+          "date": "2025-02-23",
+          "disease": "갑상선질환",
+          "symptom": "발열",
+          "medication": "오메프라졸",
+          "notes": "갑상선질환 진료, 발열 증상으로 오메프라졸 처방"
+        },
+        {
+          "date": "2024-10-13",
+          "disease": "간질환",
+          "symptom": "콧물",
+          "medication": "아몰디핀정",
+          "notes": "간질환 진료, 콧물 증상으로 아몰디핀정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 69,
+      "mrn": "MRN20250069",
+      "name": "정민희",
+      "birthDate": "2010-09-10",
+      "sex": "F",
+      "age": 15,
+      "phone": "010-8948-1948",
+      "email": "정민희689@hanmail.net",
+      "address": "울산광역시 노원구 반포대로 20번길 58호",
+      "insuranceNo": "2518998078",
+      "allergies": [
+        "설폰아미드",
+        "에리트로마이신"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-06-18",
+          "disease": "두통",
+          "symptom": "불면",
+          "medication": "아세트아미노펜",
+          "notes": "두통 진료, 불면 증상으로 아세트아미노펜 처방"
+        },
+        {
+          "date": "2024-10-18",
+          "disease": "감기",
+          "symptom": "복통",
+          "medication": "로사르탄정",
+          "notes": "감기 진료, 복통 증상으로 로사르탄정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 70,
+      "mrn": "MRN20250070",
+      "name": "고영숙",
+      "birthDate": "1987-05-19",
+      "sex": "F",
+      "age": 38,
+      "phone": "011-2969-4079",
+      "email": "고영숙408@gmail.com",
+      "address": "부산광역시 강북구 테헤란로 73번길 58호",
+      "insuranceNo": "2529127864",
+      "allergies": [
+        "페니실린",
+        "설폰아미드"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-09-07",
+          "disease": "불안장애",
+          "symptom": "복통",
+          "medication": "프레드니솔론",
+          "notes": "불안장애 진료, 복통 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2025-05-11",
+          "disease": "골다공증",
+          "symptom": "변비",
+          "medication": "로라타딘",
+          "notes": "골다공증 진료, 변비 증상으로 로라타딘 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 71,
+      "mrn": "MRN20250071",
+      "name": "권철수",
+      "birthDate": "1977-04-06",
+      "sex": "M",
+      "age": 48,
+      "phone": "016-9813-3670",
+      "email": "권철수228@gmail.com",
+      "address": "인천광역시 강북구 반포대로 53번길 65호",
+      "insuranceNo": "8595210561",
+      "allergies": [
+        "에리트로마이신",
+        "페니실린"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-09-21",
+          "disease": "치매",
+          "symptom": "피로감",
+          "medication": "란소프라졸",
+          "notes": "치매 진료, 피로감 증상으로 란소프라졸 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 72,
+      "mrn": "MRN20250072",
+      "name": "서민호",
+      "birthDate": "1965-12-19",
+      "sex": "M",
+      "age": 60,
+      "phone": "011-9607-1878",
+      "email": "서민호379@naver.com",
+      "address": "광주광역시 노원구 서초대로 185번길 73호",
+      "insuranceNo": "1910126521",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-08-29",
+          "disease": "우울증",
+          "symptom": "호흡곤란",
+          "medication": "하이드로코르티손",
+          "notes": "우울증 진료, 호흡곤란 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2025-08-06",
+          "disease": "파킨슨병",
+          "symptom": "호흡곤란",
+          "medication": "하이드로코르티손",
+          "notes": "파킨슨병 진료, 호흡곤란 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2025-06-12",
+          "disease": "고혈압",
+          "symptom": "소화불량",
+          "medication": "아세트아미노펜",
+          "notes": "고혈압 진료, 소화불량 증상으로 아세트아미노펜 처방"
+        },
+        {
+          "date": "2025-01-11",
+          "disease": "류마티스",
+          "symptom": "두통",
+          "medication": "글리메피리드정",
+          "notes": "류마티스 진료, 두통 증상으로 글리메피리드정 처방"
+        },
+        {
+          "date": "2024-10-13",
+          "disease": "불면증",
+          "symptom": "콧물",
+          "medication": "글리메피리드정",
+          "notes": "불면증 진료, 콧물 증상으로 글리메피리드정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 73,
+      "mrn": "MRN20250073",
+      "name": "전민호",
+      "birthDate": "1991-01-15",
+      "sex": "M",
+      "age": 34,
+      "phone": "010-3553-5785",
+      "email": "전민호498@gmail.com",
+      "address": "서울특별시 강남구 강남대로 142번길 94호",
+      "insuranceNo": "7787593364",
+      "allergies": [
+        "세파클로르"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-05-25",
+          "disease": "류마티스",
+          "symptom": "가슴통증",
+          "medication": "시타글립틴정",
+          "notes": "류마티스 진료, 가슴통증 증상으로 시타글립틴정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 74,
+      "mrn": "MRN20250074",
+      "name": "장영자",
+      "birthDate": "1985-03-11",
+      "sex": "F",
+      "age": 40,
+      "phone": "017-4334-9568",
+      "email": "장영자821@gmail.com",
+      "address": "대구광역시 관악구 논현로 187번길 99호",
+      "insuranceNo": "3038523697",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-08-06",
+          "disease": "치매",
+          "symptom": "두통",
+          "medication": "다이아벡스정",
+          "notes": "치매 진료, 두통 증상으로 다이아벡스정 처방"
+        },
+        {
+          "date": "2025-03-31",
+          "disease": "파킨슨병",
+          "symptom": "콧물",
+          "medication": "로라타딘",
+          "notes": "파킨슨병 진료, 콧물 증상으로 로라타딘 처방"
+        },
+        {
+          "date": "2025-03-29",
+          "disease": "불안장애",
+          "symptom": "인후통",
+          "medication": "아스피린",
+          "notes": "불안장애 진료, 인후통 증상으로 아스피린 처방"
+        },
+        {
+          "date": "2025-03-20",
+          "disease": "불안장애",
+          "symptom": "발열",
+          "medication": "인슐린",
+          "notes": "불안장애 진료, 발열 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2025-01-26",
+          "disease": "천식",
+          "symptom": "근육통",
+          "medication": "시타글립틴정",
+          "notes": "천식 진료, 근육통 증상으로 시타글립틴정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 75,
+      "mrn": "MRN20250075",
+      "name": "신민철",
+      "birthDate": "1962-09-18",
+      "sex": "M",
+      "age": 63,
+      "phone": "018-3172-9537",
+      "email": "신민철937@yahoo.com",
+      "address": "광주광역시 금천구 논현로 82번길 72호",
+      "insuranceNo": "1143886552",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-08-27",
+          "disease": "위염",
+          "symptom": "콧물",
+          "medication": "시타글립틴정",
+          "notes": "위염 진료, 콧물 증상으로 시타글립틴정 처방"
+        },
+        {
+          "date": "2024-11-23",
+          "disease": "신장질환",
+          "symptom": "두통",
+          "medication": "메토프롤롤정",
+          "notes": "신장질환 진료, 두통 증상으로 메토프롤롤정 처방"
+        },
+        {
+          "date": "2024-10-21",
+          "disease": "관절염",
+          "symptom": "가슴통증",
+          "medication": "프레드니솔론",
+          "notes": "관절염 진료, 가슴통증 증상으로 프레드니솔론 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 76,
+      "mrn": "MRN20250076",
+      "name": "강민숙",
+      "birthDate": "1999-07-22",
+      "sex": "F",
+      "age": 26,
+      "phone": "011-9030-9857",
+      "email": "강민숙844@hanmail.net",
+      "address": "인천광역시 강남구 봉은사로 192번길 56호",
+      "insuranceNo": "7282088618",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-01-01",
+          "disease": "관절염",
+          "symptom": "오한",
+          "medication": "인슐린",
+          "notes": "관절염 진료, 오한 증상으로 인슐린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 77,
+      "mrn": "MRN20250077",
+      "name": "이민철",
+      "birthDate": "1952-08-14",
+      "sex": "M",
+      "age": 73,
+      "phone": "019-3052-5862",
+      "email": "이민철820@yahoo.com",
+      "address": "울산광역시 금천구 논현로 77번길 85호",
+      "insuranceNo": "9298984386",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-10-04",
+          "disease": "당뇨병",
+          "symptom": "어지러움",
+          "medication": "캅토프릴정",
+          "notes": "당뇨병 진료, 어지러움 증상으로 캅토프릴정 처방"
+        },
+        {
+          "date": "2025-09-19",
+          "disease": "당뇨병",
+          "symptom": "두통",
+          "medication": "글리피지드정",
+          "notes": "당뇨병 진료, 두통 증상으로 글리피지드정 처방"
+        },
+        {
+          "date": "2025-07-01",
+          "disease": "치매",
+          "symptom": "복통",
+          "medication": "인슐린",
+          "notes": "치매 진료, 복통 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2025-05-15",
+          "disease": "신장질환",
+          "symptom": "어지러움",
+          "medication": "로사르탄정",
+          "notes": "신장질환 진료, 어지러움 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2024-11-29",
+          "disease": "갑상선질환",
+          "symptom": "식욕부진",
+          "medication": "아세트아미노펜",
+          "notes": "갑상선질환 진료, 식욕부진 증상으로 아세트아미노펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 78,
+      "mrn": "MRN20250078",
+      "name": "박순수",
+      "birthDate": "2007-08-10",
+      "sex": "F",
+      "age": 18,
+      "phone": "017-9814-6499",
+      "email": "박순수283@hanmail.net",
+      "address": "대전광역시 강서구 봉은사로 13번길 68호",
+      "insuranceNo": "1380706396",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-01-12",
+          "disease": "알레르기",
+          "symptom": "발열",
+          "medication": "메토프롤롤정",
+          "notes": "알레르기 진료, 발열 증상으로 메토프롤롤정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 79,
+      "mrn": "MRN20250079",
+      "name": "송철수",
+      "birthDate": "1976-07-11",
+      "sex": "M",
+      "age": 49,
+      "phone": "018-3193-7336",
+      "email": "송철수779@naver.com",
+      "address": "대전광역시 도봉구 강남대로 154번길 16호",
+      "insuranceNo": "3029392111",
+      "allergies": [
+        "아스피린",
+        "설폰아미드"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-08-12",
+          "disease": "요통",
+          "symptom": "기침",
+          "medication": "디곡신",
+          "notes": "요통 진료, 기침 증상으로 디곡신 처방"
+        },
+        {
+          "date": "2025-02-02",
+          "disease": "불면증",
+          "symptom": "기침",
+          "medication": "디곡신",
+          "notes": "불면증 진료, 기침 증상으로 디곡신 처방"
+        },
+        {
+          "date": "2024-11-06",
+          "disease": "관절염",
+          "symptom": "설사",
+          "medication": "아몰디핀정",
+          "notes": "관절염 진료, 설사 증상으로 아몰디핀정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 80,
+      "mrn": "MRN20250080",
+      "name": "황순주",
+      "birthDate": "1952-02-03",
+      "sex": "F",
+      "age": 73,
+      "phone": "010-2060-3075",
+      "email": "황순주93@daum.net",
+      "address": "울산광역시 구로구 역삼로 164번길 69호",
+      "insuranceNo": "2651847522",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-06-28",
+          "disease": "관절염",
+          "symptom": "호흡곤란",
+          "medication": "디곡신",
+          "notes": "관절염 진료, 호흡곤란 증상으로 디곡신 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 81,
+      "mrn": "MRN20250081",
+      "name": "권영숙",
+      "birthDate": "2000-10-31",
+      "sex": "F",
+      "age": 25,
+      "phone": "018-2798-8826",
+      "email": "권영숙740@yahoo.com",
+      "address": "울산광역시 강서구 테헤란로 199번길 8호",
+      "insuranceNo": "3546677974",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-06-22",
+          "disease": "불면증",
+          "symptom": "근육통",
+          "medication": "캅토프릴정",
+          "notes": "불면증 진료, 근육통 증상으로 캅토프릴정 처방"
+        },
+        {
+          "date": "2025-06-03",
+          "disease": "신장질환",
+          "symptom": "근육통",
+          "medication": "세티리진",
+          "notes": "신장질환 진료, 근육통 증상으로 세티리진 처방"
+        },
+        {
+          "date": "2025-03-28",
+          "disease": "불면증",
+          "symptom": "설사",
+          "medication": "하이드로코르티손",
+          "notes": "불면증 진료, 설사 증상으로 하이드로코르티손 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 82,
+      "mrn": "MRN20250082",
+      "name": "윤영주",
+      "birthDate": "2001-10-23",
+      "sex": "F",
+      "age": 24,
+      "phone": "016-7809-4815",
+      "email": "윤영주686@naver.com",
+      "address": "광주광역시 노원구 강남대로 18번길 4호",
+      "insuranceNo": "6399681670",
+      "allergies": [
+        "에리트로마이신",
+        "세파클로르"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-04-14",
+          "disease": "파킨슨병",
+          "symptom": "식욕부진",
+          "medication": "아스피린",
+          "notes": "파킨슨병 진료, 식욕부진 증상으로 아스피린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 83,
+      "mrn": "MRN20250083",
+      "name": "조민주",
+      "birthDate": "1971-09-11",
+      "sex": "F",
+      "age": 54,
+      "phone": "011-2969-4161",
+      "email": "조민주876@gmail.com",
+      "address": "부산광역시 광진구 봉은사로 125번길 90호",
+      "insuranceNo": "9112320265",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-06-09",
+          "disease": "천식",
+          "symptom": "가슴통증",
+          "medication": "디곡신",
+          "notes": "천식 진료, 가슴통증 증상으로 디곡신 처방"
+        },
+        {
+          "date": "2025-04-18",
+          "disease": "치매",
+          "symptom": "소화불량",
+          "medication": "로라타딘",
+          "notes": "치매 진료, 소화불량 증상으로 로라타딘 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 84,
+      "mrn": "MRN20250084",
+      "name": "서정미",
+      "birthDate": "1984-10-23",
+      "sex": "F",
+      "age": 41,
+      "phone": "017-5895-5687",
+      "email": "서정미396@naver.com",
+      "address": "부산광역시 노원구 논현로 147번길 52호",
+      "insuranceNo": "8896008757",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-01-17",
+          "disease": "파킨슨병",
+          "symptom": "콧물",
+          "medication": "로라타딘",
+          "notes": "파킨슨병 진료, 콧물 증상으로 로라타딘 처방"
+        },
+        {
+          "date": "2025-01-17",
+          "disease": "두통",
+          "symptom": "구토",
+          "medication": "이부프로펜",
+          "notes": "두통 진료, 구토 증상으로 이부프로펜 처방"
+        },
+        {
+          "date": "2024-12-18",
+          "disease": "관절염",
+          "symptom": "변비",
+          "medication": "아스피린",
+          "notes": "관절염 진료, 변비 증상으로 아스피린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 85,
+      "mrn": "MRN20250085",
+      "name": "박정미",
+      "birthDate": "1997-03-06",
+      "sex": "F",
+      "age": 28,
+      "phone": "017-3125-5421",
+      "email": "박정미227@hanmail.net",
+      "address": "광주광역시 광진구 테헤란로 110번길 53호",
+      "insuranceNo": "6353661161",
+      "allergies": [
+        "페니실린"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-03-01",
+          "disease": "심장질환",
+          "symptom": "발열",
+          "medication": "이부프로펜",
+          "notes": "심장질환 진료, 발열 증상으로 이부프로펜 처방"
+        },
+        {
+          "date": "2025-02-12",
+          "disease": "위염",
+          "symptom": "요통",
+          "medication": "세티리진",
+          "notes": "위염 진료, 요통 증상으로 세티리진 처방"
+        },
+        {
+          "date": "2025-01-13",
+          "disease": "신장질환",
+          "symptom": "기침",
+          "medication": "아스피린",
+          "notes": "신장질환 진료, 기침 증상으로 아스피린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 86,
+      "mrn": "MRN20250086",
+      "name": "한영희",
+      "birthDate": "1978-11-15",
+      "sex": "F",
+      "age": 47,
+      "phone": "016-2410-8866",
+      "email": "한영희751@yahoo.com",
+      "address": "광주광역시 금천구 강남대로 35번길 9호",
+      "insuranceNo": "8690273739",
+      "allergies": [
+        "페니실린"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-04-29",
+          "disease": "천식",
+          "symptom": "관절통",
+          "medication": "디곡신",
+          "notes": "천식 진료, 관절통 증상으로 디곡신 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 87,
+      "mrn": "MRN20250087",
+      "name": "한민자",
+      "birthDate": "1967-06-17",
+      "sex": "F",
+      "age": 58,
+      "phone": "018-4875-8631",
+      "email": "한민자447@yahoo.com",
+      "address": "광주광역시 강동구 테헤란로 20번길 42호",
+      "insuranceNo": "9273568731",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-09-13",
+          "disease": "불안장애",
+          "symptom": "발열",
+          "medication": "하이드로코르티손",
+          "notes": "불안장애 진료, 발열 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2025-09-02",
+          "disease": "고혈압",
+          "symptom": "오한",
+          "medication": "세티리진",
+          "notes": "고혈압 진료, 오한 증상으로 세티리진 처방"
+        },
+        {
+          "date": "2025-06-13",
+          "disease": "요통",
+          "symptom": "발열",
+          "medication": "디곡신",
+          "notes": "요통 진료, 발열 증상으로 디곡신 처방"
+        },
+        {
+          "date": "2025-05-24",
+          "disease": "감기",
+          "symptom": "관절통",
+          "medication": "로사르탄정",
+          "notes": "감기 진료, 관절통 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2025-01-02",
+          "disease": "감기",
+          "symptom": "구토",
+          "medication": "란소프라졸",
+          "notes": "감기 진료, 구토 증상으로 란소프라졸 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 88,
+      "mrn": "MRN20250088",
+      "name": "박지훈",
+      "birthDate": "1965-01-24",
+      "sex": "M",
+      "age": 60,
+      "phone": "018-4064-1994",
+      "email": "박지훈629@yahoo.com",
+      "address": "부산광역시 강서구 삼성로 190번길 57호",
+      "insuranceNo": "7231988328",
+      "allergies": [
+        "세파클로르"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-06-06",
+          "disease": "천식",
+          "symptom": "소화불량",
+          "medication": "아세트아미노펜",
+          "notes": "천식 진료, 소화불량 증상으로 아세트아미노펜 처방"
+        },
+        {
+          "date": "2025-03-28",
+          "disease": "불면증",
+          "symptom": "설사",
+          "medication": "로사르탄정",
+          "notes": "불면증 진료, 설사 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2025-03-03",
+          "disease": "간질환",
+          "symptom": "변비",
+          "medication": "오메프라졸",
+          "notes": "간질환 진료, 변비 증상으로 오메프라졸 처방"
+        },
+        {
+          "date": "2025-01-02",
+          "disease": "우울증",
+          "symptom": "가슴통증",
+          "medication": "프레드니솔론",
+          "notes": "우울증 진료, 가슴통증 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2024-11-27",
+          "disease": "불면증",
+          "symptom": "식욕부진",
+          "medication": "발사르탄정",
+          "notes": "불면증 진료, 식욕부진 증상으로 발사르탄정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 89,
+      "mrn": "MRN20250089",
+      "name": "박민희",
+      "birthDate": "2009-07-24",
+      "sex": "F",
+      "age": 16,
+      "phone": "010-9202-6877",
+      "email": "박민희357@yahoo.com",
+      "address": "광주광역시 구로구 역삼로 32번길 12호",
+      "insuranceNo": "8224964225",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-06-30",
+          "disease": "신장질환",
+          "symptom": "불면",
+          "medication": "아몰디핀정",
+          "notes": "신장질환 진료, 불면 증상으로 아몰디핀정 처방"
+        },
+        {
+          "date": "2025-05-05",
+          "disease": "고혈압",
+          "symptom": "콧물",
+          "medication": "아스피린",
+          "notes": "고혈압 진료, 콧물 증상으로 아스피린 처방"
+        },
+        {
+          "date": "2024-10-26",
+          "disease": "신장질환",
+          "symptom": "발열",
+          "medication": "세티리진",
+          "notes": "신장질환 진료, 발열 증상으로 세티리진 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 90,
+      "mrn": "MRN20250090",
+      "name": "전민희",
+      "birthDate": "1965-06-06",
+      "sex": "F",
+      "age": 60,
+      "phone": "017-3068-5406",
+      "email": "전민희841@gmail.com",
+      "address": "대구광역시 노원구 서초대로 140번길 86호",
+      "insuranceNo": "6347719526",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-07-11",
+          "disease": "파킨슨병",
+          "symptom": "관절통",
+          "medication": "이부프로펜",
+          "notes": "파킨슨병 진료, 관절통 증상으로 이부프로펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 91,
+      "mrn": "MRN20250091",
+      "name": "안순희",
+      "birthDate": "1961-08-11",
+      "sex": "F",
+      "age": 64,
+      "phone": "018-3043-1451",
+      "email": "안순희732@yahoo.com",
+      "address": "서울특별시 노원구 삼성로 47번길 42호",
+      "insuranceNo": "6964859394",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-01-02",
+          "disease": "당뇨병",
+          "symptom": "콧물",
+          "medication": "아몰디핀정",
+          "notes": "당뇨병 진료, 콧물 증상으로 아몰디핀정 처방"
+        },
+        {
+          "date": "2024-10-17",
+          "disease": "감기",
+          "symptom": "설사",
+          "medication": "시타글립틴정",
+          "notes": "감기 진료, 설사 증상으로 시타글립틴정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 92,
+      "mrn": "MRN20250092",
+      "name": "한순자",
+      "birthDate": "1984-01-09",
+      "sex": "F",
+      "age": 41,
+      "phone": "016-3032-6035",
+      "email": "한순자764@daum.net",
+      "address": "서울특별시 금천구 반포대로 148번길 56호",
+      "insuranceNo": "7744521986",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-07-09",
+          "disease": "두통",
+          "symptom": "어지러움",
+          "medication": "로사르탄정",
+          "notes": "두통 진료, 어지러움 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2025-04-13",
+          "disease": "불안장애",
+          "symptom": "어지러움",
+          "medication": "디곡신",
+          "notes": "불안장애 진료, 어지러움 증상으로 디곡신 처방"
+        },
+        {
+          "date": "2025-04-11",
+          "disease": "치매",
+          "symptom": "가슴통증",
+          "medication": "디곡신",
+          "notes": "치매 진료, 가슴통증 증상으로 디곡신 처방"
+        },
+        {
+          "date": "2025-03-20",
+          "disease": "골다공증",
+          "symptom": "발열",
+          "medication": "메토프롤롤정",
+          "notes": "골다공증 진료, 발열 증상으로 메토프롤롤정 처방"
+        },
+        {
+          "date": "2024-10-12",
+          "disease": "골다공증",
+          "symptom": "피로감",
+          "medication": "발사르탄정",
+          "notes": "골다공증 진료, 피로감 증상으로 발사르탄정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 93,
+      "mrn": "MRN20250093",
+      "name": "최순수",
+      "birthDate": "1986-01-04",
+      "sex": "F",
+      "age": 39,
+      "phone": "017-3362-9485",
+      "email": "최순수783@gmail.com",
+      "address": "광주광역시 금천구 논현로 54번길 2호",
+      "insuranceNo": "7960124880",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-09-16",
+          "disease": "요통",
+          "symptom": "기침",
+          "medication": "프레드니솔론",
+          "notes": "요통 진료, 기침 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2025-04-05",
+          "disease": "심장질환",
+          "symptom": "불면",
+          "medication": "글리메피리드정",
+          "notes": "심장질환 진료, 불면 증상으로 글리메피리드정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 94,
+      "mrn": "MRN20250094",
+      "name": "조정자",
+      "birthDate": "1961-04-09",
+      "sex": "F",
+      "age": 64,
+      "phone": "017-5703-2496",
+      "email": "조정자786@yahoo.com",
+      "address": "인천광역시 강동구 반포대로 59번길 71호",
+      "insuranceNo": "3444669324",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-03-07",
+          "disease": "두통",
+          "symptom": "구토",
+          "medication": "아스피린",
+          "notes": "두통 진료, 구토 증상으로 아스피린 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 95,
+      "mrn": "MRN20250095",
+      "name": "임민호",
+      "birthDate": "1973-09-10",
+      "sex": "M",
+      "age": 52,
+      "phone": "010-7015-7473",
+      "email": "임민호433@yahoo.com",
+      "address": "대전광역시 강남구 논현로 55번길 18호",
+      "insuranceNo": "2582746788",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-08-04",
+          "disease": "감기",
+          "symptom": "기침",
+          "medication": "다이아벡스정",
+          "notes": "감기 진료, 기침 증상으로 다이아벡스정 처방"
+        },
+        {
+          "date": "2025-06-28",
+          "disease": "심장질환",
+          "symptom": "어지러움",
+          "medication": "글리피지드정",
+          "notes": "심장질환 진료, 어지러움 증상으로 글리피지드정 처방"
+        },
+        {
+          "date": "2025-03-19",
+          "disease": "위염",
+          "symptom": "변비",
+          "medication": "프레드니솔론",
+          "notes": "위염 진료, 변비 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2024-12-02",
+          "disease": "감기",
+          "symptom": "콧물",
+          "medication": "프레드니솔론",
+          "notes": "감기 진료, 콧물 증상으로 프레드니솔론 처방"
+        },
+        {
+          "date": "2024-11-19",
+          "disease": "요통",
+          "symptom": "요통",
+          "medication": "글리피지드정",
+          "notes": "요통 진료, 요통 증상으로 글리피지드정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 96,
+      "mrn": "MRN20250096",
+      "name": "임민수",
+      "birthDate": "1984-03-15",
+      "sex": "M",
+      "age": 41,
+      "phone": "018-5468-1013",
+      "email": "임민수579@daum.net",
+      "address": "서울특별시 관악구 삼성로 119번길 91호",
+      "insuranceNo": "6518207594",
+      "allergies": [
+        "설폰아미드"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-05-16",
+          "disease": "간질환",
+          "symptom": "오한",
+          "medication": "하이드로코르티손",
+          "notes": "간질환 진료, 오한 증상으로 하이드로코르티손 처방"
+        },
+        {
+          "date": "2024-11-10",
+          "disease": "요통",
+          "symptom": "요통",
+          "medication": "글리피지드정",
+          "notes": "요통 진료, 요통 증상으로 글리피지드정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 97,
+      "mrn": "MRN20250097",
+      "name": "황성호",
+      "birthDate": "1994-10-19",
+      "sex": "M",
+      "age": 31,
+      "phone": "019-3306-1280",
+      "email": "황성호675@hanmail.net",
+      "address": "서울특별시 강서구 서초대로 28번길 38호",
+      "insuranceNo": "2080760742",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-08-30",
+          "disease": "불안장애",
+          "symptom": "설사",
+          "medication": "글리피지드정",
+          "notes": "불안장애 진료, 설사 증상으로 글리피지드정 처방"
+        },
+        {
+          "date": "2025-07-09",
+          "disease": "류마티스",
+          "symptom": "어지러움",
+          "medication": "인슐린",
+          "notes": "류마티스 진료, 어지러움 증상으로 인슐린 처방"
+        },
+        {
+          "date": "2025-05-11",
+          "disease": "신장질환",
+          "symptom": "오한",
+          "medication": "세티리진",
+          "notes": "신장질환 진료, 오한 증상으로 세티리진 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 98,
+      "mrn": "MRN20250098",
+      "name": "전철수",
+      "birthDate": "1987-12-23",
+      "sex": "M",
+      "age": 38,
+      "phone": "019-8271-8842",
+      "email": "전철수66@yahoo.com",
+      "address": "부산광역시 강북구 봉은사로 197번길 99호",
+      "insuranceNo": "4866662687",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-05-08",
+          "disease": "감기",
+          "symptom": "요통",
+          "medication": "아스피린",
+          "notes": "감기 진료, 요통 증상으로 아스피린 처방"
+        },
+        {
+          "date": "2025-02-18",
+          "disease": "천식",
+          "symptom": "피로감",
+          "medication": "로사르탄정",
+          "notes": "천식 진료, 피로감 증상으로 로사르탄정 처방"
+        },
+        {
+          "date": "2024-12-06",
+          "disease": "불면증",
+          "symptom": "두통",
+          "medication": "글리피지드정",
+          "notes": "불면증 진료, 두통 증상으로 글리피지드정 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 99,
+      "mrn": "MRN20250099",
+      "name": "박민자",
+      "birthDate": "1981-01-26",
+      "sex": "F",
+      "age": 44,
+      "phone": "010-3347-9630",
+      "email": "박민자908@hanmail.net",
+      "address": "대구광역시 도봉구 봉은사로 18번길 49호",
+      "insuranceNo": "4447817523",
+      "allergies": [
+        "없음"
+      ],
+      "medicalHistory": [
+        {
+          "date": "2025-07-09",
+          "disease": "요통",
+          "symptom": "근육통",
+          "medication": "아세트아미노펜",
+          "notes": "요통 진료, 근육통 증상으로 아세트아미노펜 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    },
+    {
+      "id": 100,
+      "mrn": "MRN20250100",
+      "name": "황영희",
+      "birthDate": "2003-05-05",
+      "sex": "F",
+      "age": 22,
+      "phone": "019-2796-6929",
+      "email": "황영희786@naver.com",
+      "address": "대전광역시 강남구 역삼로 132번길 15호",
+      "insuranceNo": "1567868110",
+      "allergies": [],
+      "medicalHistory": [
+        {
+          "date": "2025-09-09",
+          "disease": "불면증",
+          "symptom": "피로감",
+          "medication": "발사르탄정",
+          "notes": "불면증 진료, 피로감 증상으로 발사르탄정 처방"
+        },
+        {
+          "date": "2025-07-24",
+          "disease": "갑상선질환",
+          "symptom": "어지러움",
+          "medication": "시타글립틴정",
+          "notes": "갑상선질환 진료, 어지러움 증상으로 시타글립틴정 처방"
+        },
+        {
+          "date": "2025-03-12",
+          "disease": "갑상선질환",
+          "symptom": "어지러움",
+          "medication": "란소프라졸",
+          "notes": "갑상선질환 진료, 어지러움 증상으로 란소프라졸 처방"
+        },
+        {
+          "date": "2025-02-09",
+          "disease": "간질환",
+          "symptom": "구토",
+          "medication": "로라타딘",
+          "notes": "간질환 진료, 구토 증상으로 로라타딘 처방"
+        }
+      ],
+      "duplicateType": "일반",
+      "duplicateNote": "일반 환자",
+      "createdAt": "2025-10-09T09:40:27.258Z",
+      "updatedAt": "2025-10-09T09:40:27.258Z"
+    }
+  ]
+}
