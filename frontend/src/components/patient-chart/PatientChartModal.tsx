@@ -3,6 +3,8 @@ import { WaitingPatient } from '../../data/waitingPatientsData';
 import { getPatientHistory, addVisitRecord, updatePatientInfo, PatientHistory } from '../../data/patientHistoryData';
 import { clinicalNote } from '../../api/ai';
 import { updatePatient } from '../../api/patients';
+import { MedicalOpinionModal } from './MedicalOpinionModal';
+import { MedicalOpinion } from '../../types/medicalOpinion';
 
 
 interface PatientChartModalProps {
@@ -128,6 +130,11 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
     const [testSummary, setTestSummary] = useState<string | null>(null);
     const [isLoadingPrescriptionSummary, setIsLoadingPrescriptionSummary] = useState(false);
     const [isLoadingTestSummary, setIsLoadingTestSummary] = useState(false);
+    
+    // 소견서 발급 상태
+    const [medicalOpinion, setMedicalOpinion] = useState<string>('');
+    const [isOpinionGenerated, setIsOpinionGenerated] = useState(false);
+    const [isOpinionModalOpen, setIsOpinionModalOpen] = useState(false);
 
 
     // AI 제안 내용 생성 (기본 템플릿만)
@@ -242,6 +249,47 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
         return soapData;
     };
 
+    // 소견서 발급 함수
+    const generateMedicalOpinion = () => {
+        setIsOpinionModalOpen(true);
+    };
+
+    // 소견서 저장 함수
+    const handleSaveOpinion = (opinion: MedicalOpinion) => {
+        // 소견서를 로컬 스토리지에 저장 (실제로는 백엔드에 저장)
+        const existingOpinions = JSON.parse(localStorage.getItem('medicalOpinions') || '[]');
+        existingOpinions.push(opinion);
+        localStorage.setItem('medicalOpinions', JSON.stringify(existingOpinions));
+        
+        alert('소견서가 발급되었습니다.');
+        setIsOpinionModalOpen(false);
+    };
+
+    // 소견서 인쇄 함수
+    const printMedicalOpinion = () => {
+        if (!medicalOpinion) return;
+        
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>소견서 - ${patient.name}</title>
+                        <style>
+                            body { font-family: 'Malgun Gothic', sans-serif; padding: 20px; line-height: 1.6; }
+                            .header { text-align: center; margin-bottom: 30px; }
+                            .content { white-space: pre-line; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="content">${medicalOpinion}</div>
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+    };
 
     useEffect(() => {
         if (isOpen) {
@@ -784,10 +832,26 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
                                                 fontSize: '14px',
                                                 fontWeight: 500,
                                                 cursor: chartData.freeformNotes.trim() ? 'pointer' : 'not-allowed',
-                                                opacity: chartData.freeformNotes.trim() ? 1 : 0.6
+                                                opacity: chartData.freeformNotes.trim() ? 1 : 0.6,
+                                                marginRight: '8px'
                                             }}
                                         >
                                             AI 정리
+                                        </button>
+                                        <button
+                                            onClick={generateMedicalOpinion}
+                                            style={{
+                                                padding: '8px 16px',
+                                                backgroundColor: '#6b7280',
+                                                color: 'white',
+                                                border: 'none',
+                                                borderRadius: '6px',
+                                                fontSize: '14px',
+                                                fontWeight: 500,
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            소견서 발급
                                         </button>
                                     </div>
                                 </div>
@@ -1338,7 +1402,14 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
                 </div>
             </div>
 
-
+            {/* 소견서 모달 */}
+            <MedicalOpinionModal 
+                isOpen={isOpinionModalOpen}
+                onClose={() => setIsOpinionModalOpen(false)}
+                patient={patient}
+                chartData={chartData}
+                onSave={handleSaveOpinion}
+            />
         </div>
     );
 };

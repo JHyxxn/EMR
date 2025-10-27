@@ -12,6 +12,7 @@ import { NewPatientModal } from './components/patient-registration';
 import { Dashboard, Calendar, QuickActions, AlertsSection } from './components/dashboard';
 import { PatientChart } from './pages/PatientChart';
 import { ExamManagement } from './pages/ExamManagement';
+import { DocumentManagement } from './pages/DocumentManagement';
 import { Header, Sidebar } from './components/layout';
 import { WaitingPatient, waitingPatientsData } from './data/waitingPatientsData';
 import { addBulkPatientHistory, addVisitRecord, updatePatientInfo, getPatientHistory, createDefaultVisitRecord } from './data/patientHistoryData';
@@ -34,7 +35,22 @@ export default function App() {
     const [searchQuery, setSearchQuery] = useState('');
 
     // 대기 환자 목록 상태 관리
-    const [waitingPatients, setWaitingPatients] = useState<WaitingPatient[]>(waitingPatientsData);
+    const [waitingPatients, setWaitingPatients] = useState<WaitingPatient[]>([]);
+    
+    // 환자 데이터 로드
+    useEffect(() => {
+        console.log('waitingPatientsData 길이:', waitingPatientsData.length);
+        console.log('waitingPatientsData 첫 번째 환자:', waitingPatientsData[0]);
+        
+        // birthDate가 있는 환자만 필터링
+        const validPatients = waitingPatientsData
+            .filter(patient => patient.birthDate && patient.birthDate !== '');
+        
+        console.log('유효한 환자 수:', validPatients.length);
+        console.log('유효한 환자들:', validPatients);
+        
+        setWaitingPatients(validPatients);
+    }, []);
     const [isUsingBackendData, setIsUsingBackendData] = useState(false);
     
     // 검사 하기 버튼 연동을 위한 상태 관리
@@ -174,19 +190,17 @@ export default function App() {
                 // 인증 상태 확인
                 if (checkAuth()) {
                     setIsAuthenticated(true);
-                    // 백엔드에서 환자 데이터 가져오기
-                    await loadPatientsFromBackend();
                 } else {
                     // 테스트용: 토큰이 없어도 자동으로 로그인 상태로 설정
                     localStorage.setItem('token', 'temp-token');
                     setIsAuthenticated(true);
-                    // 백엔드에서 환자 데이터 가져오기 (강제 테스트)
-                    await loadPatientsFromBackend();
                 }
+                
+                // 로컬 데이터 사용 (백엔드 연결 비활성화)
+                console.log('로컬 데이터 사용 중');
+                
             } catch (error) {
                 console.error('앱 초기화 실패:', error);
-                // 백엔드 연결 실패 시 로컬 데이터 사용
-                setWaitingPatients(waitingPatientsData);
             } finally {
                 setLoading(false);
                 // 대량 환자 내역 데이터 초기화
@@ -420,6 +434,7 @@ export default function App() {
                             onPatientClear={() => setSelectedPatientForTest(null)}
                         />
                     )}
+                    {currentPage === 'document' && <DocumentManagement />}
                     {currentPage === 'appointment' && (
                         <div style={{ textAlign: "center", padding: "40px" }}>
                             <h2>예약 관리</h2>

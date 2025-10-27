@@ -175,79 +175,10 @@ export const patientHistoryData: PatientHistory[] = [
     },
     {
         patientId: 3,
-        patientName: "이지은",
-        birthDate: "1990-08-10",
+        patientName: "이윤효",
+        birthDate: "2002-11-08",
         phone: "010-3456-7890",
-        visits: [
-            {
-                date: "2025-09-09",
-                visitType: "재진",
-                diagnosis: "두통",
-                medicalRecord: {
-                    symptoms: "두통, 어지러움",
-                    diagnosis: "긴장성 두통 의심",
-                    treatment: "진통제 처방 및 휴식 권고"
-                },
-                prescription: {
-                    medications: [
-                        {
-                            name: "Ibuprofen",
-                            dosage: "400mg",
-                            frequency: "1T bid"
-                        }
-                    ],
-                    instructions: "1일 2회 식후 30분"
-                },
-                staffMemo: "두통으로 내원. 전반적 상태 양호."
-            },
-            {
-                date: "2025-01-18",
-                visitType: "재진",
-                diagnosis: "당뇨 관리",
-                medicalRecord: {
-                    symptoms: "혈당 조절 상태 확인",
-                    diagnosis: "당뇨병",
-                    treatment: "약물 조정 및 식이 관리"
-                },
-                prescription: {
-                    medications: [
-                        {
-                            name: "Metformin",
-                            dosage: "1000mg",
-                            frequency: "1T bid"
-                        },
-                        {
-                            name: "Glimepiride",
-                            dosage: "1mg",
-                            frequency: "1T qd"
-                        }
-                    ],
-                    instructions: "Metformin 1일 2회 식후, Glimepiride 1일 1회 아침"
-                },
-                staffMemo: "혈당 조절 개선됨. 식이 관리 잘 하고 있음."
-            },
-            {
-                date: "2025-01-03",
-                visitType: "초진",
-                diagnosis: "당뇨병 진단",
-                medicalRecord: {
-                    symptoms: "다음, 다뇨, 체중 감소",
-                    diagnosis: "당뇨병",
-                    treatment: "약물 처방 및 식이 관리 교육"
-                },
-                prescription: {
-                    medications: [
-                        {
-                            name: "Metformin",
-                            dosage: "500mg",
-                            frequency: "1T bid"
-                        }
-                    ],
-                    instructions: "1일 2회 식후 30분"
-                },
-                staffMemo: "당뇨병 진단. 식이 관리 및 운동 교육 실시."
-            }
-        ]
+        visits: []
     },
     {
         patientId: 4,

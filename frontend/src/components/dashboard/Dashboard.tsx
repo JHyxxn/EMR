@@ -73,6 +73,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
         return () => clearInterval(timer);
     }, []);
 
+    // 병원 운영시간 확인 (09:00 - 18:00)
+    const isHospitalOpen = () => {
+        const currentHour = currentTime.getHours();
+        return currentHour >= 9 && currentHour < 18;
+    };
+
     // 환자 상태 관리 (대기 중, 진료 완료)
     const [patientStatus, setPatientStatus] = useState<{[key: string]: string}>({
         '1': 'waiting',
@@ -294,15 +300,31 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
 
     // 나이 계산 함수
     const calculateAge = (birthDate: string) => {
-        const today = new Date();
-        const birth = new Date(birthDate);
-        let age = today.getFullYear() - birth.getFullYear();
-        const monthDiff = today.getMonth() - birth.getMonth();
-        
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-            age--;
+        if (!birthDate) {
+            return '?';
         }
-        return age;
+        
+        try {
+            const today = new Date();
+            const birth = new Date(birthDate);
+            
+            // 유효한 날짜인지 확인
+            if (isNaN(birth.getTime())) {
+                return '?';
+            }
+            
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+            
+            return age;
+        } catch (error) {
+            console.error('나이 계산 오류:', error, 'birthDate:', birthDate);
+            return '?';
+        }
     };
 
     // 한글 초성 검색 함수
@@ -755,12 +777,39 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
                         })}
                     </span>
                 </div>
-                
-                <div style={{ 
-                    display: "grid",
-                    gap: "12px"
-                }}>
-                    {filteredWaitingPatients.map((patient, index) => (
+
+                {!isHospitalOpen() ? (
+                    <div style={{
+                        textAlign: "center",
+                        padding: "80px 20px",
+                        color: "#6b7280",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        minHeight: "300px"
+                    }}>
+                        <div style={{
+                            fontSize: "24px",
+                            fontWeight: 700,
+                            color: "#6b7280",
+                            marginBottom: "12px"
+                        }}>
+                            "병원 내 모든 진료가 종료되었습니다."
+                        </div>
+                        <div style={{
+                            fontSize: "16px",
+                            color: "#9ca3af"
+                        }}>
+                            운영시간: 09:00 - 18:00
+                        </div>
+                    </div>
+                ) : (
+                    <div style={{ 
+                        display: "grid",
+                        gap: "12px"
+                    }}>
+                        {filteredWaitingPatients.map((patient, index) => (
                         <div key={`${patient.id}-${index}`} style={{
                             padding: "16px",
                             background: (patientStatus[patient.id] || 'waiting') === 'completed' 
@@ -790,7 +839,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
                                         {patient.time}
                                     </span>
                                     <span style={{ marginLeft: "12px" }}>
-                                        {patient.name} ({patient.age || '?'}세, {patient.visitType}) - {(patient.condition || '').includes("검사 완료") ? "검사 완료" : (patient.condition || '')}
+                                        {patient.name} ({calculateAge(patient.birthDate)}세, {patient.visitType}) - {(patient.condition || '').includes("검사 완료") ? "검사 완료" : (patient.condition || '')}
                                     </span>
                                 </div>
                                 {patient.alert && (patient.condition || '').includes("검사 완료") && (
@@ -853,8 +902,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
                                 </div>
                             )}
                         </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* 오른쪽: 병원 일정 + 처방/오더보드 */}

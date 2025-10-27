@@ -16,7 +16,7 @@ class PrescriptionManagement {
                 dosage: '5mg',
                 frequency: '1일 1회',
                 duration: '30일',
-                interactions: ['그레이프프루트', '디곡신']',
+                interactions: ['그레이프프루트', '디곡신'],
                 contraindications: ['임신', '수유'],
                 sideEffects: ['부종', '어지러움', '두통']
             },

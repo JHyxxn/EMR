@@ -1,0 +1,54 @@
+{
+  "drugs": [
+    {
+      "id": 1,
+      "name": "아스피린",
+      "category": "해열진통제",
+      "dosage": "500mg",
+      "frequency": "1일 3회",
+      "interactions": ["와파린", "메토트렉세이트"],
+      "contraindications": ["위궤양", "출혈성 질환"],
+      "sideEffects": ["위장장애", "출혈"]
+    },
+    {
+      "id": 2,
+      "name": "아목시실린",
+      "category": "항생제",
+      "dosage": "500mg",
+      "frequency": "1일 3회",
+      "interactions": ["와파린", "메토트렉세이트"],
+      "contraindications": ["페니실린 알레르기"],
+      "sideEffects": ["설사", "알레르기 반응"]
+    },
+    {
+      "id": 3,
+      "name": "메트포르민",
+      "category": "당뇨약",
+      "dosage": "500mg",
+      "frequency": "1일 2회",
+      "interactions": ["알코올", "요오드 조영제"],
+      "contraindications": ["신부전", "간부전"],
+      "sideEffects": ["설사", "메스꺼움"]
+    },
+    {
+      "id": 4,
+      "name": "로사르탄",
+      "category": "고혈압약",
+      "dosage": "50mg",
+      "frequency": "1일 1회",
+      "interactions": ["칼륨 보충제", "리튬"],
+      "contraindications": ["임신", "양측 신동맥 협착"],
+      "sideEffects": ["어지러움", "기침"]
+    },
+    {
+      "id": 5,
+      "name": "아토르바스타틴",
+      "category": "고지혈증약",
+      "dosage": "20mg",
+      "frequency": "1일 1회",
+      "interactions": ["그레이프프루트", "와파린"],
+      "contraindications": ["활성 간질환", "임신"],
+      "sideEffects": ["근육통", "간기능 이상"]
+    }
+  ]
+}

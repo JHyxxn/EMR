@@ -63,6 +63,7 @@ export const PatientChart: React.FC<PatientChartProps> = ({ searchQuery, onAddTo
     // 증상 검색 함수 (정확한 문자열만)
     const matchesConditionSearch = (condition: string, query: string) => {
         if (!query) return true;
+        if (!condition) return false;
         return condition.toLowerCase().includes(query.toLowerCase());
     };
 
@@ -251,10 +252,10 @@ export const PatientChart: React.FC<PatientChartProps> = ({ searchQuery, onAddTo
                 <div style={{ 
                     display: "grid",
                     gap: "8px",
-                    maxHeight: "200px",
+                    maxHeight: "300px",
                     overflowY: "auto"
                 }}>
-                    {filteredPatientRecords.filter(patient => patient.visitType === '재진').slice(0, 5).map(patient => (
+                    {filteredPatientRecords.filter(patient => patient.visitType === '재진').map(patient => (
                         <div 
                             key={patient.id}
                             onClick={() => handlePatientSelect(patient)}
@@ -285,10 +286,10 @@ export const PatientChart: React.FC<PatientChartProps> = ({ searchQuery, onAddTo
                                 </span>
                             </div>
                             <div style={{ fontSize: "12px", color: "#6b7280" }}>
-                                MRN: {patient.mrn} | 생년월일: {patient.birthDate} ({calculateAge(patient.birthDate)}세)
+                                생년월일: {patient.birthDate} ({calculateAge(patient.birthDate)}세) | 전화번호: {patient.phone}
                             </div>
                             <div style={{ fontSize: "12px", color: "#6b7280", marginTop: "2px" }}>
-                                최근 방문일: {patient.lastVisitDate}
+                                최근 방문일: {patient.lastVisitDate} | {patient.diagnosis}
                             </div>
                         </div>
                     ))}
@@ -332,7 +333,7 @@ export const PatientChart: React.FC<PatientChartProps> = ({ searchQuery, onAddTo
                                 marginBottom: "16px"
                             }}>
                                 <div style={{ fontWeight: 600, marginBottom: "8px" }}>
-                                    {selectedPatient.name} ({selectedPatient.mrn})
+                                    {selectedPatient.name} ({calculateAge(selectedPatient.birthDate)}세)
                                 </div>
                                 <div style={{ fontSize: "14px", color: "#6b7280" }}>
                                     생년월일: {selectedPatient.birthDate} ({calculateAge(selectedPatient.birthDate)}세)
@@ -592,6 +593,7 @@ export const PatientChart: React.FC<PatientChartProps> = ({ searchQuery, onAddTo
                     )}
                 </div>
             </div>
+
         </div>
     );
 };

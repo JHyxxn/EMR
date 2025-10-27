@@ -21,7 +21,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange }) =
         { id: 'chart', label: '차트' },
         { id: 'exam', label: '검사' },
         { id: 'appointment', label: '예약' },
-        { id: 'forms', label: '서식 / 문서' }
+        { id: 'document', label: '서식 / 문서' }
     ];
 
     return (
