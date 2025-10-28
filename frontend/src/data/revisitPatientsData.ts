@@ -922,8 +922,8 @@ export const revisitPatientsData: RevisitPatient[] = [
         lastVisit: "2024-10-19",
         diagnosis: "불면증",
         visitType: "재진",
-        notes: [
-            {
+            notes: [
+                {
                 id: "note-1",
                 type: "재진",
                 content: "불면증",
