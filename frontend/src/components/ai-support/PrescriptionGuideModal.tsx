@@ -1,3 +1,25 @@
+/**
+ * AI 처방 가이드 모달 컴포넌트
+ * 
+ * 담당자: 김지현 (AI Gateway)
+ * 
+ * 주요 기능:
+ * - 처방 약물 입력 및 관리
+ * - 현재 복용 중인 약물 입력
+ * - AI 기반 약물 상호작용 검사
+ * - AI 기반 용량 가이드 생성
+ * - 처방 가이드 결과 표시
+ * 
+ * 기술 스택:
+ * - React + TypeScript
+ * - AI Gateway API 연동 (prescriptionGuide)
+ * - 탭 기반 UI (입력/결과)
+ * - 약물 데이터베이스 연동
+ * 
+ * 사용 위치:
+ * - PatientChartModal 내부
+ * - 처방 입력 시 AI 가이드 요청
+ */
 import React, { useState } from 'react';
 import { prescriptionGuide } from '../../api/ai';
 

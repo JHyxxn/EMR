@@ -1,3 +1,33 @@
+/**
+ * EMR 시스템 백엔드 서버
+ * 
+ * 담당자: 이윤효 (백엔드)
+ * 
+ * 주요 기능:
+ * - 환자 데이터 CRUD (생성, 조회, 수정, 삭제)
+ * - 검사 정보 관리 (검사 요청, 일정, 결과)
+ * - 문서 관리 (소견서, 진료 보고서, 처방전, 검사 요청서)
+ * - 처방 관리 (처방전 생성, 약물 상호작용 검사, 처방 이력)
+ * - AI Gateway 프록시 (임상노트 요약, 증상 분석, 처방 가이드)
+ * - 약물 데이터베이스 API (약물 검색, 상호작용 검사)
+ * - 관찰치(Observation) 관리 및 임계치 플래그 계산
+ * 
+ * 기술 스택:
+ * - Node.js + Express.js
+ * - Prisma ORM (SQLite 데이터베이스)
+ * - JWT 기반 인증
+ * - RESTful API
+ * - CORS 설정
+ * 
+ * API 엔드포인트:
+ * - /api/patients - 환자 관리
+ * - /api/observations - 관찰치 관리
+ * - /api/drugs - 약물 데이터베이스
+ * - /api/ai/* - AI Gateway 프록시
+ * - /api/documents/* - 문서 관리
+ * - /api/tests/* - 검사 관리
+ * - /api/prescriptions/* - 처방 관리
+ */
 // backend/index.js (ESM)
 import express from 'express'
 import cors from 'cors'
@@ -9,7 +39,19 @@ import DocumentManagement from './src/documentManagement.js'
 import TestManagement from './src/testManagement.js'
 import PrescriptionManagement from './src/prescriptionManagement.js'
 
-// ---------- 공통 임계치 규칙 ----------
+// ---------- 공통 임계치 규칙 (이윤효 담당) ----------
+/**
+ * 관찰치(Observation)의 임계치를 계산하여 플래그를 생성하는 함수
+ * 
+ * @param {Object} obs - 관찰치 객체 { codeLoinc, value, unit }
+ * @returns {Array<string>} 플래그 배열 (예: ['HIGH_BP_SYSTOLIC', 'HIGH_GLUCOSE'])
+ * 
+ * 임계치 기준:
+ * - 수축기 혈압(BP-SYS): >= 140 → HIGH_BP_SYSTOLIC
+ * - 이완기 혈압(BP-DIA): >= 90 → HIGH_BP_DIASTOLIC
+ * - 공복 혈당(GLU-FBS): >= 200 → HIGH_GLUCOSE
+ * - 심박수(HR): >= 120 → HIGH_HEART_RATE
+ */
 function calcFlagsForObservation(obs) {
     const flags = []
     if (obs.codeLoinc === 'BP-SYS') {

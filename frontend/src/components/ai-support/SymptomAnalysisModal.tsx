@@ -1,3 +1,25 @@
+/**
+ * AI 증상 분석 모달 컴포넌트
+ * 
+ * 담당자: 김지현 (AI Gateway)
+ * 
+ * 주요 기능:
+ * - 환자 증상 입력 및 관리
+ * - 증상 심각도, 기간, 패턴 설정
+ * - AI 기반 진단 추천
+ * - 가능한 진단 목록 및 확률 표시
+ * - 추가 검사 권장사항 제공
+ * 
+ * 기술 스택:
+ * - React + TypeScript
+ * - AI Gateway API 연동 (symptomAnalysis)
+ * - 탭 기반 UI (입력/결과)
+ * - 다중 AI 모델 지원 (auto 폴백)
+ * 
+ * 사용 위치:
+ * - PatientChartModal 내부
+ * - 증상 분석 요청 시
+ */
 import React, { useState, useEffect } from 'react';
 import { symptomAnalysis } from '../../api/ai';
 

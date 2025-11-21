@@ -1,5 +1,25 @@
+/**
+ * 환자 검색바 컴포넌트
+ * 
+ * 담당자: 이희창 (프론트엔드)
+ * 
+ * 주요 기능:
+ * - 실시간 환자 검색 (이름, MRN, 생년월일, 전화번호)
+ * - 검색 결과 드롭다운 표시
+ * - 환자 선택 시 콜백 함수 호출
+ * 
+ * 기술 스택:
+ * - React + TypeScript
+ * - 실시간 검색 (onChange 이벤트)
+ * - API 연동 (Patients.searchPatients)
+ * - 로딩 상태 표시
+ * 
+ * 사용 위치:
+ * - Header 컴포넌트 내부
+ * - 대시보드 상단 검색바
+ */
 import React, { useState } from 'react';
-import { Patients } from '../api';
+import { Patients } from '../../api';
 
 interface SearchBarProps {
     onPatientSelect?: (patient: any) => void;
@@ -7,7 +27,7 @@ interface SearchBarProps {
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onPatientSelect }) => {
     const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
+    const [searchResults, setSearchResults] = useState<any[]>([]);
     const [isSearching, setIsSearching] = useState(false);
 
     const handleSearch = async (query: string) => {

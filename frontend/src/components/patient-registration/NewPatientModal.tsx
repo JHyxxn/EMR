@@ -172,25 +172,34 @@ export const NewPatientModal: React.FC<NewPatientModalProps> = ({ isOpen, onClos
 
     // 대기 목록에 추가 핸들러
     const handleAddToWaitingList = () => {
+        // birthDate가 없으면 dob를 사용 (호환성)
+        const birthDate = formData.birthDate || formData.dob || '';
+        
+        if (!birthDate || birthDate.trim() === '') {
+            alert('생년월일을 입력해주세요.');
+            return;
+        }
+        
         // 간호사 정보를 포함한 환자 데이터 생성
         const patientWithNurseInfo = {
             name: formData.name,
-            birthDate: formData.birthDate,
-            phone: formData.phone,
-            symptoms: formData.symptoms,
+            birthDate: birthDate.trim(),
+            phone: formData.phone || '',
+            symptoms: formData.symptoms || '',
             nurseInfo: {
-                symptoms: formData.symptoms,
+                symptoms: formData.symptoms || '',
                 bloodPressure: formData.bloodPressure ? {
                     systolic: parseInt(formData.bloodPressure.split('/')[0]),
                     diastolic: parseInt(formData.bloodPressure.split('/')[1]),
                     measuredAt: new Date().toISOString()
                 } : undefined,
-                notes: formData.notes,
+                notes: formData.notes || '',
                 registeredBy: "간호사",
                 registeredAt: new Date().toISOString()
             }
         };
         
+        console.log('신규 환자 등록 데이터:', patientWithNurseInfo);
         onAddToWaitingList(patientWithNurseInfo);
         onClose();
     };

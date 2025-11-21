@@ -1,5 +1,19 @@
 /**
  * 검사 관리 페이지 컴포넌트
+ * 
+ * 담당자: 이희창 (프론트엔드)
+ * 
+ * 주요 기능:
+ * - 검사 오더 관리
+ * - 검사 결과 입력 (혈압, 심전도, 혈당 등)
+ * - AI 기반 검사 결과 분석 및 시각화
+ * - 정상/비정상 수치 자동 판단 및 색상 표시
+ * 
+ * 기술 스택:
+ * - React + TypeScript
+ * - 조건부 렌더링 (정상/비정상 수치 시각적 구분)
+ * - AI 분석 결과 표시
+ * - 탭 기반 UI (검사 오더 / 검사 결과 / AI 분석)
  */
 import React, { useState, useEffect } from 'react';
 import { tokens } from '../design/tokens';

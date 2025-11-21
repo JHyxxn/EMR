@@ -1,6 +1,29 @@
 /**
  * 약물 데이터베이스 관리 모듈
- * drug_dataset_500.json 파일을 로드하여 약물 상호작용 검사 및 처방 가이드 제공
+ * 
+ * 담당자: 김종원 (데이터 생성) / 김지현 (AI Gateway)
+ * 
+ * 주요 기능:
+ * - 약물 데이터 로드 (drug_dataset_500.json)
+ * - 약물 검색 (이름, 성분명, 카테고리)
+ * - 약물 상호작용 검사
+ * - 처방 가이드 생성
+ * - 약물 카테고리별 통계
+ * 
+ * 기술 스택:
+ * - Node.js
+ * - 파일 시스템 (fs)
+ * - JSON 데이터 파싱
+ * - 상호작용 매트릭스 구축
+ * 
+ * 데이터 소스:
+ * - Downloads/drug_dataset_500.json (500개 약물 정보)
+ * 
+ * API 엔드포인트:
+ * - /api/drugs/search - 약물 검색
+ * - /api/drugs/interactions - 상호작용 검사
+ * - /api/drugs/prescription-guide - 처방 가이드
+ * - /api/drugs/status - 데이터베이스 상태
  */
 
 import fs from 'fs';

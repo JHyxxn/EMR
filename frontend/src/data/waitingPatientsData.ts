@@ -23,6 +23,13 @@ export interface WaitingPatient {
         registeredBy: string;
         registeredAt: string;
     };
+    
+    // 처방 검사 정보 (선택적)
+    prescriptionTests?: Array<{
+        testName: string;
+        urgency: 'routine' | 'urgent';
+        result?: string;
+    }>;
 }
 
 // 금일 대기 환자 20명 데이터 (동명이인, 예약/방문 환자 포함)

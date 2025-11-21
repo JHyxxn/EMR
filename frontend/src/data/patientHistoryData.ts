@@ -556,6 +556,16 @@ export const getPatientHistoryByName = (patientName: string): PatientHistory | u
     return patientHistoryData.find(p => p.patientName === patientName);
 };
 
+// 환자 내역 삭제
+export const deletePatientHistory = (patientId: number) => {
+    const index = patientHistoryData.findIndex(p => p.patientId === patientId);
+    if (index !== -1) {
+        patientHistoryData.splice(index, 1);
+        return true;
+    }
+    return false;
+};
+
 // 환자 정보 업데이트
 export const updatePatientInfo = (
     patientId: number,

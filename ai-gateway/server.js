@@ -1,3 +1,40 @@
+/**
+ * AI Gateway 서버
+ * 
+ * 담당자: 김지현 (AI Gateway)
+ * 
+ * 주요 기능:
+ * - 다중 AI 모델 통합 (OpenAI, Anthropic, Google)
+ * - 자동 폴백 메커니즘 (모델 실패 시 자동 전환)
+ * - Rate Limit 관리
+ * - 임상노트 요약 (SOAP 분석)
+ * - Lab/바이탈 요약
+ * - 증상 분석 AI (진단 추천)
+ * - 처방 가이드 (약물 상호작용 및 용량 가이드)
+ * - 검사 결과 AI 분석
+ * 
+ * 기술 스택:
+ * - Node.js + Express.js
+ * - OpenAI API
+ * - Anthropic Claude API
+ * - Google Gemini API
+ * - Rate Limit 관리
+ * - CORS 설정
+ * 
+ * AI 모델:
+ * - OpenAI: gpt-4o, gpt-4o-mini, gpt-3.5-turbo
+ * - Anthropic: claude-3-5-sonnet, claude-3-haiku, claude-3-opus
+ * - Google: gemini-1.5-pro, gemini-1.5-flash, gemini-1.0-pro
+ * 
+ * API 엔드포인트:
+ * - /health - 헬스체크
+ * - /insight/clinical-note - 임상노트 요약
+ * - /insight/lab-summary - Lab 요약
+ * - /insight/symptom-analysis - 증상 분석
+ * - /insight/prescription-guide - 처방 가이드
+ * - /insight/test-analysis - 검사 결과 분석
+ * - /models/status - 모델 상태 확인
+ */
 // ai-gateway/server.js
 import express from 'express';
 import cors from 'cors';

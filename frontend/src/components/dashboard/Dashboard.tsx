@@ -12,6 +12,7 @@ import { waitingPatientsData, WaitingPatient } from '../../data/waitingPatientsD
 import { PatientChartModal } from '../patient-chart/PatientChartModal';
 import { NewPatientModal } from '../patient-registration/NewPatientModal';
 import { RevisitPatientModal } from '../patient-registration/RevisitPatientModal';
+import { getPatientHistory, getPatientHistoryByName, deletePatientHistory } from '../../data/patientHistoryData';
 
 interface DashboardProps {
     searchQuery: string;
@@ -300,7 +301,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
 
     // 나이 계산 함수
     const calculateAge = (birthDate: string) => {
-        if (!birthDate) {
+        if (!birthDate || birthDate.trim() === '') {
             return '?';
         }
         
@@ -310,6 +311,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
             
             // 유효한 날짜인지 확인
             if (isNaN(birth.getTime())) {
+                console.warn('유효하지 않은 생년월일:', birthDate);
+                return '?';
+            }
+            
+            // 날짜가 미래인지 확인
+            if (birth > today) {
+                console.warn('미래 날짜:', birthDate);
                 return '?';
             }
             
@@ -318,6 +326,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
             
             if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
                 age--;
+            }
+            
+            // 나이가 음수이거나 비정상적으로 크면 "?" 반환
+            if (age < 0 || age > 150) {
+                console.warn('비정상적인 나이:', age, 'birthDate:', birthDate);
+                return '?';
             }
             
             return age;
@@ -743,7 +757,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
     return (
         <div style={{ 
             display: "grid", 
-            gridTemplateColumns: "1fr 1fr", 
+            gridTemplateColumns: "6fr 4fr", 
             gap: "20px"
         }}>
             {/* 왼쪽: 금일 대기 환자 */}
@@ -1110,13 +1124,42 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
                         hour12: false
                     });
 
+                    // birthDate가 없거나 빈 문자열인지 확인
+                    if (!patientData.birthDate || patientData.birthDate.trim() === '') {
+                        alert('생년월일을 입력해주세요.');
+                        return;
+                    }
+
+                    // 고유한 환자 ID 생성 (타임스탬프 기반으로 충돌 방지)
+                    // 기존 대기 환자 ID와 겹치지 않도록 충분히 큰 값 사용
+                    const maxExistingId = waitingPatients.length > 0 
+                        ? Math.max(...waitingPatients.map(p => p.id), 0) 
+                        : 0;
+                    const newPatientId = Math.max(Date.now(), maxExistingId + 100000);
+                    
+                    // 신규 환자는 기존 내역이 없어야 하므로, 같은 이름이나 ID의 기존 내역이 있으면 삭제
+                    const existingHistoryById = getPatientHistory(newPatientId);
+                    const existingHistoryByName = getPatientHistoryByName(patientData.name);
+                    
+                    if (existingHistoryById) {
+                        // 같은 ID의 기존 내역 삭제
+                        deletePatientHistory(newPatientId);
+                        console.log('신규 환자 등록: 기존 내역 삭제 (ID:', newPatientId, ')');
+                    }
+                    
+                    if (existingHistoryByName && existingHistoryByName.patientId !== newPatientId) {
+                        // 같은 이름의 다른 환자 내역이 있으면 삭제하지 않음 (동명이인 가능)
+                        // 하지만 신규 환자이므로 이 환자의 내역은 없어야 함
+                        console.log('신규 환자 등록: 같은 이름의 기존 환자 내역 발견 (ID:', existingHistoryByName.patientId, '), 신규 환자이므로 무시');
+                    }
+
                     const newPatient: WaitingPatient = {
-                        id: Math.max(...waitingPatients.map(p => p.id), 0) + 1,
+                        id: newPatientId,
                         time: currentTime,
                         name: patientData.name,
-                        birthDate: patientData.birthDate,
-                        phone: patientData.phone,
-                        condition: patientData.symptoms,
+                        birthDate: patientData.birthDate.trim(),
+                        phone: patientData.phone || '',
+                        condition: patientData.symptoms || '',
                         visitType: "초진",
                         alert: null,
                         alertType: null,
@@ -1125,6 +1168,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
                         nurseInfo: patientData.nurseInfo
                     };
 
+                    console.log('신규 환자 등록:', newPatient, '나이:', calculateAge(newPatient.birthDate));
                     setWaitingPatients(prev => [...prev, newPatient]);
                     alert('신규 환자가 대기 목록에 추가되었습니다.');
                 }}

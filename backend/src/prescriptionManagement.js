@@ -1,6 +1,31 @@
 /**
  * 처방 관리 시스템
- * 처방전 작성, 약물 상호작용 검사, 처방 이력 관리
+ * 
+ * 담당자: 이윤효 (백엔드)
+ * 
+ * 주요 기능:
+ * - 처방전 생성 및 저장
+ * - 약물 상호작용 검사
+ * - 처방 이력 조회
+ * - 처방 통계 생성
+ * - 약물 정보 관리
+ * 
+ * 기술 스택:
+ * - Node.js
+ * - 파일 시스템 (fs)
+ * - 약물 데이터베이스 연동
+ * 
+ * 약물 정보:
+ * - 약물명, 카테고리, 용량, 복용법
+ * - 약물 상호작용 목록
+ * - 금기사항
+ * - 부작용 정보
+ * 
+ * API 엔드포인트:
+ * - /api/prescriptions - 처방전 생성
+ * - /api/prescriptions/check-interactions - 약물 상호작용 검사
+ * - /api/prescriptions/history/:patientId - 처방 이력 조회
+ * - /api/prescriptions/statistics - 처방 통계 조회
  */
 
 import fs from 'fs';

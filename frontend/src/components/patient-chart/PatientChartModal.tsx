@@ -110,9 +110,10 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
         freeformNotes: '',
         nurseInfo: patient.nurseInfo ? {
             ...patient.nurseInfo,
-            bloodPressure: patient.nurseInfo.bloodPressure || ''
+            bloodPressure: patient.nurseInfo.bloodPressure || '',
+            symptoms: patient.nurseInfo.symptoms || patient.condition || ''
         } : {
-            symptoms: '',
+            symptoms: patient.condition || '',
             bloodPressure: '',
             notes: '',
             registeredBy: '',
@@ -174,9 +175,9 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
             const response = await clinicalNote({
                 text: chartData.freeformNotes, // 자유형 메모를 text로 전달
                 patient: patientInfo
-            });
+            }, { provider: 'auto' });
 
-            if (response.summary) {
+            if (response && response.summary) {
                 // AI 응답을 SOAP 형식으로 파싱하여 각 필드에 자동 입력
                 const soapData = parseAIToSOAP(response.summary);
                 
@@ -211,10 +212,20 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
                 }
 
                 alert('자유형 메모가 SOAP 형식으로 정리되었고, 처방/검사 추천이 생성되었습니다.');
+            } else {
+                alert('AI 응답을 받지 못했습니다.\n\n백엔드 서버(포트 4000)와 AI Gateway 서버(포트 5001)가 실행 중인지 확인해주세요.');
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('메모 정리 오류:', error);
-            alert('메모 정리 중 오류가 발생했습니다.');
+            const errorMessage = error?.message || error?.toString() || '알 수 없는 오류';
+            
+            if (errorMessage.includes('Failed to fetch') || errorMessage.includes('NetworkError')) {
+                alert('서버에 연결할 수 없습니다.\n\n백엔드 서버(포트 4000)와 AI Gateway 서버(포트 5001)가 실행 중인지 확인해주세요.');
+            } else if (errorMessage.includes('500') || errorMessage.includes('502') || errorMessage.includes('ai_gateway')) {
+                alert('AI Gateway 서버 오류가 발생했습니다.\n\nAI Gateway 서버(포트 5001)가 실행 중인지 확인해주세요.');
+            } else {
+                alert(`메모 정리 중 오류가 발생했습니다.\n\n오류: ${errorMessage}`);
+            }
         }
     };
 
@@ -295,8 +306,98 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
         if (isOpen) {
             generateAISuggestions();
             // 환자 내역 로드
+            // 신규 환자(초진)이고 visitOrigin이 'walkin'이면 내역이 없어야 함
             const history = getPatientHistory(patient.id);
-            setPatientHistory(history);
+            // 신규 환자인 경우 기존 내역이 있어도 무시 (초진이므로 내역이 없어야 함)
+            if (patient.visitType === '초진' && patient.visitOrigin === 'walkin' && history) {
+                // 신규 환자인데 기존 내역이 있으면 무시
+                console.log('신규 환자 (초진): 기존 내역 무시', patient.name, patient.id);
+                setPatientHistory(undefined);
+            } else {
+                setPatientHistory(history);
+            }
+            
+            // 처방에서 온 검사 정보가 있으면 검사 탭에 표시
+            if ((patient as any).prescriptionTests && (patient as any).prescriptionTests.length > 0) {
+                setChartData(prev => ({
+                    ...prev,
+                    tests: (patient as any).prescriptionTests.map((test: any) => ({
+                        testName: test.testName || test.name || '검사',
+                        urgency: test.urgency || 'routine'
+                    }))
+                }));
+            }
+            
+            // 재진 환자의 경우 condition을 nurseInfo.symptoms로 설정
+            // patient.condition이 있고, 현재 nurseInfo.symptoms가 없거나 다르면 업데이트
+            if (patient.condition && patient.condition.trim() !== '') {
+                setChartData(prev => {
+                    // 이미 같은 증상이면 업데이트하지 않음
+                    if (prev.nurseInfo?.symptoms === patient.condition) {
+                        return prev;
+                    }
+                    return {
+                        ...prev,
+                        nurseInfo: {
+                            symptoms: patient.condition,
+                            bloodPressure: prev.nurseInfo?.bloodPressure || '',
+                            notes: prev.nurseInfo?.notes || '',
+                            registeredBy: prev.nurseInfo?.registeredBy || patient.nurseInfo?.registeredBy || '',
+                            registeredAt: prev.nurseInfo?.registeredAt || patient.nurseInfo?.registeredAt || ''
+                        }
+                    };
+                });
+            }
+            
+            // 검사 완료 환자(이지현, 김지현, 박민수)에게 진료 기록 미리 작성
+            if ((patient.condition || '').includes("검사 완료")) {
+                const getMedicalRecord = (patientName: string) => {
+                    if (patientName === "이지현") {
+                        return {
+                            freeformNotes: "환자가 두통과 어지럼증을 호소하여 내원. CT 검사 및 혈액검사 시행. 검사 결과 CT에서 뇌출혈 의심 소견 확인, 혈액검사에서 WBC 12,500/μL로 상승 확인. 상급병원 이송 필요.",
+                            soap: {
+                                subjective: "두통, 어지럼증 호소",
+                                objective: "CT 검사: 뇌출혈 의심 소견, 혈액검사: WBC 12,500/μL (정상: 4,000-10,000)",
+                                assessment: "뇌출혈 의심, 백혈구 증가증",
+                                plan: "상급병원 이송 권고, 응급실 이송 조치"
+                            }
+                        };
+                    } else if (patientName === "김지현") {
+                        return {
+                            freeformNotes: "환자가 피로감과 발열을 호소하여 내원. 혈액검사 시행. 검사 결과 WBC 7,200/μL로 정상 범위 확인. 경과 관찰 및 대증 치료.",
+                            soap: {
+                                subjective: "피로감, 발열",
+                                objective: "혈액검사: WBC 7,200/μL (정상 범위)",
+                                assessment: "상기도 감염 의심",
+                                plan: "경과 관찰, 대증 치료"
+                            }
+                        };
+                    } else if (patientName === "박민수") {
+                        return {
+                            freeformNotes: "환자가 가슴 통증을 호소하여 내원. X-ray 검사 시행. 검사 결과 정상 소견 확인. 경과 관찰 및 대증 치료.",
+                            soap: {
+                                subjective: "가슴 통증",
+                                objective: "X-ray 검사: 정상 소견",
+                                assessment: "가슴 통증, 원인 불명",
+                                plan: "경과 관찰, 필요시 재검사"
+                            }
+                        };
+                    }
+                    return null;
+                };
+                
+                const medicalRecord = getMedicalRecord(patient.name);
+                if (medicalRecord) {
+                    setChartData(prev => ({
+                        ...prev,
+                        freeformNotes: medicalRecord.freeformNotes,
+                        soap: {
+                            ...prev.soap,
+                            ...medicalRecord.soap
+                        }
+                    }));
+                }
+            }
         }
     }, [isOpen, patient]);
 
@@ -717,7 +818,7 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
                         {activeTab === 'chart' && (
                             <div style={{ flex: 1, overflowY: 'auto' }}>
                                 {/* 간호사 등록 정보 */}
-                                {chartData.nurseInfo && (chartData.nurseInfo.symptoms || chartData.nurseInfo.bloodPressure || chartData.nurseInfo.notes) && (
+                                {chartData.nurseInfo && (chartData.nurseInfo.symptoms?.trim() || chartData.nurseInfo.bloodPressure || chartData.nurseInfo.notes?.trim()) && (
                                     <div style={{
                                         backgroundColor: '#f0f9ff',
                                         border: '1px solid #0ea5e9',
@@ -1161,6 +1262,263 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
 
                         {activeTab === 'test' && (
                             <div style={{ flex: 1, overflowY: 'auto' }}>
+                                {/* 검사 완료 환자 결과 표시 */}
+                                {(patient.condition || '').includes("검사 완료") && (
+                                    <div style={{
+                                        backgroundColor: 'white',
+                                        border: '1px solid #e5e7eb',
+                                        borderRadius: '8px',
+                                        padding: '16px',
+                                        marginBottom: '16px'
+                                    }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                                            <h4 style={{
+                                                margin: 0,
+                                                fontSize: '16px',
+                                                fontWeight: 600,
+                                                color: '#374151'
+                                            }}>
+                                                검사 완료 결과
+                                            </h4>
+                                        </div>
+                                        
+                                        {/* 상급병원 이송 필요 알림 */}
+                                        {patient.alert && patient.alert.includes("상급병원") && (
+                                            <div style={{
+                                                backgroundColor: '#f9fafb',
+                                                border: '1px solid #e5e7eb',
+                                                borderRadius: '6px',
+                                                padding: '12px',
+                                                marginBottom: '12px'
+                                            }}>
+                                                <div style={{ 
+                                                    fontSize: '14px', 
+                                                    fontWeight: 600, 
+                                                    color: '#374151',
+                                                    marginBottom: '4px'
+                                                }}>
+                                                    상급병원 이송 필요
+                                                </div>
+                                                <div style={{ fontSize: '13px', color: '#6b7280' }}>
+                                                    {patient.alert}
+                                                </div>
+                                            </div>
+                                        )}
+                                        
+                                        {/* 검사 결과 목록 */}
+                                        {(patient as any).prescriptionTests && (patient as any).prescriptionTests.length > 0 ? (
+                                            <div style={{ display: 'grid', gap: '12px' }}>
+                                                {(patient as any).prescriptionTests.map((test: any, index: number) => {
+                                                    // 검사 결과 시뮬레이션 (실제로는 백엔드에서 가져와야 함)
+                                                    const testResults: { [key: string]: { result: string; status: string; normalRange: string; abnormalPart?: string } } = {
+                                                        '혈액검사': { result: 'WBC: 12,500/μL (정상: 4,000-10,000)', status: '비정상', normalRange: '4,000-10,000/μL', abnormalPart: '12,500/μL' },
+                                                        '위내시경': { result: '위염 소견, 점막 부종 확인', status: '비정상', normalRange: '정상', abnormalPart: '위염 소견, 점막 부종 확인' },
+                                                        'X-ray 검사': { result: '폐 음영 증가, 폐렴 의심', status: '비정상', normalRange: '정상', abnormalPart: '폐 음영 증가, 폐렴 의심' },
+                                                        'CT 검사': { result: '뇌출혈 의심 소견', status: '비정상', normalRange: '정상', abnormalPart: '뇌출혈 의심 소견' }
+                                                    };
+                                                    
+                                                    const testName = test.testName || test.name || '검사';
+                                                    const result = testResults[testName] || { 
+                                                        result: '검사 완료', 
+                                                        status: '완료',
+                                                        normalRange: '-'
+                                                    };
+                                                    
+                                                    // 비정상 부분만 빨간색 배경으로 표시
+                                                    const renderResult = () => {
+                                                        if (result.status === '비정상' && result.abnormalPart) {
+                                                            const parts = result.result.split(result.abnormalPart);
+                                                            return (
+                                                                <>
+                                                                    {parts[0]}
+                                                                    <span style={{
+                                                                        backgroundColor: '#fee2e2',
+                                                                        padding: '2px 4px',
+                                                                        borderRadius: '3px',
+                                                                        color: '#dc2626',
+                                                                        fontWeight: 600
+                                                                    }}>
+                                                                        {result.abnormalPart}
+                                                                    </span>
+                                                                    {parts[1]}
+                                                                </>
+                                                            );
+                                                        }
+                                                        return result.result;
+                                                    };
+                                                    
+                                                    return (
+                                                        <div key={index} style={{
+                                                            backgroundColor: 'white',
+                                                            border: '1px solid #e5e7eb',
+                                                            borderRadius: '6px',
+                                                            padding: '12px'
+                                                        }}>
+                                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                                                <span style={{ fontSize: '14px', fontWeight: 600, color: '#374151' }}>
+                                                                    {testName}
+                                                                </span>
+                                                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                                    <span style={{
+                                                                        padding: '4px 8px',
+                                                                        borderRadius: '4px',
+                                                                        fontSize: '12px',
+                                                                        fontWeight: 500,
+                                                                        backgroundColor: test.urgency === 'urgent' ? '#fecaca' : '#dcfce7',
+                                                                        color: test.urgency === 'urgent' ? '#dc2626' : '#166534'
+                                                                    }}>
+                                                                        {test.urgency === 'urgent' ? '긴급' : '일반'}
+                                                                    </span>
+                                                                    {result.status === '비정상' && (
+                                                                        <span style={{
+                                                                            padding: '4px 8px',
+                                                                            borderRadius: '4px',
+                                                                            fontSize: '12px',
+                                                                            fontWeight: 600,
+                                                                            backgroundColor: '#fee2e2',
+                                                                            color: '#dc2626'
+                                                                        }}>
+                                                                            비정상
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                            <div style={{ 
+                                                                fontSize: '13px', 
+                                                                color: '#374151',
+                                                                marginTop: '8px',
+                                                                padding: '8px',
+                                                                backgroundColor: '#f9fafb',
+                                                                borderRadius: '4px',
+                                                                fontWeight: 400
+                                                            }}>
+                                                                <div style={{ marginBottom: '4px' }}>
+                                                                    <strong>결과:</strong> {renderResult()}
+                                                                </div>
+                                                                <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                                                                    정상 범위: {result.normalRange}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <div style={{ fontSize: '14px', color: '#374151', marginBottom: '12px' }}>
+                                                    검사 완료 상태입니다. 검사 결과를 확인하세요.
+                                                </div>
+                                                {/* 검사 완료 환자에게 기본 검사 결과 표시 */}
+                                                {(() => {
+                                                    // 검사 완료 환자에게 기본 검사 결과 생성
+                                                    const defaultTests = patient.alertType === "AI 위험" ? [
+                                                        { testName: "CT 검사", urgency: "urgent" as const, result: "뇌출혈 의심 소견" },
+                                                        { testName: "혈액검사", urgency: "urgent" as const, result: "WBC: 12,500/μL (정상: 4,000-10,000)" }
+                                                    ] : [
+                                                        { testName: "혈액검사", urgency: "routine" as const, result: "정상 범위" }
+                                                    ];
+                                                    
+                                                    return (
+                                                        <div style={{ display: 'grid', gap: '12px' }}>
+                                                            {defaultTests.map((test, index) => {
+                                                                const testResults: { [key: string]: { result: string; status: string; normalRange: string; abnormalPart?: string } } = {
+                                                                    '혈액검사': { result: test.result || 'WBC: 12,500/μL (정상: 4,000-10,000)', status: test.result?.includes('정상') ? '완료' : '비정상', normalRange: '4,000-10,000/μL', abnormalPart: '12,500/μL' },
+                                                                    'CT 검사': { result: test.result || '뇌출혈 의심 소견', status: '비정상', normalRange: '정상', abnormalPart: '뇌출혈 의심 소견' },
+                                                                    'X-ray 검사': { result: test.result || '정상 소견', status: '완료', normalRange: '정상' }
+                                                                };
+                                                                
+                                                                const result = testResults[test.testName] || { 
+                                                                    result: test.result || '검사 완료', 
+                                                                    status: '완료',
+                                                                    normalRange: '-'
+                                                                };
+                                                                
+                                                                // 비정상 부분만 빨간색 배경으로 표시
+                                                                const renderResult = () => {
+                                                                    if (result.status === '비정상' && result.abnormalPart) {
+                                                                        const parts = result.result.split(result.abnormalPart);
+                                                                        return (
+                                                                            <>
+                                                                                {parts[0]}
+                                                                                <span style={{
+                                                                                    backgroundColor: '#fee2e2',
+                                                                                    padding: '2px 4px',
+                                                                                    borderRadius: '3px',
+                                                                                    color: '#dc2626',
+                                                                                    fontWeight: 600
+                                                                                }}>
+                                                                                    {result.abnormalPart}
+                                                                                </span>
+                                                                                {parts[1]}
+                                                                            </>
+                                                                        );
+                                                                    }
+                                                                    return result.result;
+                                                                };
+                                                                
+                                                                return (
+                                                                    <div key={index} style={{
+                                                                        backgroundColor: 'white',
+                                                                        border: '1px solid #e5e7eb',
+                                                                        borderRadius: '6px',
+                                                                        padding: '12px'
+                                                                    }}>
+                                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                                                            <span style={{ fontSize: '14px', fontWeight: 600, color: '#374151' }}>
+                                                                                {test.testName}
+                                                                            </span>
+                                                                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                                                <span style={{
+                                                                                    padding: '4px 8px',
+                                                                                    borderRadius: '4px',
+                                                                                    fontSize: '12px',
+                                                                                    fontWeight: 500,
+                                                                                    backgroundColor: test.urgency === 'urgent' ? '#fecaca' : '#dcfce7',
+                                                                                    color: test.urgency === 'urgent' ? '#dc2626' : '#166534'
+                                                                                }}>
+                                                                                    {test.urgency === 'urgent' ? '긴급' : '일반'}
+                                                                                </span>
+                                                                                {result.status === '비정상' && (
+                                                                                    <span style={{
+                                                                                        padding: '4px 8px',
+                                                                                        borderRadius: '4px',
+                                                                                        fontSize: '12px',
+                                                                                        fontWeight: 600,
+                                                                                        backgroundColor: '#fee2e2',
+                                                                                        color: '#dc2626'
+                                                                                    }}>
+                                                                                        비정상
+                                                                                    </span>
+                                                                                )}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div style={{ 
+                                                                            fontSize: '13px', 
+                                                                            color: '#374151',
+                                                                            marginTop: '8px',
+                                                                            padding: '8px',
+                                                                            backgroundColor: '#f9fafb',
+                                                                            borderRadius: '4px',
+                                                                            fontWeight: 400
+                                                                        }}>
+                                                                            <div style={{ marginBottom: '4px' }}>
+                                                                                <strong>결과:</strong> {renderResult()}
+                                                                            </div>
+                                                                            <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                                                                                정상 범위: {result.normalRange}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    );
+                                                })()}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                                
                                 {/* AI 검사 요약 */}
                                 {testSummary && (
                                     <div style={{
@@ -1224,7 +1582,20 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
                                         </button>
                                     </div>
                                     
-                                    {chartData.tests.map((test, index) => (
+                                    {chartData.tests.length === 0 ? (
+                                        <div style={{
+                                            padding: '24px',
+                                            textAlign: 'center',
+                                            color: '#6b7280',
+                                            fontSize: '14px',
+                                            backgroundColor: '#f9fafb',
+                                            borderRadius: '6px',
+                                            border: '1px dashed #d1d5db'
+                                        }}>
+                                            검사 항목이 없습니다. "+ 검사 추가" 버튼을 클릭하여 검사를 추가하세요.
+                                        </div>
+                                    ) : (
+                                        chartData.tests.map((test, index) => (
                                         <div key={index} style={{
                                             border: '1px solid #e5e7eb',
                                             borderRadius: '6px',
@@ -1311,7 +1682,8 @@ export const PatientChartModal: React.FC<PatientChartModalProps> = ({
                                                 </div>
                                             </div>
                                         </div>
-                                    ))}
+                                        ))
+                                    )}
                                 </div>
                                 
                                 {/* 검사 관련 메모 */}

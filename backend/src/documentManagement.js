@@ -1,6 +1,34 @@
 /**
  * 문서 관리 시스템
- * 소견서, 진료 보고서, 처방전, 검사 요청서 자동 생성
+ * 
+ * 담당자: 이윤효 (백엔드) / 김지현 (AI Gateway)
+ * 
+ * 주요 기능:
+ * - 소견서 자동 생성
+ * - 진료 보고서 자동 생성 (SOAP 형식)
+ * - 처방전 자동 생성
+ * - 검사 요청서 자동 생성
+ * - 문서 파일 저장 및 관리
+ * - 문서 목록 조회
+ * 
+ * 기술 스택:
+ * - Node.js
+ * - 템플릿 기반 문서 생성
+ * - 파일 시스템 (fs)
+ * - 환자 정보 자동 매핑
+ * 
+ * 템플릿 종류:
+ * - 소견서 (opinion)
+ * - 진료 보고서 (medicalReport)
+ * - 처방전 (prescription)
+ * - 검사 요청서 (testRequest)
+ * 
+ * API 엔드포인트:
+ * - /api/documents/opinion - 소견서 생성
+ * - /api/documents/medical-report - 진료 보고서 생성
+ * - /api/documents/prescription - 처방전 생성
+ * - /api/documents/test-request - 검사 요청서 생성
+ * - /api/documents - 문서 목록 조회
  */
 
 import fs from 'fs';

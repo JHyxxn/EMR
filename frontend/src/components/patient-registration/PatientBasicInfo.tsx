@@ -152,20 +152,26 @@ export const PatientBasicInfo: React.FC<PatientBasicInfoProps> = ({
                         </label>
                         <input 
                             type="date" 
-                            value={formData.dob}
-                            onChange={(e) => onInputChange('dob', e.target.value)}
+                            value={formData.birthDate || formData.dob || ''}
+                            onChange={(e) => {
+                                onInputChange('birthDate', e.target.value);
+                                // 호환성을 위해 dob도 업데이트
+                                if (formData.dob !== undefined) {
+                                    onInputChange('dob', e.target.value);
+                                }
+                            }}
                             style={{
                                 width: "100%",
                                 padding: "8px 12px",
-                                border: `1px solid ${getFieldError('dob') ? '#dc2626' : '#d1d5db'}`,
+                                border: `1px solid ${getFieldError('birthDate') || getFieldError('dob') ? '#dc2626' : '#d1d5db'}`,
                                 borderRadius: "6px",
                                 fontSize: "14px",
                                 boxSizing: "border-box"
                             }}
                         />
-                        {getFieldError('dob') && (
+                        {(getFieldError('birthDate') || getFieldError('dob')) && (
                             <div style={{ fontSize: "12px", color: "#dc2626", marginTop: "4px" }}>
-                                {getFieldError('dob')}
+                                {getFieldError('birthDate') || getFieldError('dob')}
                             </div>
                         )}
                     </div>

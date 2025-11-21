@@ -388,7 +388,7 @@ export default function App() {
                                 name: patientData.name,
                                 birthDate: patientData.birthDate,
                                 phone: patientData.phone,
-                                condition: patientData.symptoms,
+                                condition: patientData.condition || patientData.symptoms || '',
                                 visitType: "재진",
                                 alert: null,
                                 alertType: null,

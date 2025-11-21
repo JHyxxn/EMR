@@ -1,6 +1,32 @@
 /**
  * 검사 관리 시스템
- * 검사 요청, 결과 관리, 검사 일정 관리
+ * 
+ * 담당자: 이윤효 (백엔드)
+ * 
+ * 주요 기능:
+ * - 검사 요청 생성 및 관리
+ * - 검사 일정 관리
+ * - 검사 결과 입력 및 저장
+ * - 검사 통계 생성
+ * - 검사 종류별 정상 범위 관리
+ * 
+ * 기술 스택:
+ * - Node.js
+ * - 파일 시스템 (fs)
+ * - 검사 종류별 정상 범위 데이터
+ * 
+ * 검사 종류:
+ * - 혈액 검사 (CBC, WBC, RBC, HGB, HCT, PLT 등)
+ * - 생화학 검사 (GLU, BUN, CRE, ALT, AST 등)
+ * - 심장 검사 (CK, CK-MB, TROPONIN, BNP)
+ * - 갑상선 검사 (TSH, T3, T4)
+ * - 기타 검사
+ * 
+ * API 엔드포인트:
+ * - /api/tests/request - 검사 요청 생성
+ * - /api/tests/schedule - 검사 일정 생성
+ * - /api/tests/results - 검사 결과 입력
+ * - /api/tests/statistics - 검사 통계 조회
  */
 
 import fs from 'fs';

@@ -1,3 +1,20 @@
+/**
+ * 재진환자 차트 페이지 컴포넌트
+ * 
+ * 담당자: 이희창 (프론트엔드)
+ * 
+ * 주요 기능:
+ * - 재진환자 검색 및 선택 (이름, 생년월일, 전화번호 복합 검색)
+ * - 환자 이전 진료 기록 조회 및 표시
+ * - 오늘 등록 정보 입력 (증상, 혈압, 노트)
+ * - 대기 목록에 재진환자 추가
+ * 
+ * 기술 스택:
+ * - React + TypeScript
+ * - 한글 초성 검색 알고리즘
+ * - 복합 검색 (이름, 생년월일, 전화번호)
+ * - Context API를 통한 상태 관리
+ */
 import React, { useState } from 'react';
 import { tokens } from '../design/tokens';
 import { Input } from '../components/common';
@@ -154,6 +171,26 @@ export const PatientChart: React.FC<PatientChartProps> = ({ searchQuery, onAddTo
 
     const handlePatientSelect = (patient: PatientRecord) => {
         setSelectedPatient(patient);
+        // 재진 환자 선택 시 최근 증상을 자동으로 채움
+        // PatientRecord에는 symptoms 필드가 있지만, RevisitPatient에는 없을 수 있음
+        let symptoms = '';
+        if ('symptoms' in patient && patient.symptoms && patient.symptoms.trim() !== '') {
+            symptoms = patient.symptoms;
+        } else if ('diagnosis' in patient && patient.diagnosis && patient.diagnosis.trim() !== '') {
+            // RevisitPatient의 경우 diagnosis를 증상으로 사용
+            symptoms = patient.diagnosis;
+        } else if ('notes' in patient && Array.isArray(patient.notes) && patient.notes.length > 0) {
+            // 최근 노트의 content를 증상으로 사용
+            const latestNote = patient.notes[0];
+            symptoms = latestNote.content || '';
+        }
+        
+        if (symptoms.trim() !== '') {
+            setTodayInfo(prev => ({
+                ...prev,
+                symptoms: symptoms
+            }));
+        }
     };
 
     // 재진환자 등록 상태 관리
@@ -187,20 +224,44 @@ export const PatientChart: React.FC<PatientChartProps> = ({ searchQuery, onAddTo
             hour12: false
         });
 
+        // 증상이 비어있으면 선택된 환자의 증상을 사용
+        let symptoms = todayInfo.symptoms.trim();
+        if (!symptoms) {
+            // PatientRecord의 symptoms 필드 확인
+            if ('symptoms' in selectedPatient && selectedPatient.symptoms && selectedPatient.symptoms.trim() !== '') {
+                symptoms = selectedPatient.symptoms;
+            } else if ('diagnosis' in selectedPatient && selectedPatient.diagnosis && selectedPatient.diagnosis.trim() !== '') {
+                // RevisitPatient의 경우 diagnosis를 증상으로 사용
+                symptoms = selectedPatient.diagnosis;
+            } else if ('notes' in selectedPatient && Array.isArray(selectedPatient.notes) && selectedPatient.notes.length > 0) {
+                // 최근 노트의 content를 증상으로 사용
+                const latestNote = selectedPatient.notes[0];
+                symptoms = latestNote.content || '';
+            }
+        }
+        
+        // 증상이 여전히 비어있으면 기본값 설정
+        if (!symptoms || symptoms.trim() === '') {
+            symptoms = '재진 환자';
+            console.warn('재진 환자 증상이 비어있습니다:', selectedPatient);
+        }
+        
+        console.log('대기 목록 추가 - 환자:', selectedPatient.name, '증상:', symptoms);
+        
         const waitingPatient: WaitingPatient = {
             id: Date.now(),
             time: currentTime,
             name: selectedPatient.name,
             birthDate: selectedPatient.birthDate,
             phone: selectedPatient.phone,
-            condition: todayInfo.symptoms,
+            condition: symptoms,
             visitType: "재진",
             alert: null,
             alertType: null,
             buttonText: "진료 시작",
             visitOrigin: "walkin" as const,
             nurseInfo: {
-                symptoms: todayInfo.symptoms,
+                symptoms: symptoms,
                 bloodPressure: todayInfo.bloodPressure ? {
                     systolic: parseInt(todayInfo.bloodPressure.split('/')[0]),
                     diastolic: parseInt(todayInfo.bloodPressure.split('/')[1]),
