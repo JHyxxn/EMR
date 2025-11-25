@@ -17,7 +17,7 @@
  * - 상호작용 매트릭스 구축
  * 
  * 데이터 소스:
- * - Downloads/drug_dataset_500.json (500개 약물 정보)
+ * - Downloads/drug_dataset_500.json (5개 약물 정보)
  * 
  * API 엔드포인트:
  * - /api/drugs/search - 약물 검색
