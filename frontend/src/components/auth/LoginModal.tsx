@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useAuthStore } from '../hooks/authStore';
+// @ts-ignore - JSX 파일 import
+import { useAuthStore } from '../../hooks/authStore.jsx';
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -10,7 +11,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const { login, loading } = useAuthStore();
+    const { login, loading } = useAuthStore() as { login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>, loading: boolean };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,7 +26,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         if (result.success) {
             onClose();
         } else {
-            setError(result.error);
+            setError(result.error || '로그인에 실패했습니다.');
         }
     };
 
@@ -97,8 +98,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                 outline: 'none',
                                 transition: 'border-color 0.2s'
                             }}
-                            onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
-                            onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+                            onFocus={(e) => (e.target as HTMLInputElement).style.borderColor = '#3b82f6'}
+                            onBlur={(e) => (e.target as HTMLInputElement).style.borderColor = '#d1d5db'}
                             placeholder="사용자명을 입력하세요"
                         />
                     </div>
@@ -126,8 +127,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                 outline: 'none',
                                 transition: 'border-color 0.2s'
                             }}
-                            onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
-                            onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
+                            onFocus={(e) => (e.target as HTMLInputElement).style.borderColor = '#3b82f6'}
+                            onBlur={(e) => (e.target as HTMLInputElement).style.borderColor = '#d1d5db'}
                             placeholder="비밀번호를 입력하세요"
                         />
                     </div>
@@ -165,8 +166,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                 cursor: 'pointer',
                                 transition: 'background-color 0.2s'
                             }}
-                            onMouseEnter={(e) => e.target.style.background = '#f9fafb'}
-                            onMouseLeave={(e) => e.target.style.background = 'white'}
+                            onMouseEnter={(e) => (e.target as HTMLButtonElement).style.background = '#f9fafb'}
+                            onMouseLeave={(e) => (e.target as HTMLButtonElement).style.background = 'white'}
                         >
                             취소
                         </button>
@@ -186,10 +187,10 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                                 transition: 'background-color 0.2s'
                             }}
                             onMouseEnter={(e) => {
-                                if (!loading) e.target.style.background = '#2563eb';
+                                if (!loading) (e.target as HTMLButtonElement).style.background = '#2563eb';
                             }}
                             onMouseLeave={(e) => {
-                                if (!loading) e.target.style.background = '#3b82f6';
+                                if (!loading) (e.target as HTMLButtonElement).style.background = '#3b82f6';
                             }}
                         >
                             {loading ? '로그인 중...' : '로그인'}
