@@ -9,7 +9,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { NewPatientModal } from './components/patient-registration';
-import { Dashboard, Calendar, QuickActions, AlertsSection } from './components/dashboard';
+import { Dashboard, AlertsSection } from './components/dashboard';
 import { PatientChart } from './pages/PatientChart';
 import { ExamManagement } from './pages/ExamManagement';
 import { DocumentManagement } from './pages/DocumentManagement';
@@ -18,7 +18,7 @@ import { Header, Sidebar } from './components/layout';
 import { WaitingPatient, waitingPatientsData } from './data/waitingPatientsData';
 import { addBulkPatientHistory, addVisitRecord, updatePatientInfo, getPatientHistory, createDefaultVisitRecord } from './data/patientHistoryData';
 import { getPatients, createPatient } from './api/patients';
-import { getCurrentUser, isAuthenticated as checkAuth } from './api/auth';
+import { isAuthenticated as checkAuth } from './api/auth';
 import './App.css';
 
 export default function App() {

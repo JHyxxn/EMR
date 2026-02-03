@@ -532,7 +532,7 @@ const drugData = {
 };
 
 // JSON 파일로 저장
-const outputPath = path.join(__dirname, 'Downloads', 'drug_dataset_500.json');
+const outputPath = path.join(__dirname, 'drug_dataset_500.json');
 const outputDir = path.dirname(outputPath);
 
 // 디렉토리가 없으면 생성

@@ -17,7 +17,7 @@
  * - 상호작용 매트릭스 구축
  * 
  * 데이터 소스:
- * - Downloads/drug_dataset_500.json (5개 약물 정보)
+ * - DataBase/drug_dataset_500.json (50개 약물 정보)
  * 
  * API 엔드포인트:
  * - /api/drugs/search - 약물 검색
@@ -41,7 +41,7 @@ class DrugDatabase {
      */
     loadDrugData() {
         try {
-            const drugDataPath = path.join(process.cwd(), '..', 'Downloads', 'drug_dataset_500.json');
+            const drugDataPath = path.join(process.cwd(), '..', 'DataBase', 'drug_dataset_500.json');
             const rawData = fs.readFileSync(drugDataPath, 'utf8');
             const drugDataset = JSON.parse(rawData);
             

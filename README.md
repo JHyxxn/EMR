@@ -78,6 +78,12 @@
   - 검사 결과 입력
   - AI 기반 검사 결과 분석
 
+- **[`frontend/src/pages/AppointmentManagement.tsx`](frontend/src/pages/AppointmentManagement.tsx)**
+  - 예약 관리 페이지
+  - 1년 전체 세로형 캘린더
+  - 교수님별 고정 스케줄 표시
+  - 예약 생성/수정/취소 기능
+
 - **[`frontend/src/components/patient-chart/PatientChartModal.tsx`](frontend/src/components/patient-chart/PatientChartModal.tsx)**
   - 진료 차트 모달 컴포넌트
   - SOAP 진료 기록 작성
@@ -106,7 +112,7 @@
 
 #### 서버 및 API
 - **[`backend/index.js`](backend/index.js)**
-  - FastAPI 백엔드 서버 메인 파일
+  - Express.js 백엔드 서버 메인 파일
   - 환자 데이터 CRUD API
   - 검사 정보 관리 API
   - 문서 관리 API
@@ -156,8 +162,8 @@
 - **[`backend/patient_data_50_with_waiting.json`](backend/patient_data_50_with_waiting.json)**
   - 생성된 환자 데이터 (50명 + 대기 환자 15명)
 
-- **[`Downloads/drug_dataset_500.json`](Downloads/drug_dataset_500.json)**
-  - 약물 데이터베이스 (5개 약물 정보)
+- **[`DataBase/drug_dataset_500.json`](DataBase/drug_dataset_500.json)**
+  - 약물 데이터베이스 (50개 약물 정보)
 
 ### 오수민 (AI Gateway) 담당 파일
 
@@ -251,8 +257,8 @@ frontend/src/components/
 ├── dashboard/                 # 대시보드 컴포넌트
 │   ├── Dashboard.tsx         # 메인 대시보드
 │   ├── AlertsSection.tsx     # 알림 섹션
-│   ├── Calendar.tsx          # 캘린더
-│   └── QuickActions.tsx      # 빠른 액션
+│   ├── Calendar.tsx          # 캘린더 (참고용)
+│   └── QuickActions.tsx      # 빠른 액션 (참고용)
 ├── patient-registration/      # 환자 등록
 │   ├── NewPatientModal.tsx   # 신규 환자 등록
 │   ├── RevisitPatientModal.tsx # 재진 환자 등록
@@ -267,10 +273,10 @@ frontend/src/components/
 #### 6단계: 페이지 컴포넌트
 ```
 frontend/src/pages/
-├── Dashboard.jsx             # 대시보드 페이지
 ├── PatientChart.tsx          # 환자 차트 페이지
 ├── ExamManagement.tsx        # 검사 관리 페이지
-└── DocumentManagement.tsx    # 문서 관리 페이지
+├── DocumentManagement.tsx    # 문서 관리 페이지
+└── AppointmentManagement.tsx # 예약 관리 페이지
 ```
 
 #### 7단계: API 연동
@@ -340,7 +346,7 @@ backend/src/
 #### 4단계: 메인 서버 구축
 ```
 backend/
-└── index.js                  # FastAPI 백엔드 서버
+└── index.js                  # Express.js 백엔드 서버
     ├── Express.js 설정
     ├── CORS 설정
     ├── 환자 CRUD API
@@ -384,8 +390,11 @@ backend/src/
 backend/
 └── patient_data_50_with_waiting.json      # 생성된 환자 데이터
 
-Downloads/
-└── drug_dataset_500.json                  # 약물 데이터베이스 (5개)
+DataBase/
+├── drug_dataset_500.json                  # 약물 데이터베이스 (50개)
+├── drug_database_collector.py             # 약물 데이터 수집 스크립트
+├── generate_drug_data.js                  # 약물 데이터 생성 스크립트
+└── sample_drug_database.py                # 샘플 약물 데이터베이스 생성기
 ```
 
 **개발 순서 요약:**
@@ -578,7 +587,7 @@ backend/src/
 - "데이터 생성기의 재현성(reproducibility)은 보장하나요? 같은 입력에 대해 항상 같은 결과가 나오나요?"
 - "생성된 데이터의 통계적 분포는 실제 환자 데이터와 유사한가요?"
 - "데이터 검증 로직은 무엇인가요? 잘못된 데이터가 생성되지 않나요?"
-- "약물 데이터 5개는 충분한가요? 실제로는 수만 개의 약물이 있는데?"
+- "약물 데이터 50개는 충분한가요? 실제로는 수만 개의 약물이 있는데?"
 
 **대답 전략:**
 - "공공 의료 데이터 포털의 공식 데이터를 사용했습니다."
@@ -590,7 +599,7 @@ backend/src/
 - "랜덤 시드를 사용하여 재현 가능하도록 구현했으며, 테스트 시 동일한 결과를 얻을 수 있습니다."
 - "생성된 데이터는 실제 환자 데이터의 통계적 특성(연령 분포, 질병 분포 등)을 반영하도록 설계했습니다."
 - "데이터 검증 로직을 통해 유효하지 않은 데이터(예: 미래 생년월일, 음수 나이 등)를 필터링합니다."
-- "약물 데이터를 5개로 한정한 이유는 약물 상호작용 검증 로직의 정확성을 명확히 보여주기 위함입니다. 테스트 단계에서는 상호작용 관계를 정확히 검증할 수 있도록 대표적인 약물들(아스피린, 아목시실린, 메트포르민, 로사르탄, 아토르바스타틴)을 선별했습니다. 실제 서비스에서는 전체 약물 데이터베이스를 연동할 예정입니다."
+- "약물 데이터베이스에는 현재 50개의 약물 정보가 포함되어 있으며, 약물 상호작용 검증 로직의 정확성을 검증할 수 있도록 대표적인 약물들을 포함했습니다. 실제 서비스에서는 전체 약물 데이터베이스를 연동할 예정입니다."
 
 ---
 
