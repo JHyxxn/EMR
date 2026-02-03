@@ -1,7 +1,7 @@
 /**
  * AI Gateway API 클라이언트
  * 
- * 담당자: 김지현 (AI Gateway)
+ * 담당자: 오수민 (AI Gateway)
  * 
  * 주요 기능:
  * - AI Gateway 헬스체크

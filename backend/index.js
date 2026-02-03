@@ -1,7 +1,7 @@
 /**
  * EMR 시스템 백엔드 서버
  * 
- * 담당자: 조형석 (백엔드)
+ * 담당자: 김지현 (백엔드)
  * 
  * 주요 기능:
  * - 환자 데이터 CRUD (생성, 조회, 수정, 삭제)
@@ -39,7 +39,7 @@ import DocumentManagement from './src/documentManagement.js'
 import TestManagement from './src/testManagement.js'
 import PrescriptionManagement from './src/prescriptionManagement.js'
 
-// ---------- 공통 임계치 규칙 (조형석 담당) ----------
+// ---------- 공통 임계치 규칙 (김지현 담당) ----------
 /**
  * 관찰치(Observation)의 임계치를 계산하여 플래그를 생성하는 함수
  * 

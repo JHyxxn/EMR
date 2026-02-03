@@ -1,7 +1,7 @@
 /**
  * AI Gateway 서버
  * 
- * 담당자: 김지현 (AI Gateway)
+ * 담당자: 오수민 (AI Gateway)
  * 
  * 주요 기능:
  * - 다중 AI 모델 통합 (OpenAI, Anthropic, Google)
