@@ -175,7 +175,7 @@ export const patientHistoryData: PatientHistory[] = [
     },
     {
         patientId: 3,
-        patientName: "이윤효",
+        patientName: "조형석",
         birthDate: "2002-11-08",
         phone: "010-3456-7890",
         visits: []

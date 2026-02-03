@@ -130,3 +130,27 @@ export const prescriptionGuide = async (payload, { provider = "auto" } = {}) => 
     
     return await response.json();
 };
+
+/** 검사 결과 AI 분석
+ * payload 예: { 
+ *   testResult: { testName, value, unit, status, referenceRange }, 
+ *   patient: { name, age, sex } 
+ * }
+ * provider: "rule" | "auto" | "openai" | "anthropic" | "google"
+ */
+export const testAnalysis = async (payload, { provider = "auto" } = {}) => {
+    const response = await fetch(`${API_BASE_URL}/api/ai/test-analysis${qs({ provider })}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+    });
+    
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `AI Gateway 오류: ${response.status}`);
+    }
+    
+    return await response.json();
+};

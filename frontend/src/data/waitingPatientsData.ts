@@ -51,7 +51,7 @@ export const waitingPatientsData: WaitingPatient[] = [
     {
         id: 2,
         time: "09:00",
-        name: "이희창",
+        name: "오수민",
         birthDate: "2002-05-21",
         phone: "010-2345-6789",
         condition: "피부 발진",
@@ -64,7 +64,7 @@ export const waitingPatientsData: WaitingPatient[] = [
     {
         id: 3,
         time: "09:30",
-        name: "이윤효",
+        name: "조형석",
         birthDate: "2002-11-08",
         phone: "010-3456-7890",
         condition: "복통",
@@ -77,7 +77,7 @@ export const waitingPatientsData: WaitingPatient[] = [
     {
         id: 4,
         time: "09:30",
-        name: "김종원",
+        name: "조형석",
         birthDate: "2004-05-12",
         phone: "010-4567-8901",
         condition: "두통",
@@ -131,6 +131,19 @@ export const waitingPatientsData: WaitingPatient[] = [
     {
         id: 8,
         time: "10:30",
+        name: "김지현",
+        birthDate: "1995-08-15",
+        phone: "010-7890-1235",
+        condition: "어지러움",
+        visitType: "재진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "reservation"
+    },
+    {
+        id: 9,
+        time: "10:30",
         name: "이철수",
         birthDate: "1983-06-18",
         phone: "010-8901-2345",
@@ -144,7 +157,20 @@ export const waitingPatientsData: WaitingPatient[] = [
 
     // 11:00 - 11:30
     {
-        id: 9,
+        id: 10,
+        time: "11:00",
+        name: "김지현",
+        birthDate: "2000-03-10",
+        phone: "010-8901-2346",
+        condition: "복통",
+        visitType: "초진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "walkin"
+    },
+    {
+        id: 11,
         time: "11:00",
         name: "박영희",
         birthDate: "1989-04-25",
@@ -157,7 +183,7 @@ export const waitingPatientsData: WaitingPatient[] = [
         visitOrigin: "reservation"
     },
     {
-        id: 10,
+        id: 12,
         time: "11:00",
         name: "최동현",
         birthDate: "1991-08-07",
@@ -170,7 +196,7 @@ export const waitingPatientsData: WaitingPatient[] = [
         visitOrigin: "walkin"
     },
     {
-        id: 11,
+        id: 13,
         time: "11:30",
         name: "김민지",
         birthDate: "1993-01-30",
@@ -183,7 +209,7 @@ export const waitingPatientsData: WaitingPatient[] = [
         visitOrigin: "reservation"
     },
     {
-        id: 12,
+        id: 14,
         time: "11:30",
         name: "이준영",
         birthDate: "1986-10-12",
@@ -198,7 +224,7 @@ export const waitingPatientsData: WaitingPatient[] = [
 
     // 12:00 - 12:30
     {
-        id: 13,
+        id: 15,
         time: "12:00",
         name: "정수영",
         birthDate: "1984-07-05",
@@ -211,7 +237,7 @@ export const waitingPatientsData: WaitingPatient[] = [
         visitOrigin: "reservation"
     },
     {
-        id: 14,
+        id: 16,
         time: "12:00",
         name: "박현우",
         birthDate: "1994-03-20",
@@ -224,7 +250,7 @@ export const waitingPatientsData: WaitingPatient[] = [
         visitOrigin: "walkin"
     },
     {
-        id: 15,
+        id: 17,
         time: "12:30",
         name: "최서연",
         birthDate: "1988-11-28",
@@ -237,7 +263,7 @@ export const waitingPatientsData: WaitingPatient[] = [
         visitOrigin: "reservation"
     },
     {
-        id: 16,
+        id: 18,
         time: "12:30",
         name: "김태현",
         birthDate: "1996-05-15",
@@ -252,7 +278,7 @@ export const waitingPatientsData: WaitingPatient[] = [
 
     // 13:00 - 13:30
     {
-        id: 17,
+        id: 19,
         time: "13:00",
         name: "이하나",
         birthDate: "1982-09-08",
@@ -265,7 +291,7 @@ export const waitingPatientsData: WaitingPatient[] = [
         visitOrigin: "reservation"
     },
     {
-        id: 18,
+        id: 20,
         time: "13:00",
         name: "정우진",
         birthDate: "1990-12-22",
@@ -278,7 +304,7 @@ export const waitingPatientsData: WaitingPatient[] = [
         visitOrigin: "walkin"
     },
     {
-        id: 19,
+        id: 21,
         time: "13:30",
         name: "박소영",
         birthDate: "1987-02-14",
@@ -291,7 +317,7 @@ export const waitingPatientsData: WaitingPatient[] = [
         visitOrigin: "reservation"
     },
     {
-        id: 20,
+        id: 22,
         time: "13:30",
         name: "최민호",
         birthDate: "1993-06-30",

@@ -56,7 +56,7 @@ export const revisitPatientsData: RevisitPatient[] = [
     },
     {
         id: 2,
-        name: "이희창",
+        name: "오수민",
         birthDate: "2002-05-21",
         phone: "010-2345-6789",
         lastVisit: "2024-10-27",
@@ -139,7 +139,7 @@ export const revisitPatientsData: RevisitPatient[] = [
     },
     {
         id: 6,
-        name: "이윤효",
+        name: "조형석",
         birthDate: "2002-03-21",
         phone: "010-6789-0123",
         lastVisit: "2024-10-27",
@@ -174,7 +174,7 @@ export const revisitPatientsData: RevisitPatient[] = [
     },
     {
         id: 7,
-        name: "이윤효",
+        name: "조형석",
         birthDate: "1999-12-08",
         phone: "010-7890-1234",
         lastVisit: "2024-10-27",
@@ -201,7 +201,7 @@ export const revisitPatientsData: RevisitPatient[] = [
     },
     {
         id: 8,
-        name: "김종원",
+        name: "조형석",
         birthDate: "2004-04-21",
         phone: "010-8901-2345",
         lastVisit: "2024-10-27",
@@ -765,7 +765,7 @@ export const revisitPatientsData: RevisitPatient[] = [
     },
     {
         id: 42,
-        name: "이윤효",
+        name: "조형석",
         birthDate: "2002-11-08",
         phone: "010-3456-7890",
         lastVisit: "2024-10-21",
@@ -775,7 +775,7 @@ export const revisitPatientsData: RevisitPatient[] = [
     },
     {
         id: 43,
-        name: "이희창",
+        name: "오수민",
         birthDate: "1996-07-14",
         phone: "010-8989-0101",
         lastVisit: "2024-10-21",
@@ -821,7 +821,7 @@ export const revisitPatientsData: RevisitPatient[] = [
     },
     {
         id: 45,
-        name: "김종원",
+        name: "조형석",
         birthDate: "1989-06-14",
         phone: "010-5656-7878",
         lastVisit: "2024-10-20",
@@ -840,7 +840,7 @@ export const revisitPatientsData: RevisitPatient[] = [
     },
     {
         id: 46,
-        name: "김종원",
+        name: "조형석",
         birthDate: "2004-05-12",
         phone: "010-9090-1212",
         lastVisit: "2024-10-20",

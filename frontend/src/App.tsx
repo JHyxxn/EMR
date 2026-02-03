@@ -13,6 +13,7 @@ import { Dashboard, Calendar, QuickActions, AlertsSection } from './components/d
 import { PatientChart } from './pages/PatientChart';
 import { ExamManagement } from './pages/ExamManagement';
 import { DocumentManagement } from './pages/DocumentManagement';
+import { AppointmentManagement } from './pages/AppointmentManagement';
 import { Header, Sidebar } from './components/layout';
 import { WaitingPatient, waitingPatientsData } from './data/waitingPatientsData';
 import { addBulkPatientHistory, addVisitRecord, updatePatientInfo, getPatientHistory, createDefaultVisitRecord } from './data/patientHistoryData';
@@ -432,15 +433,11 @@ export default function App() {
                         <ExamManagement 
                             selectedPatient={selectedPatientForTest}
                             onPatientClear={() => setSelectedPatientForTest(null)}
+                            prescriptions={prescriptions}
                         />
                     )}
                     {currentPage === 'document' && <DocumentManagement />}
-                    {currentPage === 'appointment' && (
-                        <div style={{ textAlign: "center", padding: "40px" }}>
-                            <h2>예약 관리</h2>
-                            <p>예약 관련 기능이 여기에 표시됩니다.</p>
-                        </div>
-                    )}
+                    {currentPage === 'appointment' && <AppointmentManagement />}
                     {currentPage === 'forms' && (
                         <div style={{ textAlign: "center", padding: "40px" }}>
                             <h2>서식 / 문서</h2>
@@ -448,23 +445,6 @@ export default function App() {
                         </div>
                     )}
                 </main>
-                
-                {/* 우측 패널: 캘린더, 빠른 액션, 알림 섹션 */}
-                <aside style={{ 
-                    width: "300px", 
-                    background: "white", 
-                    borderLeft: "1px solid #e5e7eb",
-                    padding: "20px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "20px",
-                    overflow: "auto",
-                    maxHeight: "100vh"
-                }}>
-                    <Calendar />
-                    <QuickActions onNewPatient={() => setShowNewPatientModal(true)} />
-                    <AlertsSection waitingPatients={waitingPatients} setWaitingPatients={setWaitingPatients} />
-                </aside>
             </div>
             
             {/* 신규 환자 등록 모달 */}

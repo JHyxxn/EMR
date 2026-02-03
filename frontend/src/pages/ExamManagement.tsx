@@ -18,14 +18,150 @@
 import React, { useState, useEffect } from 'react';
 import { tokens } from '../design/tokens';
 import { WaitingPatient } from '../data/waitingPatientsData';
+import { testAnalysis } from '../api/ai';
 
 interface ExamManagementProps {
     selectedPatient: WaitingPatient | null;
     onPatientClear: () => void;
+    prescriptions?: Array<{
+        id: string;
+        patientName: string;
+        patientId: string;
+        tests: Array<{
+            testName: string;
+            urgency: 'routine' | 'urgent';
+        }>;
+        createdAt: string;
+    }>;
 }
 
-export const ExamManagement: React.FC<ExamManagementProps> = ({ selectedPatient, onPatientClear }) => {
+interface ExamOrder {
+    id: number;
+    patientName?: string;
+    patientId?: number;
+    category: 'lab' | 'imaging' | 'procedure';
+    code?: string;
+    priority?: 'routine' | 'urgent' | 'stat';
+    requestedAt?: string;
+}
+
+interface ExamResult {
+    id: number;
+    testName: string;
+    value: string;
+    unit?: string;
+    referenceRange?: string;
+    status: 'normal' | 'abnormal' | 'critical';
+    aiAnalysis?: string;
+    createdAt: string;
+}
+
+export const ExamManagement: React.FC<ExamManagementProps> = ({ selectedPatient, onPatientClear, prescriptions = [] }) => {
     const [activeTab, setActiveTab] = useState<'orders' | 'results' | 'analysis'>('orders');
+    
+    // 검사 오더 관련 상태
+    const [examOrders, setExamOrders] = useState<ExamOrder[]>([]);
+    const [showOrderModal, setShowOrderModal] = useState(false);
+    const [editingOrder, setEditingOrder] = useState<ExamOrder | null>(null);
+    const [orderFilter, setOrderFilter] = useState<{
+        patient?: string;
+        category?: string;
+        date?: string;
+    }>({});
+
+    // 검사 결과 관련 상태
+    const [examResults, setExamResults] = useState<ExamResult[]>([]);
+    const [resultForm, setResultForm] = useState({
+        systolicBP: '',
+        diastolicBP: '',
+        ecg: '',
+        bloodSugar: '',
+        otherResults: ''
+    });
+    const [isAnalyzing, setIsAnalyzing] = useState<number | null>(null);
+
+    // prescriptions에서 검사 오더 자동 생성
+    useEffect(() => {
+        const newOrders: ExamOrder[] = [];
+        prescriptions.forEach(prescription => {
+            if (prescription.tests && prescription.tests.length > 0) {
+                prescription.tests.forEach(test => {
+                    // 이미 존재하는 오더인지 확인 (중복 방지)
+                    const existingOrder = examOrders.find(order => 
+                        order.patientName === prescription.patientName &&
+                        order.code === test.testName &&
+                        new Date(order.requestedAt || '').toDateString() === new Date(prescription.createdAt).toDateString()
+                    );
+                    
+                    if (!existingOrder) {
+                        // 검사명에 따라 카테고리 자동 분류
+                        let category: 'lab' | 'imaging' | 'procedure' = 'lab';
+                        if (test.testName.includes('CT') || test.testName.includes('X-ray') || test.testName.includes('MRI') || test.testName.includes('초음파')) {
+                            category = 'imaging';
+                        } else if (test.testName.includes('내시경') || test.testName.includes('처치')) {
+                            category = 'procedure';
+                        }
+
+                        newOrders.push({
+                            id: Date.now() + Math.random(), // 고유 ID 생성
+                            patientName: prescription.patientName,
+                            patientId: parseInt(prescription.patientId) || undefined,
+                            category,
+                            code: test.testName,
+                            priority: test.urgency === 'urgent' ? 'urgent' : 'routine',
+                            requestedAt: prescription.createdAt
+                        });
+                    }
+                });
+            }
+        });
+
+        if (newOrders.length > 0) {
+            setExamOrders(prev => {
+                // 중복 제거를 위해 기존 오더와 병합
+                const merged = [...prev];
+                newOrders.forEach(newOrder => {
+                    const exists = merged.some(existing => 
+                        existing.patientName === newOrder.patientName &&
+                        existing.code === newOrder.code &&
+                        existing.requestedAt === newOrder.requestedAt
+                    );
+                    if (!exists) {
+                        merged.push(newOrder);
+                    }
+                });
+                return merged;
+            });
+        }
+    }, [prescriptions]);
+
+    // 검사 오더 생성/수정 핸들러
+    const handleEditOrder = (order: ExamOrder) => {
+        setEditingOrder(order);
+        setShowOrderModal(true);
+    };
+
+    const handleDeleteOrder = (id: number) => {
+        if (window.confirm('검사 오더를 삭제하시겠습니까?')) {
+            setExamOrders(prev => prev.filter(order => order.id !== id));
+        }
+    };
+
+    const handleSaveOrder = (orderData: Omit<ExamOrder, 'id'>) => {
+        if (editingOrder) {
+            // 수정
+            setExamOrders(prev => prev.map(order => order.id === editingOrder.id ? { ...orderData, id: editingOrder.id } : order));
+        } else {
+            // 생성
+            const newOrder: ExamOrder = {
+                ...orderData,
+                id: Date.now()
+            };
+            setExamOrders(prev => [...prev, newOrder]);
+        }
+        setShowOrderModal(false);
+        setEditingOrder(null);
+    };
 
     return (
         <div style={{ padding: '24px', backgroundColor: '#f8fafc', minHeight: '100vh' }}>
@@ -121,15 +257,248 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({ selectedPatient,
                         borderRadius: '8px',
                         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
                     }}>
-                        <h3 style={{ 
-                            fontSize: '18px', 
-                            fontWeight: 600, 
-                            marginBottom: '16px',
-                            color: tokens.colors.text.primary
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '24px'
                         }}>
-                            검사 오더 관리
-                        </h3>
-                        <p>검사 오더를 관리할 수 있습니다.</p>
+                            <h3 style={{ 
+                                fontSize: '18px', 
+                                fontWeight: 600, 
+                                margin: 0,
+                                color: tokens.colors.text.primary
+                            }}>
+                                검사 오더 관리
+                            </h3>
+                            <button
+                                onClick={() => setShowOrderModal(true)}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: tokens.colors.primary,
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    fontSize: '14px',
+                                    fontWeight: 500,
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.2s'
+                                }}
+                                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0284c7'}
+                                onMouseOut={(e) => e.currentTarget.style.backgroundColor = tokens.colors.primary}
+                            >
+                                + 신규 검사 오더
+                            </button>
+                        </div>
+
+                        {/* 필터 섹션 */}
+                        <div style={{
+                            display: 'flex',
+                            gap: '12px',
+                            marginBottom: '20px',
+                            padding: '16px',
+                            backgroundColor: tokens.colors.background.secondary,
+                            borderRadius: '6px'
+                        }}>
+                            <select
+                                value={orderFilter.patient || ''}
+                                onChange={(e) => setOrderFilter({ ...orderFilter, patient: e.target.value })}
+                                style={{
+                                    padding: '8px 12px',
+                                    border: '1px solid #d1d5db',
+                                    borderRadius: '6px',
+                                    fontSize: '14px',
+                                    minWidth: '150px'
+                                }}
+                            >
+                                <option value="">전체 환자</option>
+                                {/* 환자 목록은 나중에 API에서 가져올 예정 */}
+                            </select>
+                            <select
+                                value={orderFilter.category || ''}
+                                onChange={(e) => setOrderFilter({ ...orderFilter, category: e.target.value })}
+                                style={{
+                                    padding: '8px 12px',
+                                    border: '1px solid #d1d5db',
+                                    borderRadius: '6px',
+                                    fontSize: '14px',
+                                    minWidth: '150px'
+                                }}
+                            >
+                                <option value="">전체 검사 유형</option>
+                                <option value="lab">혈액검사</option>
+                                <option value="imaging">영상검사</option>
+                                <option value="procedure">처치</option>
+                            </select>
+                            <input
+                                type="date"
+                                value={orderFilter.date || ''}
+                                onChange={(e) => setOrderFilter({ ...orderFilter, date: e.target.value })}
+                                style={{
+                                    padding: '8px 12px',
+                                    border: '1px solid #d1d5db',
+                                    borderRadius: '6px',
+                                    fontSize: '14px'
+                                }}
+                            />
+                        </div>
+
+                        {/* 검사 오더 목록 */}
+                        <div style={{
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '6px',
+                            overflow: 'hidden'
+                        }}>
+                            <table style={{
+                                width: '100%',
+                                borderCollapse: 'collapse'
+                            }}>
+                                <thead>
+                                    <tr style={{
+                                        backgroundColor: tokens.colors.background.secondary,
+                                        borderBottom: '2px solid #e5e7eb'
+                                    }}>
+                                        <th style={{
+                                            padding: '12px 16px',
+                                            textAlign: 'left',
+                                            fontSize: '14px',
+                                            fontWeight: 600,
+                                            color: tokens.colors.text.primary
+                                        }}>환자명</th>
+                                        <th style={{
+                                            padding: '12px 16px',
+                                            textAlign: 'left',
+                                            fontSize: '14px',
+                                            fontWeight: 600,
+                                            color: tokens.colors.text.primary
+                                        }}>검사 유형</th>
+                                        <th style={{
+                                            padding: '12px 16px',
+                                            textAlign: 'left',
+                                            fontSize: '14px',
+                                            fontWeight: 600,
+                                            color: tokens.colors.text.primary
+                                        }}>검사 코드</th>
+                                        <th style={{
+                                            padding: '12px 16px',
+                                            textAlign: 'left',
+                                            fontSize: '14px',
+                                            fontWeight: 600,
+                                            color: tokens.colors.text.primary
+                                        }}>우선순위</th>
+                                        <th style={{
+                                            padding: '12px 16px',
+                                            textAlign: 'left',
+                                            fontSize: '14px',
+                                            fontWeight: 600,
+                                            color: tokens.colors.text.primary
+                                        }}>요청일시</th>
+                                        <th style={{
+                                            padding: '12px 16px',
+                                            textAlign: 'center',
+                                            fontSize: '14px',
+                                            fontWeight: 600,
+                                            color: tokens.colors.text.primary
+                                        }}>작업</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {examOrders.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={6} style={{
+                                                padding: '40px',
+                                                textAlign: 'center',
+                                                color: tokens.colors.text.secondary
+                                            }}>
+                                                검사 오더가 없습니다. 신규 검사 오더를 생성해주세요.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        examOrders.map((order) => (
+                                            <tr key={order.id} style={{
+                                                borderBottom: '1px solid #e5e7eb',
+                                                transition: 'background-color 0.2s'
+                                            }}
+                                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = tokens.colors.background.secondary}
+                                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                                            >
+                                                <td style={{ padding: '12px 16px', fontSize: '14px' }}>
+                                                    {order.patientName || '환자 선택 필요'}
+                                                </td>
+                                                <td style={{ padding: '12px 16px', fontSize: '14px' }}>
+                                                    <span style={{
+                                                        padding: '4px 8px',
+                                                        borderRadius: '4px',
+                                                        fontSize: '12px',
+                                                        fontWeight: 500,
+                                                        backgroundColor: order.category === 'lab' ? '#dbeafe' : 
+                                                                        order.category === 'imaging' ? '#fef3c7' : '#fce7f3',
+                                                        color: order.category === 'lab' ? '#1e40af' : 
+                                                               order.category === 'imaging' ? '#92400e' : '#831843'
+                                                    }}>
+                                                        {order.category === 'lab' ? '혈액검사' : 
+                                                         order.category === 'imaging' ? '영상검사' : '처치'}
+                                                    </span>
+                                                </td>
+                                                <td style={{ padding: '12px 16px', fontSize: '14px', color: tokens.colors.text.secondary }}>
+                                                    {order.code || '-'}
+                                                </td>
+                                                <td style={{ padding: '12px 16px', fontSize: '14px' }}>
+                                                    <span style={{
+                                                        padding: '4px 8px',
+                                                        borderRadius: '4px',
+                                                        fontSize: '12px',
+                                                        fontWeight: 500,
+                                                        backgroundColor: order.priority === 'urgent' ? '#fee2e2' : 
+                                                                        order.priority === 'stat' ? '#fecaca' : '#f0f9ff',
+                                                        color: order.priority === 'urgent' ? '#dc2626' : 
+                                                               order.priority === 'stat' ? '#991b1b' : '#0369a1'
+                                                    }}>
+                                                        {order.priority === 'urgent' ? '긴급' : 
+                                                         order.priority === 'stat' ? '즉시' : '일반'}
+                                                    </span>
+                                                </td>
+                                                <td style={{ padding: '12px 16px', fontSize: '14px', color: tokens.colors.text.secondary }}>
+                                                    {order.requestedAt ? new Date(order.requestedAt).toLocaleString('ko-KR') : '-'}
+                                                </td>
+                                                <td style={{ padding: '12px 16px', textAlign: 'center' }}>
+                                                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                                                        <button
+                                                            onClick={() => handleEditOrder(order)}
+                                                            style={{
+                                                                padding: '6px 12px',
+                                                                backgroundColor: 'white',
+                                                                color: tokens.colors.primary,
+                                                                border: `1px solid ${tokens.colors.primary}`,
+                                                                borderRadius: '4px',
+                                                                fontSize: '12px',
+                                                                cursor: 'pointer'
+                                                            }}
+                                                        >
+                                                            수정
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteOrder(order.id)}
+                                                            style={{
+                                                                padding: '6px 12px',
+                                                                backgroundColor: 'white',
+                                                                color: tokens.colors.error,
+                                                                border: `1px solid ${tokens.colors.error}`,
+                                                                borderRadius: '4px',
+                                                                fontSize: '12px',
+                                                                cursor: 'pointer'
+                                                            }}
+                                                        >
+                                                            삭제
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 )}
 
@@ -167,6 +536,8 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({ selectedPatient,
                                                 <input 
                                                     type="number" 
                                                     placeholder="수축기" 
+                                                    value={resultForm.systolicBP}
+                                                    onChange={(e) => setResultForm({ ...resultForm, systolicBP: e.target.value })}
                                                     style={{
                                                         padding: '8px 12px',
                                                         border: '1px solid #d1d5db',
@@ -178,6 +549,8 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({ selectedPatient,
                                                 <input 
                                                     type="number" 
                                                     placeholder="이완기" 
+                                                    value={resultForm.diastolicBP}
+                                                    onChange={(e) => setResultForm({ ...resultForm, diastolicBP: e.target.value })}
                                                     style={{
                                                         padding: '8px 12px',
                                                         border: '1px solid #d1d5db',
@@ -193,12 +566,16 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({ selectedPatient,
                                             <label style={{ display: 'block', fontWeight: 500, marginBottom: '4px', color: tokens.colors.text.secondary }}>
                                                 심전도
                                             </label>
-                                            <select style={{
-                                                padding: '8px 12px',
-                                                border: '1px solid #d1d5db',
-                                                borderRadius: '4px',
-                                                width: '200px'
-                                            }}>
+                                            <select 
+                                                value={resultForm.ecg}
+                                                onChange={(e) => setResultForm({ ...resultForm, ecg: e.target.value })}
+                                                style={{
+                                                    padding: '8px 12px',
+                                                    border: '1px solid #d1d5db',
+                                                    borderRadius: '4px',
+                                                    width: '200px'
+                                                }}
+                                            >
                                                 <option value="">선택하세요</option>
                                                 <option value="정상">정상</option>
                                                 <option value="비정상">비정상</option>
@@ -214,6 +591,8 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({ selectedPatient,
                                             <input 
                                                 type="number" 
                                                 placeholder="혈당 수치" 
+                                                value={resultForm.bloodSugar}
+                                                onChange={(e) => setResultForm({ ...resultForm, bloodSugar: e.target.value })}
                                                 style={{
                                                     padding: '8px 12px',
                                                     border: '1px solid #d1d5db',
@@ -241,18 +620,173 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({ selectedPatient,
                                             />
                                         </div>
                                         
-                                        <button style={{
-                                            padding: '10px 20px',
-                                            backgroundColor: tokens.colors.primary,
-                                            color: 'white',
-                                            border: 'none',
-                                            borderRadius: '6px',
-                                            fontSize: '14px',
-                                            fontWeight: 500,
-                                            cursor: 'pointer',
-                                            width: 'fit-content'
-                                        }}>
-                                            검사 결과 저장
+                                        <button 
+                                            onClick={async () => {
+                                                if (!selectedPatient) return;
+                                                
+                                                // 검사 결과 생성
+                                                const results: ExamResult[] = [];
+                                                
+                                                if (resultForm.systolicBP && resultForm.diastolicBP) {
+                                                    const value = `${resultForm.systolicBP}/${resultForm.diastolicBP}`;
+                                                    const status = parseInt(resultForm.systolicBP) > 140 || parseInt(resultForm.diastolicBP) > 90 ? 'abnormal' : 'normal';
+                                                    
+                                                    // AI 분석 호출
+                                                    setIsAnalyzing(results.length);
+                                                    try {
+                                                        const aiResult = await testAnalysis({
+                                                            testResult: {
+                                                                testName: '혈압',
+                                                                value,
+                                                                unit: 'mmHg',
+                                                                status: status === 'abnormal' ? 'abnormal' : 'normal',
+                                                                referenceRange: '120/80 mmHg 이하'
+                                                            },
+                                                            patient: {
+                                                                name: selectedPatient.name,
+                                                                age: selectedPatient.age,
+                                                                sex: selectedPatient.sex
+                                                            }
+                                                        });
+                                                        
+                                                        results.push({
+                                                            id: Date.now(),
+                                                            testName: '혈압',
+                                                            value,
+                                                            unit: 'mmHg',
+                                                            referenceRange: '120/80 mmHg 이하',
+                                                            status,
+                                                            aiAnalysis: aiResult.analysis,
+                                                            createdAt: new Date().toISOString()
+                                                        });
+                                                    } catch (error) {
+                                                        console.error('AI 분석 실패:', error);
+                                                        results.push({
+                                                            id: Date.now(),
+                                                            testName: '혈압',
+                                                            value,
+                                                            unit: 'mmHg',
+                                                            referenceRange: '120/80 mmHg 이하',
+                                                            status,
+                                                            createdAt: new Date().toISOString()
+                                                        });
+                                                    }
+                                                    setIsAnalyzing(null);
+                                                }
+                                                
+                                                if (resultForm.ecg) {
+                                                    const status = resultForm.ecg === '정상' ? 'normal' : 'abnormal';
+                                                    setIsAnalyzing(results.length);
+                                                    try {
+                                                        const aiResult = await testAnalysis({
+                                                            testResult: {
+                                                                testName: '심전도',
+                                                                value: resultForm.ecg,
+                                                                status,
+                                                                referenceRange: '정상'
+                                                            },
+                                                            patient: {
+                                                                name: selectedPatient.name,
+                                                                age: selectedPatient.age,
+                                                                sex: selectedPatient.sex
+                                                            }
+                                                        });
+                                                        
+                                                        results.push({
+                                                            id: Date.now() + 1,
+                                                            testName: '심전도',
+                                                            value: resultForm.ecg,
+                                                            status,
+                                                            referenceRange: '정상',
+                                                            aiAnalysis: aiResult.analysis,
+                                                            createdAt: new Date().toISOString()
+                                                        });
+                                                    } catch (error) {
+                                                        console.error('AI 분석 실패:', error);
+                                                        results.push({
+                                                            id: Date.now() + 1,
+                                                            testName: '심전도',
+                                                            value: resultForm.ecg,
+                                                            status,
+                                                            referenceRange: '정상',
+                                                            createdAt: new Date().toISOString()
+                                                        });
+                                                    }
+                                                    setIsAnalyzing(null);
+                                                }
+                                                
+                                                if (resultForm.bloodSugar) {
+                                                    const valueNum = parseInt(resultForm.bloodSugar);
+                                                    const status = valueNum < 70 || valueNum > 100 ? 'abnormal' : 'normal';
+                                                    setIsAnalyzing(results.length);
+                                                    try {
+                                                        const aiResult = await testAnalysis({
+                                                            testResult: {
+                                                                testName: '혈당',
+                                                                value: resultForm.bloodSugar,
+                                                                unit: 'mg/dL',
+                                                                status,
+                                                                referenceRange: '70-100 mg/dL'
+                                                            },
+                                                            patient: {
+                                                                name: selectedPatient.name,
+                                                                age: selectedPatient.age,
+                                                                sex: selectedPatient.sex
+                                                            }
+                                                        });
+                                                        
+                                                        results.push({
+                                                            id: Date.now() + 2,
+                                                            testName: '혈당',
+                                                            value: resultForm.bloodSugar,
+                                                            unit: 'mg/dL',
+                                                            referenceRange: '70-100 mg/dL',
+                                                            status,
+                                                            aiAnalysis: aiResult.analysis,
+                                                            createdAt: new Date().toISOString()
+                                                        });
+                                                    } catch (error) {
+                                                        console.error('AI 분석 실패:', error);
+                                                        results.push({
+                                                            id: Date.now() + 2,
+                                                            testName: '혈당',
+                                                            value: resultForm.bloodSugar,
+                                                            unit: 'mg/dL',
+                                                            referenceRange: '70-100 mg/dL',
+                                                            status,
+                                                            createdAt: new Date().toISOString()
+                                                        });
+                                                    }
+                                                    setIsAnalyzing(null);
+                                                }
+                                                
+                                                if (results.length > 0) {
+                                                    setExamResults(prev => [...prev, ...results]);
+                                                    setResultForm({
+                                                        systolicBP: '',
+                                                        diastolicBP: '',
+                                                        ecg: '',
+                                                        bloodSugar: '',
+                                                        otherResults: ''
+                                                    });
+                                                    alert('검사 결과가 저장되었습니다.');
+                                                } else {
+                                                    alert('검사 결과를 입력해주세요.');
+                                                }
+                                            }}
+                                            style={{
+                                                padding: '10px 20px',
+                                                backgroundColor: tokens.colors.primary,
+                                                color: 'white',
+                                                border: 'none',
+                                                borderRadius: '6px',
+                                                fontSize: '14px',
+                                                fontWeight: 500,
+                                                cursor: 'pointer',
+                                                width: 'fit-content'
+                                            }}
+                                        >
+                                            {isAnalyzing !== null ? 'AI 분석 중...' : '검사 결과 저장'}
                                         </button>
                                     </div>
                                 </div>
@@ -267,16 +801,106 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({ selectedPatient,
                                         borderRadius: '6px',
                                         overflow: 'hidden'
                                     }}>
-                                        <div style={{ 
-                                            backgroundColor: '#f9fafb', 
-                                            padding: '12px 16px',
-                                            borderBottom: '1px solid #e5e7eb',
-                                            fontSize: '14px',
-                                            fontWeight: 500,
-                                            color: tokens.colors.text.secondary
-                                        }}>
-                                            아직 검사 결과가 없습니다.
-                                        </div>
+                                        {examResults.length === 0 ? (
+                                            <div style={{ 
+                                                backgroundColor: '#f9fafb', 
+                                                padding: '12px 16px',
+                                                borderBottom: '1px solid #e5e7eb',
+                                                fontSize: '14px',
+                                                fontWeight: 500,
+                                                color: tokens.colors.text.secondary
+                                            }}>
+                                                아직 검사 결과가 없습니다.
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                {examResults.map((result) => (
+                                                    <div key={result.id} style={{
+                                                        padding: '16px',
+                                                        borderBottom: '1px solid #e5e7eb',
+                                                        backgroundColor: result.status === 'critical' ? '#fef2f2' : 
+                                                                        result.status === 'abnormal' ? '#fef3c7' : '#f0fdf4'
+                                                    }}>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                                            <div>
+                                                                <h5 style={{ 
+                                                                    fontSize: '16px', 
+                                                                    fontWeight: 600, 
+                                                                    margin: 0,
+                                                                    color: tokens.colors.text.primary
+                                                                }}>
+                                                                    {result.testName}
+                                                                </h5>
+                                                                <p style={{ 
+                                                                    fontSize: '14px', 
+                                                                    color: tokens.colors.text.secondary,
+                                                                    margin: '4px 0 0 0'
+                                                                }}>
+                                                                    결과: {result.value} {result.unit || ''}
+                                                                    {result.referenceRange && ` (정상범위: ${result.referenceRange})`}
+                                                                </p>
+                                                            </div>
+                                                            <span style={{
+                                                                padding: '4px 12px',
+                                                                borderRadius: '4px',
+                                                                fontSize: '12px',
+                                                                fontWeight: 500,
+                                                                backgroundColor: result.status === 'critical' ? '#fee2e2' : 
+                                                                                result.status === 'abnormal' ? '#fef3c7' : '#dcfce7',
+                                                                color: result.status === 'critical' ? '#dc2626' : 
+                                                                       result.status === 'abnormal' ? '#92400e' : '#166534'
+                                                            }}>
+                                                                {result.status === 'critical' ? '위험' : 
+                                                                 result.status === 'abnormal' ? '비정상' : '정상'}
+                                                            </span>
+                                                        </div>
+                                                        
+                                                        {/* AI 분석 코멘트 */}
+                                                        {result.aiAnalysis && (
+                                                            <div style={{
+                                                                marginTop: '12px',
+                                                                padding: '12px',
+                                                                backgroundColor: 'white',
+                                                                borderRadius: '6px',
+                                                                border: '1px solid #e5e7eb'
+                                                            }}>
+                                                                <div style={{
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    marginBottom: '8px',
+                                                                    gap: '8px'
+                                                                }}>
+                                                                    <span style={{
+                                                                        fontSize: '12px',
+                                                                        fontWeight: 600,
+                                                                        color: tokens.colors.primary
+                                                                    }}>
+                                                                        🤖 AI 분석
+                                                                    </span>
+                                                                </div>
+                                                                <p style={{
+                                                                    fontSize: '14px',
+                                                                    color: tokens.colors.text.primary,
+                                                                    margin: 0,
+                                                                    lineHeight: '1.6',
+                                                                    whiteSpace: 'pre-wrap'
+                                                                }}>
+                                                                    {result.aiAnalysis}
+                                                                </p>
+                                                            </div>
+                                                        )}
+                                                        
+                                                        <p style={{
+                                                            fontSize: '12px',
+                                                            color: tokens.colors.text.secondary,
+                                                            margin: '8px 0 0 0'
+                                                        }}>
+                                                            {new Date(result.createdAt).toLocaleString('ko-KR')}
+                                                        </p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -503,6 +1127,262 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({ selectedPatient,
                         )}
                     </div>
                 )}
+            </div>
+
+            {/* 검사 오더 생성/수정 모달 */}
+            {showOrderModal && (
+                <ExamOrderModal
+                    isOpen={showOrderModal}
+                    onClose={() => {
+                        setShowOrderModal(false);
+                        setEditingOrder(null);
+                    }}
+                    onSubmit={handleSaveOrder}
+                    editingOrder={editingOrder}
+                    selectedPatient={selectedPatient}
+                />
+            )}
+        </div>
+    );
+};
+
+// 검사 오더 생성/수정 모달 컴포넌트
+interface ExamOrderModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSubmit: (orderData: Omit<ExamOrder, 'id'>) => void;
+    editingOrder: ExamOrder | null;
+    selectedPatient: WaitingPatient | null;
+}
+
+const ExamOrderModal: React.FC<ExamOrderModalProps> = ({ isOpen, onClose, onSubmit, editingOrder, selectedPatient }) => {
+    const [formData, setFormData] = useState({
+        patientName: editingOrder?.patientName || selectedPatient?.name || '',
+        patientId: editingOrder?.patientId || undefined,
+        category: editingOrder?.category || 'lab' as 'lab' | 'imaging' | 'procedure',
+        code: editingOrder?.code || '',
+        priority: editingOrder?.priority || 'routine' as 'routine' | 'urgent' | 'stat'
+    });
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        onSubmit({
+            ...formData,
+            requestedAt: new Date().toISOString()
+        });
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000
+        }}>
+            <div style={{
+                background: 'white',
+                borderRadius: '12px',
+                padding: '24px',
+                width: '500px',
+                maxWidth: '90vw',
+                maxHeight: '90vh',
+                overflow: 'auto',
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+            }}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '24px',
+                    borderBottom: '1px solid #e5e7eb',
+                    paddingBottom: '16px'
+                }}>
+                    <h3 style={{
+                        fontSize: '20px',
+                        fontWeight: 600,
+                        margin: 0,
+                        color: tokens.colors.text.primary
+                    }}>
+                        {editingOrder ? '검사 오더 수정' : '신규 검사 오더'}
+                    </h3>
+                    <button
+                        onClick={onClose}
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            fontSize: '24px',
+                            cursor: 'pointer',
+                            color: '#6b7280',
+                            padding: '4px'
+                        }}
+                    >
+                        ×
+                    </button>
+                </div>
+
+                <form onSubmit={handleSubmit}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        {/* 환자 선택 */}
+                        <div>
+                            <label style={{
+                                display: 'block',
+                                fontSize: '14px',
+                                fontWeight: 500,
+                                marginBottom: '8px',
+                                color: tokens.colors.text.primary
+                            }}>
+                                환자 *
+                            </label>
+                            <input
+                                type="text"
+                                value={formData.patientName}
+                                onChange={(e) => setFormData({ ...formData, patientName: e.target.value })}
+                                placeholder="환자명을 입력하세요"
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '10px 12px',
+                                    border: '1px solid #d1d5db',
+                                    borderRadius: '6px',
+                                    fontSize: '14px'
+                                }}
+                            />
+                        </div>
+
+                        {/* 검사 유형 */}
+                        <div>
+                            <label style={{
+                                display: 'block',
+                                fontSize: '14px',
+                                fontWeight: 500,
+                                marginBottom: '8px',
+                                color: tokens.colors.text.primary
+                            }}>
+                                검사 유형 *
+                            </label>
+                            <select
+                                value={formData.category}
+                                onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '10px 12px',
+                                    border: '1px solid #d1d5db',
+                                    borderRadius: '6px',
+                                    fontSize: '14px'
+                                }}
+                            >
+                                <option value="lab">혈액검사</option>
+                                <option value="imaging">영상검사</option>
+                                <option value="procedure">처치</option>
+                            </select>
+                        </div>
+
+                        {/* 검사 코드 */}
+                        <div>
+                            <label style={{
+                                display: 'block',
+                                fontSize: '14px',
+                                fontWeight: 500,
+                                marginBottom: '8px',
+                                color: tokens.colors.text.primary
+                            }}>
+                                검사 코드
+                            </label>
+                            <input
+                                type="text"
+                                value={formData.code}
+                                onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+                                placeholder="예: CBC, CT, X-ray 등"
+                                style={{
+                                    width: '100%',
+                                    padding: '10px 12px',
+                                    border: '1px solid #d1d5db',
+                                    borderRadius: '6px',
+                                    fontSize: '14px'
+                                }}
+                            />
+                        </div>
+
+                        {/* 우선순위 */}
+                        <div>
+                            <label style={{
+                                display: 'block',
+                                fontSize: '14px',
+                                fontWeight: 500,
+                                marginBottom: '8px',
+                                color: tokens.colors.text.primary
+                            }}>
+                                우선순위 *
+                            </label>
+                            <select
+                                value={formData.priority}
+                                onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '10px 12px',
+                                    border: '1px solid #d1d5db',
+                                    borderRadius: '6px',
+                                    fontSize: '14px'
+                                }}
+                            >
+                                <option value="routine">일반</option>
+                                <option value="urgent">긴급</option>
+                                <option value="stat">즉시</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style={{
+                        display: 'flex',
+                        gap: '12px',
+                        justifyContent: 'flex-end',
+                        marginTop: '24px',
+                        paddingTop: '24px',
+                        borderTop: '1px solid #e5e7eb'
+                    }}>
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            style={{
+                                padding: '10px 20px',
+                                backgroundColor: 'white',
+                                color: tokens.colors.text.primary,
+                                border: '1px solid #d1d5db',
+                                borderRadius: '6px',
+                                fontSize: '14px',
+                                fontWeight: 500,
+                                cursor: 'pointer'
+                            }}
+                        >
+                            취소
+                        </button>
+                        <button
+                            type="submit"
+                            style={{
+                                padding: '10px 20px',
+                                backgroundColor: tokens.colors.primary,
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '6px',
+                                fontSize: '14px',
+                                fontWeight: 500,
+                                cursor: 'pointer'
+                            }}
+                        >
+                            {editingOrder ? '수정' : '생성'}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     );
