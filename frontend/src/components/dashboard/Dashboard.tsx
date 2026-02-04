@@ -6,13 +6,17 @@
  * - 금일 병원 일정 (시간대, 활동, 상태)
  * - 당일 처방/오더보드 (환자명, 처방/오더 내용, 시간, 상태)
  */
-import React, { useState, useEffect } from 'react';
-import { tokens } from '../../design/tokens';
+import React, { useState, useEffect, useMemo } from 'react';
 import { waitingPatientsData, WaitingPatient } from '../../data/waitingPatientsData';
+import { revisitPatientsData } from '../../data/revisitPatientsData';
 import { PatientChartModal } from '../patient-chart/PatientChartModal';
 import { NewPatientModal } from '../patient-registration/NewPatientModal';
 import { RevisitPatientModal } from '../patient-registration/RevisitPatientModal';
 import { getPatientHistory, getPatientHistoryByName, deletePatientHistory } from '../../data/patientHistoryData';
+import { WaitingPatientsColumn } from './WaitingPatientsColumn';
+import { InTestPatientsColumn } from './InTestPatientsColumn';
+import { ScheduleAndAlertsColumn } from './ScheduleAndAlertsColumn';
+import { UnifiedPatient } from './types';
 
 interface DashboardProps {
     searchQuery: string;
@@ -119,16 +123,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
         }));
     };
 
-    // 새로운 병원 일정 추가 함수
-    const addHospitalSchedule = (timeRange: string, activity: string, status: string = "예정") => {
-        const newSchedule = {
-            id: Math.max(...hospitalSchedule.map(s => s.id)) + 1,
-            timeRange,
-            activity,
-            status
-        };
-        setHospitalSchedule(prev => [...prev, newSchedule]);
-    };
 
     // 새로운 처방/오더 추가 함수
     const addPrescription = (patientName: string, patientId: string, prescriptions: Array<{
@@ -216,84 +210,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
         setWaitingPatients(prev => [...prev, newPatient]);
     };
 
-    // AI 위험도 감지 환자 추가 함수
-    const addAIRiskPatient = (patientData: {
-        time: string;
-        name: string;
-        birthDate: string;
-        phone: string;
-        condition: string;
-        visitOrigin: 'reservation' | 'walkin';
-    }) => {
-        const newPatient: WaitingPatient = {
-            id: Math.max(...waitingPatients.map(p => p.id), 0) + 1,
-            ...patientData,
-            visitType: "재진",
-            alert: "AI 위험도 감지 - 재진료 필요",
-            alertType: "AI 위험",
-            buttonText: "상세 보기"
-        };
-        setWaitingPatients(prev => [newPatient, ...prev]); // 상단에 추가
-    };
-
-    // 검사 결과 AI 분석 함수 (시뮬레이션)
-    const analyzeTestResult = (testResult: any) => {
-        // AI가 검사 결과를 분석하여 위험도 판단
-        if (testResult.riskLevel === 'high') {
-            addAIRiskPatient({
-                time: new Date().toLocaleTimeString('ko-KR', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
-                }),
-                name: testResult.patientName,
-                birthDate: testResult.birthDate,
-                phone: testResult.phone,
-                condition: testResult.condition,
-                visitOrigin: 'walkin'
-            });
-
-            // 긴급 알림에 추가
-            setNotifications(prev => ({
-                ...prev,
-                urgent: [...prev.urgent, {
-                    type: 'AI_RETREATMENT',
-                    patientName: testResult.patientName,
-                    message: `AI 재진료 필요 (${testResult.testType} 결과 이상)`,
-                    time: new Date().toLocaleTimeString('ko-KR', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false
-                    })
-                }],
-                completedTests: prev.completedTests + 1
-            }));
-        }
-    };
-
-    // 검사 완료 시뮬레이션 함수 (테스트용)
-    const simulateTestCompletion = () => {
-        const testResult = {
-            patientName: "홍길동",
-            birthDate: "1980-02-29",
-            phone: "010-5678-9012",
-            condition: "고혈압",
-            riskLevel: 'high',
-            testType: '혈액검사',
-            result: '혈당 수치 이상'
-        };
-        
-        analyzeTestResult(testResult);
-        alert('검사 완료: 홍길동 환자 재진료 필요');
-    };
-
-    // 알림 상태 관리
-    const [notifications, setNotifications] = useState({
-        urgent: [] as any[],
-        incompleteNotes: 2,
-        waitingTestResults: 1,
-        completedTests: 0
-    });
 
     // 모달 상태 관리
     const [showNewPatientModal, setShowNewPatientModal] = useState(false);
@@ -382,281 +298,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
         return condition.toLowerCase().includes(query.toLowerCase());
     };
 
-    // 금일 대기 환자 상태 관리 (동적 관리 - 예약:방문 = 4:6 비율)
-    // const [waitingPatients, setWaitingPatients] = useState<WaitingPatient[]>([
-    //     // 예약 환자들 (40%)
-    //     {
-    //         id: 1,
-    //         time: "09:00",
-    //         name: "김영수",
-    //         birthDate: "1985-03-15",
-    //         phone: "010-1234-5678",
-    //         condition: "고혈압",
-    //         visitType: "재진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "reservation"
-    //     },
-    //     {
-    //         id: 2,
-    //         time: "10:00",
-    //         name: "정민수",
-    //         birthDate: "1987-09-14",
-    //         phone: "010-6789-0123",
-    //         condition: "감기 증상",
-    //         visitType: "재진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "reservation"
-    //     },
-    //     {
-    //         id: 3,
-    //         time: "11:00",
-    //         name: "박영희",
-    //         birthDate: "1989-04-25",
-    //         phone: "010-9012-3456",
-    //         condition: "피로감",
-    //         visitType: "재진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "reservation"
-    //     },
-    //     {
-    //         id: 4,
-    //         time: "12:00",
-    //         name: "정수영",
-    //         birthDate: "1984-07-05",
-    //         phone: "010-3456-7891",
-    //         condition: "어지럼증",
-    //         visitType: "초진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "reservation"
-    //     },
-    //     {
-    //         id: 5,
-    //         time: "13:00",
-    //         name: "김철수", // 동명이인 1
-    //         birthDate: "1985-03-15",
-    //         phone: "010-1234-5678",
-    //         condition: "고혈압",
-    //         visitType: "재진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "reservation"
-    //     },
-    //     {
-    //         id: 6,
-    //         time: "14:00",
-    //         name: "김철수", // 동명이인 3 (다른 생년월일)
-    //         birthDate: "1990-08-20",
-    //         phone: "010-5678-1234",
-    //         condition: "감기",
-    //         visitType: "초진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "reservation"
-    //     },
-    //     {
-    //         id: 7,
-    //         time: "15:00",
-    //         name: "이영희", // 동명이인 5 (같은 생년월일)
-    //         birthDate: "1990-07-22",
-    //         phone: "010-2345-8888", // 다른 전화번호
-    //         condition: "복통",
-    //         visitType: "초진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "reservation"
-    //     },
-    //     {
-    //         id: 8,
-    //         time: "16:00",
-    //         name: "박현준",
-    //         birthDate: "1986-05-08",
-    //         phone: "010-9012-3458",
-    //         condition: "가슴 답답함",
-    //         visitType: "재진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "reservation"
-    //     },
-    //     {
-    //         id: 9,
-    //         time: "17:00",
-    //         name: "정승우",
-    //         birthDate: "1987-06-12",
-    //         phone: "010-3456-7893",
-    //         condition: "소화불량",
-    //         visitType: "재진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "reservation"
-    //     },
-    //     {
-    //         id: 10,
-    //         time: "18:00",
-    //         name: "이지현",
-    //         birthDate: "1985-10-21",
-    //         phone: "010-7890-1237",
-    //         condition: "복부 통증",
-    //         visitType: "초진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "reservation"
-    //     },
-    //     // 방문 환자들 (60%)
-    //     {
-    //         id: 11,
-    //         time: "09:30",
-    //         name: "박준호",
-    //         birthDate: "1978-11-08",
-    //         phone: "010-3456-7890",
-    //         condition: "복통",
-    //         visitType: "초진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "walkin"
-    //     },
-    //     {
-    //         id: 12,
-    //         time: "10:30",
-    //         name: "이철수",
-    //         birthDate: "1983-06-18",
-    //         phone: "010-8901-2345",
-    //         condition: "위염",
-    //         visitType: "재진",
-    //         alert: "고혈압 경고",
-    //         alertType: "주의",
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "walkin"
-    //     },
-    //     {
-    //         id: 13,
-    //         time: "11:30",
-    //         name: "김민지",
-    //         birthDate: "1993-01-30",
-    //         phone: "010-1234-5679",
-    //         condition: "불면증",
-    //         visitType: "재진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "walkin"
-    //     },
-    //     {
-    //         id: 14,
-    //         time: "12:30",
-    //         name: "최서연",
-    //         birthDate: "1988-11-28",
-    //         phone: "010-5678-9013",
-    //         condition: "요통",
-    //         visitType: "재진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "walkin"
-    //     },
-    //     {
-    //         id: 15,
-    //         time: "13:30",
-    //         name: "김철수", // 동명이인 2 (같은 생년월일)
-    //         birthDate: "1985-03-15",
-    //         phone: "010-1234-9999", // 다른 전화번호
-    //         condition: "당뇨",
-    //         visitType: "재진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "walkin"
-    //     },
-    //     {
-    //         id: 16,
-    //         time: "14:30",
-    //         name: "이영희", // 동명이인 4
-    //         birthDate: "1990-07-22",
-    //         phone: "010-2345-6789",
-    //         condition: "두통",
-    //         visitType: "재진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "walkin"
-    //     },
-    //     {
-    //         id: 17,
-    //         time: "15:30",
-    //         name: "최동현",
-    //         birthDate: "1991-08-07",
-    //         phone: "010-0123-4567",
-    //         condition: "관절통",
-    //         visitType: "초진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "walkin"
-    //     },
-    //     {
-    //         id: 18,
-    //         time: "16:30",
-    //         name: "김도현",
-    //         birthDate: "1984-01-23",
-    //         phone: "010-1234-5671",
-    //         condition: "손 떨림",
-    //         visitType: "초진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "walkin"
-    //     },
-    //     {
-    //         id: 19,
-    //         time: "17:30",
-    //         name: "최영수",
-    //         birthDate: "1989-12-16",
-    //         phone: "010-5678-9015",
-    //         condition: "관절 강직",
-    //         visitType: "재진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "walkin"
-    //     },
-    //     {
-    //         id: 20,
-    //         time: "18:30",
-    //         name: "최준영",
-    //         birthDate: "1992-09-18",
-    //         phone: "010-0123-4560",
-    //         condition: "손목 부종",
-    //         visitType: "초진",
-    //         alert: null,
-    //         alertType: null,
-    //         buttonText: "진료 시작",
-    //         visitOrigin: "walkin"
-    //     }
-    // ]);
 
-    // 금일 병원 일정 상태 관리 (기본 일정만)
-    const [hospitalSchedule, setHospitalSchedule] = useState([
-        { 
-            id: 1, 
-            timeRange: "09:00-18:30", 
-            activity: "외래 진료", 
-            status: "진행 중" 
-        }
-    ]);
 
 
 
@@ -736,367 +378,182 @@ export const Dashboard: React.FC<DashboardProps> = ({ searchQuery, onNewPatient,
         return (totalParts === 0 || matchCount === totalParts) || conditionMatch;
     };
 
-        // 검색어에 따른 환자 필터링 (시간 필터링 제거)
-    const filteredWaitingPatients = waitingPatients
-        .filter(patient => {
-            return matchesComplexSearch(patient, searchQuery);
-        })
-        .sort((a, b) => {
-            // 진료 완료된 환자는 맨 아래로 (최우선)
-            if ((patientStatus[a.id] || 'waiting') === 'completed' && (patientStatus[b.id] || 'waiting') !== 'completed') return 1;
-            if ((patientStatus[a.id] || 'waiting') !== 'completed' && (patientStatus[b.id] || 'waiting') === 'completed') return -1;
+    // 처방/오더 상세보기 핸들러
+    const handlePrescriptionClick = (prescription: any) => {
+        setSelectedPrescription(prescription);
+        setPrescriptionModalOpen(true);
+    };
 
-            // 검사 완료 환자 우선 (완료되지 않은 환자들 중에서)
-            if ((a.condition || '').includes("검사 완료") && !(b.condition || '').includes("검사 완료")) return -1;
-            if (!(a.condition || '').includes("검사 완료") && (b.condition || '').includes("검사 완료")) return 1;
+    // 통합 환자 리스트 생성
+    const unifiedPatients: UnifiedPatient[] = useMemo(() => {
+        const patients: UnifiedPatient[] = [];
 
-            // 일반 환자는 시간 순서대로 정렬
-            return a.time.localeCompare(b.time);
+        // 현재 시간 기준 30분 이전 시간 계산
+        const now = new Date(currentTime);
+        const thirtyMinutesAgo = new Date(now.getTime() - 30 * 60 * 1000);
+        const cutoffTime = thirtyMinutesAgo.toLocaleTimeString('ko-KR', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
         });
+
+        // 시간 문자열을 분으로 변환하는 함수
+        const timeToMinutes = (timeStr: string): number => {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours * 60 + minutes;
+        };
+
+        // 1. WAITING 상태 환자 (waitingPatients에서 검사 완료가 아닌 환자)
+        waitingPatients.forEach(patient => {
+            // 검사 완료 환자는 제외
+            if ((patient.condition || '').includes("검사 완료")) return;
+            
+            // 현재 시간 기준 30분 이전 환자는 제외
+            if (patient.time) {
+                const patientTimeMinutes = timeToMinutes(patient.time);
+                const cutoffTimeMinutes = timeToMinutes(cutoffTime);
+                
+                // 환자 시간이 30분 이전이면 제외
+                if (patientTimeMinutes < cutoffTimeMinutes) {
+                    return;
+                }
+            }
+            
+            patients.push({
+                id: patient.id,
+                name: patient.name,
+                age: calculateAge(patient.birthDate),
+                visitType: patient.visitType as '초진' | '재진',
+                chiefComplaint: patient.condition || '',
+                status: 'WAITING',
+                reservationTime: patient.time,
+                patientId: patient.id.toString(),
+                phone: patient.phone,
+                birthDate: patient.birthDate,
+                visitOrigin: patient.visitOrigin,
+                alert: patient.alert,
+                alertType: patient.alertType,
+                buttonText: patient.buttonText
+            });
+        });
+
+        // 2. IN_TEST 상태 환자 (prescriptions 중 tests가 있는 환자)
+        prescriptions.forEach(prescription => {
+            if (prescription.tests.length > 0) {
+                // 재진환자 데이터에서 나이 찾기
+                const revisitPatient = revisitPatientsData.find(rp => rp.name === prescription.patientName);
+                let patientAge: string | number = '?';
+                let birthDate = '';
+                
+                if (revisitPatient) {
+                    birthDate = revisitPatient.birthDate;
+                    patientAge = calculateAge(revisitPatient.birthDate);
+                }
+                
+                // 검사 완료 여부 확인
+                const allTestsCompleted = prescription.tests.every(t => t.result);
+                const someTestsCompleted = prescription.tests.some(t => t.result);
+                
+                // AI 요약 및 상급병원 이송 필요 여부 확인
+                const needsTransfer = prescription.notes?.includes("상급병원") || false;
+                const aiSummary = prescription.notes || prescription.revisitRecommendation || '';
+                
+                patients.push({
+                    id: prescription.id,
+                    name: prescription.patientName,
+                    age: patientAge,
+                    visitType: revisitPatient?.visitType === '초진' ? '초진' : '재진',
+                    chiefComplaint: prescription.notes || '검사 필요',
+                    status: 'IN_TEST',
+                    reservationTime: new Date(prescription.createdAt).toLocaleTimeString('ko-KR', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                        timeZone: 'Asia/Seoul'
+                    }),
+                    patientId: prescription.patientId,
+                    birthDate: birthDate,
+                    phone: revisitPatient?.phone || '',
+                    tests: prescription.tests,
+                    aiSummary: aiSummary,
+                    alert: needsTransfer ? '상급병원 이송 필요' : null,
+                    alertType: needsTransfer ? 'urgent' : null,
+                    prescriptionData: prescription
+                });
+            }
+        });
+
+
+        return patients;
+    }, [waitingPatients, prescriptions, calculateAge, currentTime]);
+
+    // status에 따라 필터링
+    const waitingPatientsList = unifiedPatients.filter(p => p.status === 'WAITING');
+    const inTestPatientsList = unifiedPatients.filter(p => p.status === 'IN_TEST');
 
     return (
         <div style={{ 
             display: "grid", 
-            gridTemplateColumns: "6fr 4fr", 
-            gap: "20px"
+            gridTemplateColumns: "1fr 1fr 1fr", 
+            gap: "20px",
+            alignContent: "start",
+            alignItems: "start"
         }}>
-            {/* 왼쪽: 금일 대기 환자 */}
-            <div style={{ 
-                background: "white", 
-                borderRadius: "8px",
-                padding: "20px",
-                border: "1px solid #e5e7eb",
-                display: "flex",
-                flexDirection: "column"
-            }}>
-                <div style={{ 
-                    fontSize: "18px", 
-                    fontWeight: 700, 
-                    marginBottom: "16px",
-                    color: "#374151",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                }}>
-                    <span>금일 대기 환자</span>
-                    <span style={{
-                        fontSize: "14px",
-                        color: "#6b7280",
-                        fontWeight: 500
-                    }}>
-                        현재 시간 {currentTime.toLocaleTimeString('ko-KR', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: false
-                        })}
-                    </span>
-                </div>
+            {/* 1. 진료 대기 컬럼 */}
+            <WaitingPatientsColumn
+                patients={waitingPatientsList}
+                searchQuery={searchQuery}
+                patientStatus={patientStatus}
+                currentTime={currentTime}
+                isHospitalOpen={isHospitalOpen}
+                onStartTreatment={handleStartTreatment}
+                onCompleteTreatment={handleCompleteTreatment}
+                isPatientTimeReached={isPatientTimeReached}
+                calculateAge={calculateAge}
+            />
 
-                {!isHospitalOpen() ? (
-                    <div style={{
-                        textAlign: "center",
-                        padding: "80px 20px",
-                        color: "#6b7280",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        minHeight: "300px"
-                    }}>
-                        <div style={{
-                            fontSize: "24px",
-                            fontWeight: 700,
-                            color: "#6b7280",
-                            marginBottom: "12px"
-                        }}>
-                            "병원 내 모든 진료가 종료되었습니다."
-                        </div>
-                        <div style={{
-                            fontSize: "16px",
-                            color: "#9ca3af"
-                        }}>
-                            운영시간: 09:00 - 18:00
-                        </div>
-                    </div>
-                ) : (
-                    <div style={{ 
-                        display: "grid",
-                        gap: "12px"
-                    }}>
-                        {filteredWaitingPatients.map((patient, index) => (
-                        <div key={`${patient.id}-${index}`} style={{
-                            padding: "16px",
-                            background: (patientStatus[patient.id] || 'waiting') === 'completed' 
-                                ? "#f8f9fa" // 완료된 환자는 회색 배경
-                                : patient.visitOrigin === "reservation" 
-                                    ? "#f0f8ff" // 예약 환자는 파란색 배경
-                                    : "white", // 방문 환자는 흰색 배경
-                            borderRadius: "8px",
-                            border: "1px solid #e5e7eb",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            opacity: (patientStatus[patient.id] || 'waiting') === 'completed' ? 0.7 : 1 // 완료된 환자는 투명도 적용
-                        }}>
-                            <div style={{ flex: 1 }}>
-                                <div style={{ 
-                                    fontSize: "16px", 
-                                    fontWeight: 600, 
-                                    color: "#374151",
-                                    marginBottom: "4px"
-                                }}>
-                                    <span style={{ 
-                                        color: "#374151",
-                                        fontWeight: 700,
-                                        fontSize: "18px"
-                                    }}>
-                                        {patient.time}
-                                    </span>
-                                    <span style={{ marginLeft: "12px" }}>
-                                        {patient.name} ({calculateAge(patient.birthDate)}세, {patient.visitType}) - {(patient.condition || '').includes("검사 완료") ? "검사 완료" : (patient.condition || '')}
-                                    </span>
-                                </div>
-                                {patient.alert && (patient.condition || '').includes("검사 완료") && (
-                                    <div style={{ 
-                                        fontSize: "14px", 
-                                        color: "#B51515",
-                                        fontWeight: 500
-                                    }}>
-                                        {patient.alert}
-                                    </div>
-                                )}
-                            </div>
-                            {(patientStatus[patient.id] || 'waiting') === 'completed' ? (
-                            <button style={{
-                                padding: "6px 12px",
-                                    background: "#10b981", // 완료는 초록색 배경
-                                    color: "white",
-                                border: "1px solid #d1d5db",
-                                borderRadius: "6px",
-                                fontSize: "12px",
-                                fontWeight: 500,
-                                    cursor: "default"
-                            }}>
-                                    완료
-                            </button>
-                            ) : (
-                                <div style={{ display: "flex", gap: "8px" }}>
-                                                            <button 
-                            onClick={() => handleStartTreatment(patient)}
-                            style={{
-                                padding: "6px 12px",
-                                background: (patient.condition || '').includes("검사 완료") ? "#5D6D7E" : "#f3f4f6", // 검사 완료 환자는 신규환자 버튼 색상
-                                color: (patient.condition || '').includes("검사 완료") ? "white" : "#374151", // 검사 완료 환자는 흰색 텍스트
-                                border: "1px solid #d1d5db",
-                                borderRadius: "6px",
-                                fontSize: "12px",
-                                fontWeight: 500,
-                                cursor: "pointer"
-                            }}
-                        >
-                            {(patient.condition || '').includes("검사 완료") ? "결과 보기" : (patient.buttonText || "진료 시작")}
-                        </button>
-                                    {isPatientTimeReached(patient.time) && (
-                                        <button 
-                                            onClick={() => handleCompleteTreatment(patient.id.toString())}
-                                            style={{
-                                                padding: "6px 12px",
-                                                background: "#3b82f6", // 파란색 배경
-                                                color: "white",
-                                                border: "1px solid #d1d5db",
-                                                borderRadius: "6px",
-                                                fontSize: "12px",
-                                                fontWeight: 500,
-                                                cursor: "pointer"
-                                            }}
-                                        >
-                                            진료 완료
-                                        </button>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+            {/* 2. 검사 진행 컬럼 */}
+            <InTestPatientsColumn
+                patients={inTestPatientsList}
+                searchQuery={searchQuery}
+                onTestButton={onTestButton}
+                onPrescriptionClick={handlePrescriptionClick}
+                onRevisit={(patient) => {
+                    // 다시 진료 버튼 클릭 시 대기 목록 최상단에 추가하고 검사 진행에서 제거
+                    const currentTime = new Date().toLocaleTimeString('ko-KR', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    });
 
-            {/* 오른쪽: 병원 일정 + 처방/오더보드 */}
-            <div style={{ 
-                display: "flex", 
-                flexDirection: "column",
-                gap: "20px",
-                minHeight: "fit-content"
-            }}>
-                {/* 금일 병원 일정 */}
-                <div style={{ 
-                    background: "white", 
-                    borderRadius: "8px",
-                    padding: "20px",
-                    border: "1px solid #e5e7eb",
-                    display: "flex",
-                    flexDirection: "column",
-                    minHeight: hospitalSchedule.length === 0 ? "120px" : "fit-content"
-                }}>
-                    <div style={{ 
-                        fontSize: "18px", 
-                        fontWeight: 700, 
-                        marginBottom: "16px",
-                        color: "#374151"
-                    }}>
-                        금일 병원 일정
-                    </div>
+                    const newWaitingPatient: WaitingPatient = {
+                        id: typeof patient.id === 'number' ? patient.id : parseInt(String(patient.id)) || Date.now(),
+                        time: currentTime,
+                        name: patient.name,
+                        birthDate: patient.birthDate || '',
+                        phone: patient.phone || '',
+                        condition: patient.chiefComplaint,
+                        visitType: patient.visitType,
+                        alert: patient.alert,
+                        alertType: patient.alertType,
+                        buttonText: '진료 시작',
+                        visitOrigin: patient.visitOrigin || 'walkin'
+                    };
+
+                    // 1. 대기 목록 최상단에 추가
+                    setWaitingPatients(prev => [newWaitingPatient, ...prev]);
                     
-                    {hospitalSchedule.length === 0 ? (
-                        <div style={{ 
-                            color: "#6b7280", 
-                            fontSize: "14px",
-                            textAlign: "center",
-                            padding: "20px 0"
-                        }}>
-                            오늘 일정이 없습니다.
-                        </div>
-                    ) : (
-                    <div style={{ 
-                        display: "grid",
-                        gap: "12px"
-                    }}>
-                        {hospitalSchedule.map((schedule) => (
-                            <div key={schedule.id} style={{
-                                padding: "16px",
-                                background: "white",
-                                borderRadius: "8px",
-                                border: "1px solid #e5e7eb",
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center"
-                            }}>
-                                <div style={{ flex: 1 }}>
-                                    <div style={{ 
-                                        fontSize: "14px", 
-                                        fontWeight: 500, 
-                                        color: "#374151",
-                                        marginBottom: "4px"
-                                    }}>
-                                        {schedule.timeRange} - {schedule.activity}
-                                    </div>
-                                </div>
-                                <div style={{ 
-                                    fontSize: "12px", 
-                                    color: schedule.status === "진행 중" ? "#374151" : "#6b7280",
-                                    background: schedule.status === "진행 중" ? "#f3f4f6" : "transparent",
-                                    padding: schedule.status === "진행 중" ? "4px 8px" : "0",
-                                    borderRadius: schedule.status === "진행 중" ? "12px" : "0",
-                                    fontWeight: 500
-                                }}>
-                                    {schedule.status}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    )}
-                </div>
-
-                {/* 당일 처방/오더보드 */}
-                <div style={{ 
-                    background: "white", 
-                    borderRadius: "8px",
-                    padding: "20px",
-                    border: "1px solid #e5e7eb",
-                    display: "flex",
-                    flexDirection: "column",
-                    minHeight: prescriptions.length === 0 ? "120px" : "fit-content"
-                }}>
-                    <div style={{ 
-                        fontSize: "18px", 
-                        fontWeight: 700, 
-                        marginBottom: "16px",
-                        color: "#374151"
-                    }}>
-                        당일 처방/오더보드
-                    </div>
+                    // 2. 검사 진행 패딩에서 제거 (prescriptions에서 해당 항목 제거)
+                    if (patient.prescriptionData?.id) {
+                        setPrescriptions(prev => prev.filter(p => p.id !== patient.prescriptionData.id));
+                    }
                     
-                    {prescriptions.length === 0 ? (
-                        <div style={{ 
-                            color: "#6b7280", 
-                            fontSize: "14px",
-                            textAlign: "center",
-                            padding: "20px 0"
-                        }}>
-                            아직 처방/오더가 없습니다.
-                        </div>
-                    ) : (
-                    <div style={{ 
-                        display: "grid",
-                        gap: "12px"
-                    }}>
-                        {prescriptions
-                            .reduce((acc, prescription) => {
-                                const existingIndex = acc.findIndex(p => p.patientName === prescription.patientName);
-                                if (existingIndex >= 0) {
-                                    // 같은 환자가 있으면 더 최근 것을 유지
-                                    if (new Date(prescription.createdAt) > new Date(acc[existingIndex].createdAt)) {
-                                        acc[existingIndex] = prescription;
-                                    }
-                                } else {
-                                    acc.push(prescription);
-                                }
-                                return acc;
-                            }, [] as typeof prescriptions)
-                            .map((prescription) => (
-                            <div key={prescription.id} style={{
-                                padding: "16px",
-                                background: "white",
-                                borderRadius: "8px",
-                                border: "1px solid #e5e7eb",
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center"
-                            }}>
-                                <div style={{ flex: 1 }}>
-                                    <div style={{ 
-                                        fontSize: "14px", 
-                                        fontWeight: 500, 
-                                        color: "#374151",
-                                        marginBottom: "4px"
-                                    }}>
-                                            {prescription.patientName} 처방 및 오더
-                                    </div>
-                                    <div style={{ 
-                                        fontSize: "12px", 
-                                        color: "#6b7280"
-                                    }}>
-                                            {new Date(prescription.createdAt).toLocaleTimeString('ko-KR', {
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                                hour12: false
-                                            })}
-                                    </div>
-                                </div>
-                                    <button 
-                                        onClick={() => {
-                                            setSelectedPrescription(prescription);
-                                            setPrescriptionModalOpen(true);
-                                        }}
-                                        style={{
-                                    padding: "6px 12px",
-                                    background: "#f3f4f6",
-                                    color: "#374151",
-                                    border: "1px solid #d1d5db",
-                                    borderRadius: "6px",
-                                    fontSize: "12px",
-                                    fontWeight: 500,
-                                    cursor: "pointer"
-                                        }}
-                                    >
-                                        상세보기
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            </div>
+                    alert(`${patient.name} 환자가 대기 목록 최상단에 추가되었습니다.`);
+                }}
+            />
+
+            {/* 3. 금일 병원 일정 및 알림/업무 요약 컬럼 */}
+            <ScheduleAndAlertsColumn />
 
             {/* 진료 차트 모달 */}
             {selectedPatient && (

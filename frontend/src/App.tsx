@@ -9,13 +9,14 @@
  */
 import React, { useState, useEffect } from 'react';
 import { NewPatientModal } from './components/patient-registration';
-import { Dashboard, AlertsSection } from './components/dashboard';
+import { Dashboard } from './components/dashboard';
 import { PatientChart } from './pages/PatientChart';
 import { ExamManagement } from './pages/ExamManagement';
 import { DocumentManagement } from './pages/DocumentManagement';
 import { AppointmentManagement } from './pages/AppointmentManagement';
 import { Header, Sidebar } from './components/layout';
 import { WaitingPatient, waitingPatientsData } from './data/waitingPatientsData';
+import { revisitPatientsData } from './data/revisitPatientsData';
 import { addBulkPatientHistory, addVisitRecord, updatePatientInfo, getPatientHistory, createDefaultVisitRecord } from './data/patientHistoryData';
 import { getPatients, createPatient } from './api/patients';
 import { isAuthenticated as checkAuth } from './api/auth';
@@ -43,14 +44,57 @@ export default function App() {
         console.log('waitingPatientsData 길이:', waitingPatientsData.length);
         console.log('waitingPatientsData 첫 번째 환자:', waitingPatientsData[0]);
         
-        // birthDate가 있는 환자만 필터링
-        const validPatients = waitingPatientsData
-            .filter(patient => patient.birthDate && patient.birthDate !== '');
+        // 1. 초진 환자만 필터링 (waitingPatientsData에서)
+        const firstVisitPatients = waitingPatientsData
+            .filter(patient => patient.visitType === '초진' && patient.birthDate && patient.birthDate !== '');
         
-        console.log('유효한 환자 수:', validPatients.length);
-        console.log('유효한 환자들:', validPatients);
+        // 2. 재진 환자는 revisitPatientsData에서 가져오기
+        // 시간대별로 배치 (9:00~18:00, 30분 간격)
+        const timeSlots = [
+            '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+            '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
+            '15:00', '15:30', '16:00', '16:30', '17:00', '17:30'
+        ];
         
-        setWaitingPatients(validPatients);
+        const revisitPatients: WaitingPatient[] = revisitPatientsData
+            .filter(patient => patient.visitType === '재진')
+            .slice(0, 20) // 최대 20명
+            .map((patient, index) => {
+                const timeIndex = index % timeSlots.length;
+                const visitOrigin: 'reservation' | 'walkin' = index % 2 === 0 ? 'reservation' : 'walkin';
+                
+                return {
+                    id: 1000 + patient.id, // 초진 환자 ID와 겹치지 않도록
+                    time: timeSlots[timeIndex],
+                    name: patient.name,
+                    birthDate: patient.birthDate,
+                    phone: patient.phone,
+                    condition: patient.diagnosis,
+                    visitType: '재진',
+                    alert: null,
+                    alertType: null,
+                    buttonText: '진료 시작',
+                    visitOrigin: visitOrigin
+                };
+            });
+        
+        // 3. 초진 환자와 재진 환자 합치기
+        const allPatients = [...firstVisitPatients, ...revisitPatients];
+        
+        // 4. 시간순으로 정렬
+        allPatients.sort((a, b) => {
+            const timeA = a.time.split(':').map(Number);
+            const timeB = b.time.split(':').map(Number);
+            const minutesA = timeA[0] * 60 + timeA[1];
+            const minutesB = timeB[0] * 60 + timeB[1];
+            return minutesA - minutesB;
+        });
+        
+        console.log('초진 환자 수:', firstVisitPatients.length);
+        console.log('재진 환자 수:', revisitPatients.length);
+        console.log('전체 환자 수:', allPatients.length);
+        
+        setWaitingPatients(allPatients);
     }, []);
     const [isUsingBackendData, setIsUsingBackendData] = useState(false);
     
@@ -80,6 +124,7 @@ export default function App() {
         tests: Array<{
             testName: string;
             urgency: 'routine' | 'urgent';
+            result?: string;  // 검사 결과 (완료된 경우)
         }>;
         nextVisit?: string;
         notes: string;
@@ -109,7 +154,7 @@ export default function App() {
             nextVisit: undefined,
             notes: "혈당 관리 상태 양호",
             revisitRecommendation: "",
-            createdAt: "2024-01-20T14:30:00.000Z"
+            createdAt: "2024-01-20T05:30:00.000Z"  // 한국 시간 14:30 (UTC+9)
         },
         // 예시 2: 처방 + 재방문 권고가 있는 환자
         {
@@ -128,41 +173,55 @@ export default function App() {
             nextVisit: undefined,
             notes: "혈압 조절 상태 확인 필요",
             revisitRecommendation: "1개월 뒤 재방문 권고",
-            createdAt: "2024-01-20T15:15:00.000Z"
+            createdAt: "2024-01-20T06:15:00.000Z"  // 한국 시간 15:15 (UTC+9)
         },
-        // 예시 3: 검사가 있는 환자
+        // 상단: 검사 완료된 환자들 (resultsReadySection)
+        // 일찍 검사 시작한 사람부터 시간순으로 정렬
+        // 1. 박현준 - 혈압 조절 상태 확인 필요 (08:30 시작, 가장 일찍)
         {
             id: "3",
             patientName: "박현준",
             patientId: "P003",
             prescriptions: [
                 {
-                    medication: "Omeprazole",
-                    dosage: "20mg",
+                    medication: "Amlodipine",
+                    dosage: "5mg",
                     frequency: "1T qd",
-                    duration: "14일"
+                    duration: "30일"
                 }
             ],
             tests: [
                 {
-                    testName: "혈액검사",
-                    urgency: "routine"
+                    testName: "혈압 측정",
+                    urgency: "routine",
+                    result: "135/85 mmHg"
                 },
                 {
-                    testName: "위내시경",
-                    urgency: "urgent"
+                    testName: "혈액검사",
+                    urgency: "routine",
+                    result: "정상 범위"
+                },
+                {
+                    testName: "심전도",
+                    urgency: "routine",
+                    result: "정상"
+                },
+                {
+                    testName: "소변검사",
+                    urgency: "routine",
+                    result: "정상"
                 }
             ],
             nextVisit: undefined,
-            notes: "위염 의심, 검사 후 재진료 필요",
-            revisitRecommendation: "검사 결과 확인 후 치료 방향 결정",
-            createdAt: "2024-01-20T16:00:00.000Z"
+            notes: "혈압 조절 상태 확인 필요",
+            revisitRecommendation: "혈압 조절 상태 확인 필요",
+            createdAt: "2024-01-19T23:30:00.000Z"  // 한국 시간 08:30 (UTC+9)
         },
-        // 예시 4: 처방 + 검사 + 재방문 권고가 있는 환자
+        // 2. 최지영 - 검사 완료 (09:00 시작)
         {
-            id: "4",
-            patientName: "최지우",
-            patientId: "P004",
+            id: "5",
+            patientName: "최지영",
+            patientId: "P005",
             prescriptions: [
                 {
                     medication: "Ibuprofen",
@@ -173,14 +232,282 @@ export default function App() {
             ],
             tests: [
                 {
+                    testName: "혈액검사",
+                    urgency: "routine",
+                    result: "정상 범위"
+                },
+                {
+                    testName: "소변검사",
+                    urgency: "routine",
+                    result: "정상"
+                },
+                {
+                    testName: "초음파",
+                    urgency: "routine",
+                    result: "정상 소견"
+                },
+                {
+                    testName: "X-ray 검사",
+                    urgency: "routine",
+                    result: "정상"
+                }
+            ],
+            nextVisit: undefined,
+            notes: "두통 재발, 검사 결과 정상",
+            revisitRecommendation: "두통 재발 시 재방문 권고",
+            createdAt: "2024-01-20T00:00:00.000Z"  // 한국 시간 09:00 (UTC+9)
+        },
+        // 3. 김지현 - 상급병원 이송 필요 (10:00 시작)
+        {
+            id: "4",
+            patientName: "김지현",
+            patientId: "P004",
+            prescriptions: [],
+            tests: [
+                {
+                    testName: "CT 검사",
+                    urgency: "urgent",
+                    result: "뇌출혈 의심 소견"
+                },
+                {
+                    testName: "혈액검사",
+                    urgency: "urgent",
+                    result: "WBC: 12,500/μL"
+                },
+                {
+                    testName: "X-ray 검사",
+                    urgency: "urgent",
+                    result: "폐 음영 증가"
+                },
+                {
+                    testName: "심전도",
+                    urgency: "urgent",
+                    result: "부정맥 소견"
+                }
+            ],
+            nextVisit: undefined,
+            notes: "상급병원 이송 필요",
+            revisitRecommendation: "상급병원 이송 필요",
+            createdAt: "2024-01-20T01:00:00.000Z"  // 한국 시간 10:00 (UTC+9)
+        },
+        // 하단: 검사 진행 중인 환자들 (inProgressSection)
+        // 검사는 8:30~18:00까지만 가능
+        // 일찍 검사 시작한 사람부터 시간순으로 정렬, 진행도도 일찍 시작한 사람이 더 높음
+        // 1. 이하나 - 심전도 진행 중 (3/4 완료) - 08:30 시작 (가장 일찍)
+        {
+            id: "6",
+            patientName: "이하나",
+            patientId: "P006",
+            prescriptions: [],
+            tests: [
+                {
+                    testName: "심전도",
+                    urgency: "urgent"
+                },
+                {
+                    testName: "혈액검사",
+                    urgency: "routine",
+                    result: "정상 범위"
+                },
+                {
+                    testName: "소변검사",
+                    urgency: "routine",
+                    result: "정상"
+                },
+                {
+                    testName: "X-ray 검사",
+                    urgency: "routine",
+                    result: "정상"
+                }
+            ],
+            nextVisit: undefined,
+            notes: "가슴 통증, 심전도 검사 필요",
+            revisitRecommendation: "",
+            createdAt: "2024-01-19T23:30:00.000Z"  // 한국 시간 08:30 (UTC+9)
+        },
+        // 2. 오수민 - X-ray 진행 중 (3/4 완료) - 09:00 시작
+        {
+            id: "7",
+            patientName: "오수민",
+            patientId: "P007",
+            prescriptions: [],
+            tests: [
+                {
+                    testName: "X-ray 검사",
+                    urgency: "routine"
+                },
+                {
+                    testName: "혈액검사",
+                    urgency: "routine",
+                    result: "정상 범위"
+                },
+                {
+                    testName: "소변검사",
+                    urgency: "routine",
+                    result: "정상"
+                },
+                {
+                    testName: "초음파",
+                    urgency: "routine",
+                    result: "정상"
+                }
+            ],
+            nextVisit: undefined,
+            notes: "요통 증상 개선 중",
+            revisitRecommendation: "",
+            createdAt: "2024-01-20T00:00:00.000Z"  // 한국 시간 09:00 (UTC+9)
+        },
+        // 3. 조형석 - 혈액검사 진행 중 (2/4 완료) - 09:30 시작
+        {
+            id: "8",
+            patientName: "조형석",
+            patientId: "P008",
+            prescriptions: [],
+            tests: [
+                {
+                    testName: "혈액검사",
+                    urgency: "routine"
+                },
+                {
+                    testName: "소변검사",
+                    urgency: "routine",
+                    result: "정상"
+                },
+                {
+                    testName: "초음파",
+                    urgency: "routine",
+                    result: "정상"
+                },
+                {
                     testName: "X-ray 검사",
                     urgency: "routine"
                 }
             ],
             nextVisit: undefined,
-            notes: "요통 증상 개선 중",
-            revisitRecommendation: "검사 결과 확인 후 물리치료 고려",
-            createdAt: "2024-01-20T16:30:00.000Z"
+            notes: "복통 증상 지속",
+            revisitRecommendation: "",
+            createdAt: "2024-01-20T00:30:00.000Z"  // 한국 시간 09:30 (UTC+9)
+        },
+        // 4. 홍길동 - 위내시경 진행 중 (2/4 완료) - 10:00 시작
+        {
+            id: "9",
+            patientName: "홍길동",
+            patientId: "P009",
+            prescriptions: [],
+            tests: [
+                {
+                    testName: "위내시경",
+                    urgency: "urgent"
+                },
+                {
+                    testName: "혈액검사",
+                    urgency: "routine",
+                    result: "정상 범위"
+                },
+                {
+                    testName: "소변검사",
+                    urgency: "routine",
+                    result: "정상"
+                },
+                {
+                    testName: "초음파",
+                    urgency: "routine"
+                }
+            ],
+            nextVisit: undefined,
+            notes: "위염 의심, 검사 후 재진료 필요",
+            revisitRecommendation: "",
+            createdAt: "2024-01-20T01:00:00.000Z"  // 한국 시간 10:00 (UTC+9)
+        },
+        // 5. 정민수 - CT 검사 진행 중 (2/4 완료) - 10:30 시작
+        {
+            id: "10",
+            patientName: "정민수",
+            patientId: "P010",
+            prescriptions: [],
+            tests: [
+                {
+                    testName: "CT 검사",
+                    urgency: "urgent"
+                },
+                {
+                    testName: "혈액검사",
+                    urgency: "routine",
+                    result: "정상 범위"
+                },
+                {
+                    testName: "소변검사",
+                    urgency: "routine"
+                },
+                {
+                    testName: "X-ray 검사",
+                    urgency: "routine"
+                }
+            ],
+            nextVisit: undefined,
+            notes: "두통 지속, 영상 검사 필요",
+            revisitRecommendation: "",
+            createdAt: "2024-01-20T01:30:00.000Z"  // 한국 시간 10:30 (UTC+9)
+        },
+        // 6. 김수진 - 초음파 진행 중 (2/4 완료) - 11:00 시작
+        {
+            id: "11",
+            patientName: "김수진",
+            patientId: "P011",
+            prescriptions: [],
+            tests: [
+                {
+                    testName: "초음파",
+                    urgency: "routine"
+                },
+                {
+                    testName: "혈액검사",
+                    urgency: "routine",
+                    result: "정상 범위"
+                },
+                {
+                    testName: "소변검사",
+                    urgency: "routine",
+                    result: "정상"
+                },
+                {
+                    testName: "X-ray 검사",
+                    urgency: "routine"
+                }
+            ],
+            nextVisit: undefined,
+            notes: "복부 통증, 초음파 검사 진행 중",
+            revisitRecommendation: "",
+            createdAt: "2024-01-20T02:00:00.000Z"  // 한국 시간 11:00 (UTC+9)
+        },
+        // 7. 정우진 - 혈액검사 진행 중 (1/4 완료) - 11:30 시작 (가장 늦게)
+        {
+            id: "12",
+            patientName: "정우진",
+            patientId: "P012",
+            prescriptions: [],
+            tests: [
+                {
+                    testName: "혈액검사",
+                    urgency: "routine"
+                },
+                {
+                    testName: "소변검사",
+                    urgency: "routine"
+                },
+                {
+                    testName: "초음파",
+                    urgency: "routine"
+                },
+                {
+                    testName: "X-ray 검사",
+                    urgency: "routine"
+                }
+            ],
+            nextVisit: undefined,
+            notes: "지속적 기침, 혈액검사 진행 중",
+            revisitRecommendation: "",
+            createdAt: "2024-01-20T02:30:00.000Z"  // 한국 시간 11:30 (UTC+9)
         }
     ]);
     

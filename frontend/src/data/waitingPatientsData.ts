@@ -328,5 +328,221 @@ export const waitingPatientsData: WaitingPatient[] = [
         alertType: null,
         buttonText: "진료 시작",
         visitOrigin: "walkin"
+    },
+
+    // 14:00 - 14:30
+    {
+        id: 23,
+        time: "14:00",
+        name: "장미라",
+        birthDate: "1992-07-18",
+        phone: "010-1234-5680",
+        condition: "어지러움",
+        visitType: "초진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "reservation"
+    },
+    {
+        id: 24,
+        time: "14:00",
+        name: "윤태호",
+        birthDate: "1981-11-25",
+        phone: "010-2345-6791",
+        condition: "목 통증",
+        visitType: "재진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "walkin"
+    },
+    {
+        id: 25,
+        time: "14:30",
+        name: "한소희",
+        birthDate: "1995-04-09",
+        phone: "010-3456-7802",
+        condition: "피부 가려움",
+        visitType: "초진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "reservation"
+    },
+    {
+        id: 26,
+        time: "14:30",
+        name: "송민준",
+        birthDate: "1988-12-03",
+        phone: "010-4567-8913",
+        condition: "소화불량",
+        visitType: "재진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "walkin"
+    },
+
+    // 15:00 - 15:30
+    {
+        id: 27,
+        time: "15:00",
+        name: "강지은",
+        birthDate: "1990-06-14",
+        phone: "010-5678-9024",
+        condition: "두통",
+        visitType: "초진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "reservation"
+    },
+    {
+        id: 28,
+        time: "15:00",
+        name: "임동욱",
+        birthDate: "1984-09-27",
+        phone: "010-6789-0135",
+        condition: "기침",
+        visitType: "재진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "walkin"
+    },
+    {
+        id: 29,
+        time: "15:30",
+        name: "오세훈",
+        birthDate: "1993-02-11",
+        phone: "010-7890-1246",
+        condition: "복통",
+        visitType: "초진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "reservation"
+    },
+    {
+        id: 30,
+        time: "15:30",
+        name: "신혜진",
+        birthDate: "1987-05-20",
+        phone: "010-8901-2357",
+        condition: "피로감",
+        visitType: "재진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "walkin"
+    },
+
+    // 16:00 - 16:30
+    {
+        id: 31,
+        time: "16:00",
+        name: "류성민",
+        birthDate: "1991-08-05",
+        phone: "010-9012-3468",
+        condition: "코막힘",
+        visitType: "초진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "reservation"
+    },
+    {
+        id: 32,
+        time: "16:00",
+        name: "문지영",
+        birthDate: "1986-01-16",
+        phone: "010-0123-4579",
+        condition: "어깨 통증",
+        visitType: "재진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "walkin"
+    },
+    {
+        id: 33,
+        time: "16:30",
+        name: "양준호",
+        birthDate: "1989-10-22",
+        phone: "010-1234-5680",
+        condition: "발열",
+        visitType: "초진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "reservation"
+    },
+    {
+        id: 34,
+        time: "16:30",
+        name: "배수진",
+        birthDate: "1994-03-08",
+        phone: "010-2345-6791",
+        condition: "가슴 답답함",
+        visitType: "재진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "walkin"
+    },
+
+    // 17:00 - 17:30
+    {
+        id: 35,
+        time: "17:00",
+        name: "전혜수",
+        birthDate: "1985-07-19",
+        phone: "010-3456-7802",
+        condition: "관절통",
+        visitType: "초진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "reservation"
+    },
+    {
+        id: 36,
+        time: "17:00",
+        name: "차민석",
+        birthDate: "1992-11-30",
+        phone: "010-4567-8913",
+        condition: "불면증",
+        visitType: "재진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "walkin"
+    },
+    {
+        id: 37,
+        time: "17:30",
+        name: "허지우",
+        birthDate: "1983-04-12",
+        phone: "010-5678-9024",
+        condition: "소화불량",
+        visitType: "초진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "reservation"
+    },
+    {
+        id: 38,
+        time: "17:30",
+        name: "노예린",
+        birthDate: "1996-09-25",
+        phone: "010-6789-0135",
+        condition: "두통",
+        visitType: "재진",
+        alert: null,
+        alertType: null,
+        buttonText: "진료 시작",
+        visitOrigin: "walkin"
     }
 ];
