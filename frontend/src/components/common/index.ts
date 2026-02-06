@@ -6,3 +6,4 @@ export { default as Card } from './Card';
 export { default as SectionTitle } from './SectionTitle';
 export { default as ListRow } from './ListRow';
 export { default as Tabs } from './Tabs';
+export { ProgressGraph } from './ProgressGraph';

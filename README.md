@@ -104,10 +104,11 @@
   - 재진료 버튼 클릭 시 대기 목록으로 이동
 
 - **[`frontend/src/components/dashboard/ScheduleAndAlertsColumn.tsx`](frontend/src/components/dashboard/ScheduleAndAlertsColumn.tsx)**
-  - 금일 병원 일정 및 알림/업무 요약 컬럼
-  - 교수 외래 진료 시간 표시
-  - 검사실 운영 시간 표시
-  - 약품 대체, 검사 결과 지연, 소견서 미작성 등 알림 표시
+  - 금일 병원 일정 및 **오늘의 알림 / 업무 요약** 컬럼
+  - 교수 외래 진료 시간, 검사실 운영 시간 표시
+  - 알림: 약품 대체 필요, **검사 결과 지연**, 소견서 미작성, 재진 대기 중 환자 (건수 표시)
+  - 알림 카드 접기/펼치기, 건별 체크 시 "완료한 항목" 영역으로 이동
+  - 미완료 건수 실시간 반영
 
 #### 대시보드 공통 컴포넌트
 - **[`frontend/src/components/dashboard/PatientCard.tsx`](frontend/src/components/dashboard/PatientCard.tsx)**
@@ -144,16 +145,21 @@
   - 대기 목록에 재진환자 추가
 
 - **[`frontend/src/pages/ExamManagement.tsx`](frontend/src/pages/ExamManagement.tsx)**
-  - 검사 관리 페이지
-  - 검사 오더 관리
-  - 검사 결과 입력
-  - AI 기반 검사 결과 분석
+  - **검사 관리 페이지** (검사실 전용 화면)
+  - 검사 오더: 처방 데이터에서 자동 생성, 날짜 선택(◀/▶) 후 해당 일자 기준 표시
+  - 검사 오더 탭: 타임 스케줄(08:00~18:00, 30분 단위)에 시간대별 오더 배치, 당일 오더 목록·필터(환자/검사 유형)
+  - 검사 일정 탭: 연간 캘린더(년도 전환), 날짜별 검사 오더 건수 표시, 날짜 클릭 시 선택
 
 - **[`frontend/src/pages/AppointmentManagement.tsx`](frontend/src/pages/AppointmentManagement.tsx)**
   - 예약 관리 페이지
   - 1년 전체 세로형 캘린더
   - 교수님별 고정 스케줄 표시
   - 예약 생성/수정/취소 기능
+
+- **[`frontend/src/pages/DocumentManagement.tsx`](frontend/src/pages/DocumentManagement.tsx)**
+  - 문서(소견서) 관리 페이지
+  - 환자별 소견서 목록·검색
+  - 소견서 조회·편집·발급
 
 - **[`frontend/src/components/patient-chart/PatientChartModal.tsx`](frontend/src/components/patient-chart/PatientChartModal.tsx)**
   - 진료 차트 모달 컴포넌트
@@ -234,7 +240,7 @@
   - 생성된 환자 데이터 (50명 + 대기 환자 15명)
 
 - **[`DataBase/drug_dataset_500.json`](DataBase/drug_dataset_500.json)**
-  - 약물 데이터베이스 (50개 약물 정보)
+  - 약물 데이터베이스 (500개 약물 정보)
 
 ### 오수민 (AI Gateway) 담당 파일
 
@@ -308,8 +314,10 @@ frontend/src/components/
     ├── Input.jsx
     ├── TextArea.jsx
     ├── Card.jsx
+    ├── SectionTitle.jsx
+    ├── ListRow.jsx
     ├── Tabs.jsx
-    └── ProgressGraph.tsx      # 검사 진행률 그래프
+    └── ProgressGraph.tsx     # 검사 진행률 그래프
 ```
 
 #### 4단계: 레이아웃 컴포넌트
@@ -334,6 +342,7 @@ frontend/src/components/
 │   ├── PatientCard.tsx       # 환자 카드 공통 컴포넌트
 │   ├── ResultsReadyRow.tsx   # 검사 완료 환자 행
 │   ├── InProgressRow.tsx     # 검사 진행 중 환자 행
+│   ├── TestChecklist.tsx     # 검사 체크리스트
 │   └── types.ts              # 대시보드 타입 정의
 ├── patient-registration/      # 환자 등록
 │   ├── NewPatientModal.tsx   # 신규 환자 등록
@@ -467,7 +476,7 @@ backend/
 └── patient_data_50_with_waiting.json      # 생성된 환자 데이터
 
 DataBase/
-├── drug_dataset_500.json                  # 약물 데이터베이스 (50개)
+├── drug_dataset_500.json                  # 약물 데이터베이스 (500개)
 ├── drug_database_collector.py             # 약물 데이터 수집 스크립트
 ├── generate_drug_data.js                  # 약물 데이터 생성 스크립트
 └── sample_drug_database.py                # 샘플 약물 데이터베이스 생성기

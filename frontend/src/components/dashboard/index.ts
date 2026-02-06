@@ -2,4 +2,3 @@
 export { Dashboard } from './Dashboard';
 export { WaitingPatientsColumn } from './WaitingPatientsColumn';
 export { InTestPatientsColumn } from './InTestPatientsColumn';
-export { ScheduleAndAlertsColumn } from './ScheduleAndAlertsColumn';
