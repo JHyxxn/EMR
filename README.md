@@ -73,18 +73,44 @@
 
 ## 👥 팀 및 담당 분야
 
-| 이름 | 담당 분야 | 책임 한 줄 |
-|:---|:---|:---|
-| **김지현** | 팀장, **AI**, **Backend** | **프로젝트 축** — Express·업무 모듈·**`ai-gateway`**, API·도메인·프론트와의 계약까지 **주도** |
-| **오수민** | **AI**, **Frontend** | **프론트엔드 구현 지원** — 김지현이 맞춘 API·계약 위에서 **화면·상태·`api` 호출·AI 결과 표시** |
-| **송유찬** | **Backend**, **DataBase** | **데이터 레이어** — **Prisma**, 생성기·JSON, **`drugDatabase`**, `DataBase/` (김지현 백엔드와 맞춤) |
+<table>
+  <colgroup>
+    <col width="96">
+    <col width="180">
+    <col>
+  </colgroup>
+  <thead>
+    <tr>
+      <th align="left">이름</th>
+      <th align="left">담당 분야</th>
+      <th align="left">책임 한 줄</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left" nowrap><strong>김지현</strong></td>
+      <td align="left" nowrap>팀장, <strong>AI</strong>, <strong>Backend</strong></td>
+      <td align="left"><strong>프로젝트 축</strong> — Express·업무 모듈·<strong><code>ai-gateway</code></strong>, API·도메인·프론트와의 계약까지 <strong>주도</strong></td>
+    </tr>
+    <tr>
+      <td align="left" nowrap><strong>오수민</strong></td>
+      <td align="left" nowrap><strong>AI</strong>, <strong>Frontend</strong></td>
+      <td align="left"><strong>프론트엔드 구현 지원</strong> — 김지현이 맞춘 API·계약 위에서 <strong>화면·상태·<code>api</code> 호출·AI 결과 표시</strong></td>
+    </tr>
+    <tr>
+      <td align="left" nowrap><strong>송유찬</strong></td>
+      <td align="left" nowrap><strong>Backend</strong>, <strong>DataBase</strong></td>
+      <td align="left"><strong>데이터 레이어</strong> — <strong>Prisma</strong>, 생성기·JSON, <strong><code>drugDatabase</code></strong>, <code>DataBase/</code> (김지현 백엔드와 맞춤)</td>
+    </tr>
+  </tbody>
+</table>
 
 > **역할 나눔**  
 > - **김지현**: **서버·비즈니스 로직·AI Gateway**를 총괄한다. **추론·모델·폴백·Rate Limit·`/insight/*`** 등 AI **본체**는 `ai-gateway`와 백엔드에 두고, 프론트는 그 **소비·표현**에 가깝다.  
 > - **오수민**: **React 화면·상태·내비게이션**과 **`frontend/src/api/*`·UI**를 **지원·분담**한다. AI는 **게이트웨이 응답을 붙이는 UX**(모달, 차트, 로딩·에러) 중심이다.  
 > - **송유찬**: **스키마·마이그레이션·시드·약물 JSON** 등 **DB·데이터 자산**을 주도한다. 김지현의 Prisma 사용·API와 맞춘다.  
 >
-> **정리**: `frontend/` **파일 수가 많아 보여도**, **의사결정·연산·계약의 중심**은 **`backend/`·`ai-gateway/`** 이며, **팀 업무 양**도 **김지현이 가장 크다**(위 비중).
+> **정리**: `frontend/` **파일 수가 많아 보여도**, **의사결정·연산·계약의 중심**은 **`backend/`·`ai-gateway/`** 이며, **팀 업무 양**도 **김지현이 가장 크다**.
 
 ---
 
@@ -119,7 +145,7 @@
 
 ## 📁 담당자별 주요 파일 목록
 
-### 김지현 (팀장, AI, Backend) 담당 파일 
+### 김지현 (팀장, AI, Backend) 담당 파일
 
 #### Express 서버·API
 - **[`backend/index.js`](backend/index.js)**
@@ -328,6 +354,7 @@ backend/src/
 ```
 
 #### 2단계: 메인 서버 (`backend/index.js`)
+```
 backend/index.js              # Express: CORS, 환자/Observation/문서/검사/처방 API, /api/ai → AI Gateway 프록시
 ```
 
@@ -348,23 +375,25 @@ ai-gateway/
 
 <a id="readme-dev-kim-prescription-exam"></a>
 
-#### 5단계: 처방·검사 도메인과 프론트(`exam-flow`·대시보드) 계약 
+#### 5단계: 처방·검사 도메인과 프론트(`exam-flow`·대시보드) 계약 (김지현)
 
 대시보드 **검사 진행**·**검사 관리** UI가 쓰는 `prescriptions`(및 `tests` 등) 표현과, `exam-flow`의 **`ExamOrderItem`** 매핑이 어긋나지 않도록 **백엔드에서 필드·의미를 먼저 고정**한다.
 
 ```
 backend/src/
 ├── prescriptionManagement.js   # 처방에 실린 검사 목록·오더 표현
-├── testManagement.js         # 검사 요청·결과·통계와의 연계
-└── (정리) index.js           # /api/prescriptions, /api/tests 등에서 위와 동일한 JSON 계약으로 응답
-
-프론트(파일 위치는 `frontend/`이나, **스키마·계약의 기준은 김지현**)
-└── components/exam-flow/prescriptionToExamOrders.ts
-    # 위 백엔드 계약에 맞춰 대시보드 처방 tests → ExamOrderItem[] 변환
+├── testManagement.js           # 검사 요청·결과·통계와의 연계
+└── (연계) index.js             # /api/prescriptions, /api/tests 등 — 동일 JSON 계약으로 응답
 ```
 
-**개발 순서 요약 (김지현) : 
-** 업무 모듈 → 메인 API 서버 → AI Gateway 서버·모델 통합 → **처방·검사 API 계약으로 `exam-flow`/대시보드와 맞춤**
+프론트 쪽 변환 파일은 `frontend/` 아래에 두되, **스키마·계약의 기준은 김지현(백엔드)** 이다.
+
+```
+frontend/src/components/exam-flow/prescriptionToExamOrders.ts
+# 대시보드 처방 tests → ExamOrderItem[] (위 백엔드 계약에 맞춘 클라이언트 변환)
+```
+
+**개발 순서 요약 (김지현):** 업무 모듈 → 메인 API 서버 → AI Gateway 서버·모델 통합 → 처방·검사 API 계약으로 `exam-flow`/대시보드와 맞춤
 
 ---
 
