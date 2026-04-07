@@ -1,5 +1,7 @@
 /**
  * 문서·소견서 관리: 소견 목록, 환자 검색, 방문 이력·소견 편집(localStorage 연동)
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 import React, { useState, useEffect } from 'react';
 import { tokens } from '../design/tokens';

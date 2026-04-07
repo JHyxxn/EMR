@@ -1,5 +1,8 @@
 /**
  * 검사 진행 컬럼
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - 완료(`ResultsReadyRow`)·진행중(`InProgressRow`) 2단, `ProgressGraph`로 진행률 표시
  * - 재진료/검사 관련 버튼은 `onTestButton` 등 상위 핸들러에 위임
  */

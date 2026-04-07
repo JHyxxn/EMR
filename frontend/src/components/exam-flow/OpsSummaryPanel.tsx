@@ -1,5 +1,8 @@
 /**
  * 검사 관리 상단 운영 요약 (`OpsSummary`)
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - 대기/진행/완료/지연 건수 칩, 병목 Top3, 지연·노쇼 환자명 리스트
  */
 import React from 'react';

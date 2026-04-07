@@ -1,7 +1,7 @@
 /**
  * 검사 관리 페이지
  *
- * 담당자: 김지현 (프론트엔드)
+ * 담당자: 오수민 (AI, Frontend)
  *
  * 탭:
  * - 검사 오더: 날짜별 오더(처방 연동 → 없으면 더미), OpsSummaryPanel + ExamFlowBoard + PatientDetailPanel

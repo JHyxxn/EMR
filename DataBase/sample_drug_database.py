@@ -2,6 +2,8 @@
 """
 샘플 약물 데이터베이스 생성기
 API 없이 테스트용 약물 상호작용 데이터를 생성합니다.
+
+담당자: 송유찬 (Backend, DataBase)
 """
 
 import pandas as pd

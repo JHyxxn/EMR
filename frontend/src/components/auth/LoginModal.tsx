@@ -1,5 +1,8 @@
 /**
  * 로그인 모달
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - `authStore`와 연동, 백엔드 `/api/auth/login` 후 JWT·사용자 정보 저장
  */
 import React, { useState } from 'react';

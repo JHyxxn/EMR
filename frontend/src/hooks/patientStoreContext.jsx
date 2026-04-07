@@ -1,5 +1,7 @@
 /**
  * 환자 스토어용 React Context + `usePatientStore` 훅
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 import { createContext, useContext } from "react";
 

@@ -1,6 +1,8 @@
 /**
  * 검사 플로우 파생 데이터 계산
  *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * 1) 슬롯 생성: 08:00~17:30 30분 간격 20개 (buildTimeSlots)
  * 2) 매트릭스 구성: examOrders의 scheduledAt → slot 키로 매핑 후, (slot, examType)별로 배열 구성 (buildMatrix)
  * 3) 요약 계산: status별 counts, WAITING인 항목만 검사유형별 집계 후 상위 3개 병목, DELAYED 환자명 리스트 (buildOpsSummary)

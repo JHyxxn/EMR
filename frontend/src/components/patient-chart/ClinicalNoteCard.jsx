@@ -1,5 +1,8 @@
 /**
  * AI 임상 요약 카드 (제목·본문·하이라이트·복사)
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - `PatientChartModal` 등에서 LLM/룰 기반 요약 표시용
  *
  * props: title?, summary?, provider? ('rule' | 'llm' | string), highlights?

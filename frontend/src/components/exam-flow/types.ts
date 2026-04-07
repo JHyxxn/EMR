@@ -1,5 +1,8 @@
 /**
  * 검사 플로우 추적용 타입 정의
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - ExamFlowBoard, PatientDetailPanel, OpsSummaryPanel 등에서 사용
  */
 

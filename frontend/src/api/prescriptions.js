@@ -1,5 +1,7 @@
 /**
  * 처방 관리 API 클라이언트
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 
 import { apiPost, apiGet } from './client.js'

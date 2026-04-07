@@ -1,5 +1,8 @@
 /**
  * 재진 환자 시드 목록 및 `RevisitPatient` 타입
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - 재진 차트 페이지, 재진 모달에서 검색·선택에 사용
  */
 export interface RevisitPatient {

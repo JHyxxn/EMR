@@ -1,5 +1,8 @@
 /**
  * 헤더 검색 등에서 선택된 환자 1명 보관 (`setPatient` / `clear`)
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - `PatientStoreProvider` + `patientStoreContext`의 `Ctx`에 값 제공
  */
 import { useMemo, useState } from "react";

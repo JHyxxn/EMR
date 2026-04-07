@@ -1,5 +1,7 @@
 /**
  * 신규 환자 등록: 바이탈 입력(체온·혈압·맥박·호흡·혈당·체중·키)
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 import React from 'react';
 

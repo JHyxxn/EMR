@@ -1,5 +1,7 @@
 /**
  * 신규 환자 등록: 방문 사유·증상·진료 계획, AI 방문 요약 버튼 연동
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 import React from 'react';
 

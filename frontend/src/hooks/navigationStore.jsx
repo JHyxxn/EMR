@@ -1,5 +1,8 @@
 /**
  * 앱 내 페이지 전환 상태 (`home` | `chart` | `exam` | …)
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - 사이드바·라우팅 대체용 `currentPage` / `navigate`
  */
 import { useMemo, useState } from "react";

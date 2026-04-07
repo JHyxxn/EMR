@@ -1,5 +1,8 @@
 /**
  * 신규 환자 등록: 기본 정보 폼 (MRN 자동 생성, 인적·연락처·주소 등)
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - `NewPatientModal`에서 사용, 필드 에러는 상위 `getFieldError`와 연동
  */
 import React, { useEffect } from 'react';

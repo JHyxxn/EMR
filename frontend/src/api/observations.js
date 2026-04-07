@@ -1,6 +1,8 @@
 /**
  * 관찰 데이터 관련 API 함수들
  * 바이탈 사인, 검사 결과, 진료 기록 등을 관리
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 
 import { apiGet, apiPost, apiPut, apiDelete } from './client';

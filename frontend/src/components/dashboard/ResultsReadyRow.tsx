@@ -1,6 +1,8 @@
 /**
  * 검사 결과 준비 완료 행 컴포넌트
  * resultsReadySection에서 사용
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 import React from 'react';
 import { ProgressGraph } from '../common/ProgressGraph';

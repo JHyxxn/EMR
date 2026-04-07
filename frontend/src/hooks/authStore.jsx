@@ -1,5 +1,8 @@
 /**
  * 인증 전역 상태: 로그인·JWT(`localStorage` token)·사용자 프로필
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - `LoginModal`·`App` 등에서 `useAuthStore` / `AuthStoreProvider` 사용
  */
 import { createContext, useContext, useMemo, useState, useCallback } from "react";

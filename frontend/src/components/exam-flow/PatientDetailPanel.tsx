@@ -1,5 +1,8 @@
 /**
  * 우측: 선택된 환자 상세 패널
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - 환자명, 검사 진행률 chips [혈액✔][소변✔][X-ray]...
  * - resultSummary, aiSummary
  * - flags, recommendedActions

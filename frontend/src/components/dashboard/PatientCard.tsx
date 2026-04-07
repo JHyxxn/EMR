@@ -1,5 +1,8 @@
 /**
  * 환자 카드 공통 UI
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - 이름·나이·방문유형(초진/재진), 상태별 `WAITING` | `IN_TEST` | `NEED_REVISIT` 레이아웃(row/column)
  */
 import React from 'react';

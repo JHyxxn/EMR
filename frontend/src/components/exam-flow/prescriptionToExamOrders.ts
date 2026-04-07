@@ -1,6 +1,8 @@
 /**
  * 대시보드 검사 진행 환자(prescriptions) → ExamOrderItem[] 변환
  * 홈 대시보드와 검사 관리 화면 데이터 연동
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 import type { ExamOrderItem, ExamType, ExamStatus } from './types';
 

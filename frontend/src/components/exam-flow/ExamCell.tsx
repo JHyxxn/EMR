@@ -1,5 +1,8 @@
 /**
  * 시간(행) × 검사유형(열) 매트릭스의 한 셀.
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * 해당 슬롯·검사유형에 예정된 환자(들)를 미니 카드로 표시. 2개 초과 시 "+N" 축약.
  * data-cell / data-slot / data-examtype: ExamFlowBoard에서 연결선 좌표 측정용.
  */

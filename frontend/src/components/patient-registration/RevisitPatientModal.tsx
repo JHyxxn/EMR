@@ -1,5 +1,8 @@
 /**
  * 재진 환자를 오늘 대기 목록에 넣기 위한 모달
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - `revisitPatientsData` 기반 검색·선택 후 `onAddToWaitingList`로 상위에 전달
  */
 import React, { useState } from 'react';

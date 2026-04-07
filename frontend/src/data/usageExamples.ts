@@ -1,5 +1,7 @@
 /**
  * `patientHistoryData` 등 동적 CRUD 사용 예시 시나리오(개발·시연용)
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 export const realClinicScenario = () => {
     // 09:00 - 첫 번째 재진 환자 도착

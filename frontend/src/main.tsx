@@ -1,5 +1,8 @@
 /**
  * Vite/React 앱 진입점
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - PatientStore / NavigationStore / AuthStore Provider로 전역 컨텍스트 래핑
  * - 개발용 ErrorBoundary(테스트 에러 트리거 버튼 포함)
  */

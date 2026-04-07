@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
 한국 식품의약품안전처 DUR API를 활용한 약물 데이터베이스 수집 스크립트
+
+담당자: 송유찬 (Backend, DataBase)
+
 - DUR(OpenAPI, data.go.kr 데이터 ID 15056780)
 - 의약품개요정보(OpenAPI, 데이터 ID 15075057)
 """

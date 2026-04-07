@@ -1,6 +1,8 @@
 /**
  * Segment Progress Graph 컴포넌트
  * 검사 진행률을 segment(칸) 형태로 표시
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 import React from 'react';
 

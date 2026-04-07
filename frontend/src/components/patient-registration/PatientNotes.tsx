@@ -1,5 +1,7 @@
 /**
  * 신규 환자 등록: 간호·환자 노트 입력 영역
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 import React from 'react';
 

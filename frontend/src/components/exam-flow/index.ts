@@ -1,5 +1,8 @@
 /**
  * 검사 플로우 UI 모듈 진입점
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * - ExamManagement 등에서 타입·유틸·컴포넌트 일괄 import
  */
 export * from './types';

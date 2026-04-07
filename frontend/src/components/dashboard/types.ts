@@ -1,5 +1,7 @@
 /**
  * 대시보드에서 사용하는 통합 환자 데이터 타입
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 import { PatientStatus } from './PatientCard';
 

@@ -1,5 +1,7 @@
 /**
  * 보드 셀 내 미니 환자 카드. 클릭 시 해당 환자로 우측 패널 갱신
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 import React from 'react';
 import type { ExamOrderItem } from './types';

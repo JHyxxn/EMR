@@ -1,6 +1,8 @@
 /**
  * 환자 관련 API 함수들
  * 백엔드 API와의 통신을 담당
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 
 import { apiGet, apiPost, apiPut, apiDelete } from './client';

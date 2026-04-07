@@ -1,6 +1,8 @@
 /**
  * 인증 관련 API 함수들
  * 로그인, 로그아웃, 토큰 관리 등을 담당
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 
 import { apiGet, apiPost } from './client';

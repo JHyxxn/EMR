@@ -1,5 +1,7 @@
 /**
  * 의사·환자 차트 시연용 확장 레코드(`PatientRecord` 등) 및 목업 데이터
+ *
+ * 담당자: 오수민 (AI, Frontend)
  */
 export interface Doctor {
     id: string;

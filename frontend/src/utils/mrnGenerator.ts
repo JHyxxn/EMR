@@ -1,6 +1,8 @@
 /**
  * EMR 시스템 MRN(Medical Record Number) 생성 및 관리 유틸리티
- * 
+ *
+ * 담당자: 오수민 (AI, Frontend)
+ *
  * 주요 기능:
  * - 환자 고유 식별번호 자동 생성 (P + 4자리 숫자)
  * - MRN 형식 검증
