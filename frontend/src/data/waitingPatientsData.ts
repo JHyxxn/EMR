@@ -1,3 +1,7 @@
+/**
+ * 금일(또는 시연용) 대기 환자 시드 데이터 및 `WaitingPatient` 타입
+ * - 대시보드 대기 컬럼, 차트 모달, 검사 관리 상단 바 등에서 공통 참조
+ */
 export interface WaitingPatient {
     id: number;
     time: string;

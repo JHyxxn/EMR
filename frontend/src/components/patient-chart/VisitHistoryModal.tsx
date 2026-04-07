@@ -1,3 +1,7 @@
+/**
+ * 방문 이력 모달
+ * - 과거 방문의 날짜·유형·증상·진단·처방·노트·담당의를 목록 형태로 표시(읽기 중심)
+ */
 import React from 'react';
 
 interface VisitHistory {

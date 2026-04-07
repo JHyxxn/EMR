@@ -1,3 +1,10 @@
+/**
+ * 진료 차트 모달 (대시보드 등에서 환자 진료 시트)
+ *
+ * - SOAP 진료 기록, 처방·검사 오더 입력 및 상위 `setPrescriptions` 연동
+ * - AI 임상노트 요약(`clinicalNote`), 소견서(`MedicalOpinionModal`) 연동
+ * - 환자 이력: `patientHistoryData` CRUD, 필요 시 `updatePatient` API
+ */
 import React, { useState, useEffect } from 'react';
 import { WaitingPatient } from '../../data/waitingPatientsData';
 import { getPatientHistory, addVisitRecord, updatePatientInfo, PatientHistory } from '../../data/patientHistoryData';

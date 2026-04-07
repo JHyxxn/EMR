@@ -1,6 +1,6 @@
 /**
- * 운영 요약 패널: 검사 일정 스타일의 패딩·구성
- * - 한 줄 헤더 + 칩/리스트를 효율적으로 배치
+ * 검사 관리 상단 운영 요약 (`OpsSummary`)
+ * - 대기/진행/완료/지연 건수 칩, 병목 Top3, 지연·노쇼 환자명 리스트
  */
 import React from 'react';
 import type { OpsSummary } from './types';

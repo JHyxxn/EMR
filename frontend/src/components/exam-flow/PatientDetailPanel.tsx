@@ -40,9 +40,10 @@ export const PatientDetailPanel: React.FC<PatientDetailPanelProps> = ({
   const chips = patientItems.map((item) => {
     const label = EXAM_TYPE_LABELS[item.examType];
     const done = item.status === 'DONE';
-    return { label, done };
+    return { key: item.id, label, done };
   });
 
+  // 요약은 가장 최근에 텍스트가 있는 오더 기준(역순 첫 매칭)
   const lastWithSummary = [...patientItems].reverse().find((i) => i.resultSummary || i.aiSummary);
   const resultSummary = lastWithSummary?.resultSummary;
   const aiSummary = lastWithSummary?.aiSummary;
@@ -70,9 +71,9 @@ export const PatientDetailPanel: React.FC<PatientDetailPanelProps> = ({
           검사 진행률
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-          {chips.map(({ label, done }) => (
+          {chips.map(({ key, label, done }) => (
             <span
-              key={label}
+              key={key}
               style={{
                 padding: '4px 10px',
                 borderRadius: '6px',

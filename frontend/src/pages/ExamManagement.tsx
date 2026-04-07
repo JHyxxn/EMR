@@ -1,19 +1,13 @@
 /**
- * 검사 관리 페이지 컴포넌트
- * 
+ * 검사 관리 페이지
+ *
  * 담당자: 김지현 (프론트엔드)
- * 
- * 주요 기능:
- * - 검사 오더 관리
- * - 검사 결과 입력 (혈압, 심전도, 혈당 등)
- * - AI 기반 검사 결과 분석 및 시각화
- * - 정상/비정상 수치 자동 판단 및 색상 표시
- * 
- * 기술 스택:
- * - React + TypeScript
- * - 조건부 렌더링 (정상/비정상 수치 시각적 구분)
- * - AI 분석 결과 표시
- * - 탭 기반 UI (검사 오더 / 검사 결과 / AI 분석)
+ *
+ * 탭:
+ * - 검사 오더: 날짜별 오더(처방 연동 → 없으면 더미), OpsSummaryPanel + ExamFlowBoard + PatientDetailPanel
+ * - 검사 일정: 연도·월 그리드로 날짜 선택, 선택일 오더 칩 목록
+ *
+ * 데이터: prescriptions(대시보드 검사 진행) → buildExamOrdersFromPrescriptions(selectedDate)
  */
 import React, { useState, useMemo } from 'react';
 import { tokens } from '../design/tokens';
@@ -25,6 +19,7 @@ import {
   ExamFlowBoard,
   PatientDetailPanel,
   OpsSummaryPanel,
+  EXAM_TYPE_LABELS,
 } from '../components/exam-flow';
 
 interface ExamManagementProps {
@@ -52,9 +47,10 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({
     new Date().toISOString().split('T')[0]
   );
   const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear());
+  /** 플로우 보드·상세 패널에서 하이라이트할 환자 */
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
 
-  // 홈 대시보드 검사 진행 환자(prescriptions)와 연동: 해당 날짜 오더가 있으면 사용, 없으면 더미
+  // 홈 대시보드 검사 진행(prescriptions)과 동일 날짜 오더가 있으면 사용, 없으면 더미
   const examOrders = useMemo(() => {
     const fromPrescriptions = buildExamOrdersFromPrescriptions(prescriptions, selectedDate);
     if (fromPrescriptions.length > 0) return fromPrescriptions;
@@ -67,12 +63,14 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({
   );
   const selectedPatientName = patientItems[0]?.patientName ?? null;
 
+  /** 로컬 날짜 기준 이전/다음 날 (T12:00:00으로 타임존 경계 왜곡 완화) */
   const changeSelectedDateByDays = (delta: number) => {
     const d = new Date(selectedDate + 'T12:00:00');
     d.setDate(d.getDate() + delta);
     setSelectedDate(d.toISOString().split('T')[0]);
   };
 
+  /** 6주(42칸) 달력: 전월·다음월 일부 포함, 칸별 해당일 오더 건수(처방→없으면 더미) */
   const generateMonthCalendar = (year: number, month: number) => {
     const firstDay = new Date(year, month, 1);
     const startDate = new Date(firstDay);
@@ -99,6 +97,7 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({
     return calendar;
   };
 
+    /** 12개월을 3열×4행 그리드용 순서로 재배치 (월 인덱스: row + col*4) */
     const generateYearCalendars = (year: number) => {
         const monthNames = [
             '1월', '2월', '3월', '4월', '5월', '6월',
@@ -123,6 +122,7 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({
     };
 
     const yearCalendars = generateYearCalendars(currentYear);
+    /** 검사 일정 탭 상단 칩: 현재 selectedDate와 동일한 examOrders(이미 날짜 필터됨) */
     const filteredOrdersByDate = examOrders;
 
     return (
@@ -313,7 +313,7 @@ export const ExamManagement: React.FC<ExamManagementProps> = ({
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                                     {filteredOrdersByDate.map((order) => (
                                         <span key={order.id} style={{ padding: '8px 12px', borderRadius: '6px', fontSize: '14px', backgroundColor: '#f0f9ff', color: '#1e40af' }}>
-                                            {order.patientName} · {order.code || '검사'}
+                                            {order.patientName} · {EXAM_TYPE_LABELS[order.examType]}
                                         </span>
                                     ))}
                                 </div>

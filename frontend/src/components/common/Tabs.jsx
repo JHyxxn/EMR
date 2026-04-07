@@ -1,3 +1,4 @@
+/** 값·옵션 배열 기반 탭 스위처 */
 import { tokens } from "@/design/tokens";
 
 export default function Tabs({ value, onChange, options, className = "" }) {

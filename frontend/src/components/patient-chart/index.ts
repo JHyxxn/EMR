@@ -1,2 +1,5 @@
-// 환자 차트 관련 컴포넌트들
+/**
+ * 환자 차트 관련 export (AI 임상 요약 카드 등)
+ * - `PatientChartModal` 등은 대부분 경로 직접 import
+ */
 export { default as ClinicalNoteCard } from './ClinicalNoteCard';

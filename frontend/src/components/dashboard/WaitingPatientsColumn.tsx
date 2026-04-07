@@ -1,5 +1,7 @@
 /**
- * 진료 대기 환자 컬럼 컴포넌트
+ * 진료 대기 컬럼
+ * - 금일 대기 목록 시간순·검색 필터, `PatientCard` row 레이아웃
+ * - 진료 시작 등 액션은 상위 콜백으로 전달
  */
 import React from 'react';
 import { WaitingPatient } from '../../data/waitingPatientsData';

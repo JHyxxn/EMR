@@ -1,3 +1,4 @@
+/** 목록 한 행(좌·우 슬롯, 카드형 스타일) */
 import { tokens } from "@/design/tokens";
 
 export default function ListRow({ left, right, className = "" }) {

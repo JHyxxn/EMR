@@ -1,16 +1,12 @@
-
-// src/components/ClinicalNoteCard.jsx
-
+/**
+ * AI 임상 요약 카드 (제목·본문·하이라이트·복사)
+ * - `PatientChartModal` 등에서 LLM/룰 기반 요약 표시용
+ *
+ * props: title?, summary?, provider? ('rule' | 'llm' | string), highlights?
+ */
 import Card from './Card'
 import { useState } from 'react'
 
-/**
- * props:
- *  - title?: string
- *  - summary?: string
- *  - provider?: 'rule' | 'llm' | string
- *  - highlights?: string[]   // 선택
- */
 export default function ClinicalNoteCard({ title = 'AI 임상 요약', summary = '', provider, highlights = [] }) {
     const [copied, setCopied] = useState(false)
 

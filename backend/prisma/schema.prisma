@@ -1,5 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+//
+// EMR SQLite 스키마 (README: User, Patient, Encounter, Observation 등)
+// - backend/prisma/migrations 와 함께 DB 구조의 단일 소스
+// - 클라이언트 생성: prisma generate
 
 // =========================
 // Prisma config (기존 유지)

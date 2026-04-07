@@ -1,4 +1,6 @@
-// 신규 환자 등록 관련 컴포넌트들
+/**
+ * 신규 환자 등록 플로우용 컴포넌트 모음
+ */
 export { NewPatientModal } from './NewPatientModal';
 export { PatientBasicInfo } from './PatientBasicInfo';
 export { VitalInput } from './VitalInput';

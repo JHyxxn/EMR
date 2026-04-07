@@ -1,3 +1,6 @@
+/**
+ * 신규 환자 등록: 기본정보·최근 바이탈 요약을 보여주는 상단 그리드 레이아웃
+ */
 import React from 'react';
 
 export const PatientSummary: React.FC = () => {

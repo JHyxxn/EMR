@@ -1,3 +1,4 @@
+/** 공통 여러 줄 입력(에러 메시지 슬롯) */
 import React from 'react';
 
 export default function TextArea({ className = "", error, ...props }) {

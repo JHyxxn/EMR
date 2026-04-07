@@ -1,3 +1,7 @@
+/**
+ * 환자별 진료·방문 이력(인메모리 보조 저장소)
+ * - 방문 추가/수정, SOAP·처방 구조; 차트·문서 화면과 데이터 형식을 맞춤
+ */
 export interface VisitRecord {
     date: string;
     visitType: '초진' | '재진';

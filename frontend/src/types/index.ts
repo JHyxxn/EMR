@@ -1,3 +1,7 @@
+/**
+ * 프론트엔드 공용 도메인 타입 모음
+ * - 환자·바이탈·방문·예약·병원일정·처방 등(백엔드 DTO와 유사 역할)
+ */
 export interface Patient {
     id: string;
     name: string;

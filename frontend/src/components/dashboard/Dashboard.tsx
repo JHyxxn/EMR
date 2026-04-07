@@ -1,10 +1,9 @@
 /**
- * EMR 시스템 메인 대시보드 컴포넌트
- * 
- * 주요 기능:
- * - 금일 대기 환자 목록 (시간, 환자명, 증상, 예상 시간, 경고)
- * - 금일 병원 일정 (시간대, 활동, 상태)
- * - 당일 처방/오더보드 (환자명, 처방/오더 내용, 시간, 상태)
+ * 홈 대시보드 메인 (상태 모니터링 중심)
+ *
+ * - 3-Column: 진료 대기 / 검사 진행 / 금일 일정·알림·업무 요약
+ * - 대기·검사 환자 통합 상태, 처방·검사 오더, 30분 이전 자동 제외 등 상위 로직
+ * - 차트·신규·재진 모달, `PatientChartModal`·`NewPatientModal` 등 연동
  */
 import React, { useState, useEffect, useMemo } from 'react';
 import { waitingPatientsData, WaitingPatient } from '../../data/waitingPatientsData';

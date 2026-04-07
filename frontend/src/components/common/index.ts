@@ -1,4 +1,6 @@
-// 공통 UI 컴포넌트들
+/**
+ * 폼·레이아웃 공통 프리미티브(Input, Button, Card, ProgressGraph 등)
+ */
 export { default as Input } from './Input';
 export { default as TextArea } from './TextArea';
 export { default as Button } from './Button';

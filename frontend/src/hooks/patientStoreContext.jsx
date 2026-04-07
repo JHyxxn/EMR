@@ -1,5 +1,6 @@
-// src/hooks/patientStoreContext.jsx
-
+/**
+ * 환자 스토어용 React Context + `usePatientStore` 훅
+ */
 import { createContext, useContext } from "react";
 
 const Ctx = createContext(null);

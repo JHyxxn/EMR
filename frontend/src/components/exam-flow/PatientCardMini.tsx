@@ -4,6 +4,7 @@
 import React from 'react';
 import type { ExamOrderItem } from './types';
 
+/** ExamStatus별 미니 카드 배경·글자색 */
 const STATUS_STYLE: Record<string, { bg: string; color: string }> = {
   WAITING:   { bg: '#f3f4f6', color: '#6b7280' },
   IN_PROGRESS: { bg: '#dbeafe', color: '#1d4ed8' },

@@ -1,6 +1,7 @@
 /**
- * 메인: 시간(행) x 검사유형(열) 매트릭스 보드
- * - 환자별 타임라인 실선으로 연결 (같은 환자 검사 흐름)
+ * 메인: 시간(행) × 검사유형(열) 매트릭스 보드
+ * - sticky 헤더, 셀에 환자 미니 카드
+ * - 환자별 검사 순서는 SVG 점선(+화살표)으로 연결 (getPatientFlowSegments + 셀 중심 좌표)
  */
 import React, { useRef, useLayoutEffect, useState, useMemo } from 'react';
 import type { ExamOrderItem, ExamType } from './types';
@@ -13,6 +14,7 @@ import {
 } from './examFlowUtils';
 import { ExamCell } from './ExamCell';
 
+/** 보드 열 순서 (examFlowUtils.EXAM_TYPE_LABELS와 대응) */
 const EXAM_TYPES = ['BLOOD', 'URINE', 'XRAY', 'ECG', 'CT'] as const;
 
 interface ExamFlowBoardProps {
@@ -21,6 +23,7 @@ interface ExamFlowBoardProps {
   onSelectPatient: (patientId: string) => void;
 }
 
+/** SVG <line> 한 구간 (픽셀 좌표, gridRef 기준) */
 interface LineSegment {
   x1: number;
   y1: number;
@@ -40,6 +43,7 @@ export const ExamFlowBoard: React.FC<ExamFlowBoardProps> = ({
   const [lines, setLines] = useState<LineSegment[]>([]);
   const [gridSize, setGridSize] = useState({ w: 720, h: 900 });
 
+  // DOM 측정 후 환자별 연결선 좌표 계산 (timeSlots는 useMemo로 고정해 effect 무한 루프 방지)
   useLayoutEffect(() => {
     const gridEl = gridRef.current;
     if (!gridEl) return;
@@ -98,7 +102,7 @@ export const ExamFlowBoard: React.FC<ExamFlowBoardProps> = ({
       }}
     >
       <div ref={gridRef} style={{ minWidth: '720px', position: 'relative' }}>
-        {/* 환자 타임라인 실선 오버레이 */}
+        {/* 환자 타임라인 연결선 (z-index 5: 셀 위에 그려 클릭은 pointerEvents:none) */}
         {lines.length > 0 && (
           <svg
             style={{

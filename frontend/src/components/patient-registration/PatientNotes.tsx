@@ -1,3 +1,6 @@
+/**
+ * 신규 환자 등록: 간호·환자 노트 입력 영역
+ */
 import React from 'react';
 
 interface PatientNotesProps {

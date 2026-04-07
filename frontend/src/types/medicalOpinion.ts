@@ -1,3 +1,7 @@
+/**
+ * 소견서 엔티티 타입 (발급·초안·인쇄 상태)
+ * - 문서 관리 페이지, 차트 내 소견 모달과 공유
+ */
 export interface MedicalOpinion {
     id: string;
     patientId: number;

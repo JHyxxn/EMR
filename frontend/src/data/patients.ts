@@ -1,3 +1,6 @@
+/**
+ * API/검색용 환자 레코드 타입 및 시드(백엔드 연동 시 참고)
+ */
 export interface Patient {
     id: string;
     name: string;

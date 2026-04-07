@@ -1,6 +1,6 @@
-// 동적 데이터 관리 사용 예시
-
-// 1. 실제 진료 시나리오 - 재진 환자가 도착
+/**
+ * `patientHistoryData` 등 동적 CRUD 사용 예시 시나리오(개발·시연용)
+ */
 export const realClinicScenario = () => {
     // 09:00 - 첫 번째 재진 환자 도착
     addPatientFromRevisit(

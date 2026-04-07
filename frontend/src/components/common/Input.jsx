@@ -1,3 +1,4 @@
+/** 공통 텍스트 입력(에러 메시지 슬롯) */
 import { tokens } from "@/design/tokens";
 
 export default function Input({ className = "", error, ...props }) {

@@ -1,3 +1,7 @@
+/**
+ * 재진 환자를 오늘 대기 목록에 넣기 위한 모달
+ * - `revisitPatientsData` 기반 검색·선택 후 `onAddToWaitingList`로 상위에 전달
+ */
 import React, { useState } from 'react';
 import { Input, TextArea } from '../common';
 import { revisitPatientsData } from '../../data/revisitPatientsData';

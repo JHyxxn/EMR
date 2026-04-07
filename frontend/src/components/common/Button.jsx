@@ -1,6 +1,4 @@
-
-// src/components/Button.jsx
-
+/** 공통 버튼 프리미티브 */
 export default function Button({ children, className = "", ...props }) {
     return (
         <button

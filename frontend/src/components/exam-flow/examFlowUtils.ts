@@ -93,7 +93,7 @@ export function formatTimeForDisplay(slot: string): string {
 
 const EXAM_TYPE_ORDER: ExamType[] = ['BLOOD', 'URINE', 'XRAY', 'ECG', 'CT'];
 
-/** 환자별 타임라인 실선 연결용: (slot, examType) 순서쌍 리스트. scheduledAt → examType 순 정렬 */
+/** 환자별 타임라인 연결선(SVG)용: 인접한 두 오더 간 (from→to) 세그먼트. 시간 슬롯·검사유형 순으로 정렬 */
 export function getPatientFlowSegments(
   examOrders: ExamOrderItem[],
   timeSlots: string[]

@@ -1,3 +1,4 @@
+/** 폼/패널 소제목 */
 import { tokens } from "@/design/tokens";
 
 export default function SectionTitle({ children, className = "", style = {} }) {

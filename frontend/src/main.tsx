@@ -1,6 +1,8 @@
-
-// src/main.tsx
-
+/**
+ * Vite/React 앱 진입점
+ * - PatientStore / NavigationStore / AuthStore Provider로 전역 컨텍스트 래핑
+ * - 개발용 ErrorBoundary(테스트 에러 트리거 버튼 포함)
+ */
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
