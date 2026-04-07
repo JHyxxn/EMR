@@ -14,7 +14,7 @@
 |:---|:---|
 | [↑ 맨 위](#readme-top) | 문서 상단으로 |
 | [개요·배경·목적](#readme-overview) | 피드백, 목적, 설계 방향, **저장소 폴더 요약** |
-| [팀·기술 스택](#readme-team) | 담당 표 + 역할 요약 |
+| [팀·기술 스택](#readme-team) | 담당 표 + 역할 |
 | [기술 스택 상세](#readme-tech) | 담당자별 스택·도구 |
 | [주요 파일 (링크)](#readme-files) | GitHub/IDE에서 **클릭으로 소스 이동** |
 | [개발 순서·폴더 트리](#readme-dev) | 단계별 디렉터리 구조 |
@@ -75,14 +75,20 @@
 
 | 이름 | 담당 분야 | 책임 한 줄 |
 |:---|:---|:---|
-| **김지현** | 팀장, **AI**, **Backend** | Express 메인 API, 업무 모듈, **`ai-gateway`** |
-| **오수민** | **AI**, **Frontend** | **React 앱 전반**, `api/ai.js`, AI 모달·차트 연동 |
-| **송유찬** | **Backend**, **DataBase** | **Prisma**, 생성기·JSON, **`drugDatabase`**, `DataBase/` |
+| **김지현** | 팀장, **AI**, **Backend** | **프로젝트 축** — Express·업무 모듈·**`ai-gateway`**, API·도메인·프론트와의 계약까지 **주도** |
+| **오수민** | **AI**, **Frontend** | **프론트엔드 구현 지원** — 김지현이 맞춘 API·계약 위에서 **화면·상태·`api` 호출·AI 결과 표시** |
+| **송유찬** | **Backend**, **DataBase** | **데이터 레이어** — **Prisma**, 생성기·JSON, **`drugDatabase`**, `DataBase/` (김지현 백엔드와 맞춤) |
+
+> **업무 비중(팀 3인 기준, 대략)**  
+> - **김지현 약 70%**: 설계·백엔드·AI Gateway·업무 모듈·REST·`/api/ai`·처방·검사 도메인 정리 등 **삼 분의 이상**을 맡는다. **프론트엔드도** 라우팅·연동 기준을 잡고, 필요 시 직접 손보거나 오수민과 나누어 **도움을 준 영역**이다.  
+> - **나머지 약 30%**: **오수민**은 위 전제 하에서 **React UI·컴포넌트·프론트 `api`·대시보드·검사 화면 등 구현을 지원**하고, **송유찬**은 **DB 스키마·시드·약물·생성기** 등 데이터 측을 맡는다.
 
 > **역할 나눔**  
-> - **김지현**: 비즈니스 API + AI Gateway 서버(모델·`/insight/*`).  
-> - **오수민**: 화면·상태·프론트 API 호출·AI UX.  
-> - **송유찬**: 스키마·마이그레이션·시드 데이터·약물 자산.
+> - **김지현**: **서버·비즈니스 로직·AI Gateway**를 총괄한다. **추론·모델·폴백·Rate Limit·`/insight/*`** 등 AI **본체**는 `ai-gateway`와 백엔드에 두고, 프론트는 그 **소비·표현**에 가깝다.  
+> - **오수민**: **React 화면·상태·내비게이션**과 **`frontend/src/api/*`·UI**를 **지원·분담**한다. AI는 **게이트웨이 응답을 붙이는 UX**(모달, 차트, 로딩·에러) 중심이다.  
+> - **송유찬**: **스키마·마이그레이션·시드·약물 JSON** 등 **DB·데이터 자산**을 주도한다. 김지현의 Prisma 사용·API와 맞춘다.  
+>
+> **정리**: `frontend/` **파일 수가 많아 보여도**, **의사결정·연산·계약의 중심**은 **`backend/`·`ai-gateway/`** 이며, **팀 업무 양**도 **김지현이 가장 크다**(위 비중).
 
 ---
 
@@ -90,14 +96,15 @@
 
 ## 🛠 기술 스택 (담당과 연계)
 
-### 김지현 (팀장, AI, Backend)
+### 김지현 (팀장, AI, Backend) — **팀 업무 약 70%**
 - **Backend**: Node.js, Express.js, RESTful API, 백엔드 ↔ AI Gateway 연동·프록시
-- **AI**: `ai-gateway` — 다중 LLM(OpenAI, Anthropic, Google), `/insight/*` 라우트, Rate Limit
+- **AI**: `ai-gateway` — 다중 LLM(OpenAI, Anthropic, Google), `/insight/*` 라우트, Rate Limit, **실제 LLM 호출·프롬프트·응답 가공의 중심**
 - **DB 연동**: Prisma 클라이언트 사용(스키마·마이그레이션은 송유찬 주도)
+- **프론트와의 관계**: API·검사·처방 **계약과 방향을 먼저 정하고**, 프론트 구현은 **오수민이 지원**하되 필요 시 **직접 보완**하는 역할
 
-### 오수민 (AI, Frontend)
-- **Frontend**: React 18, TypeScript, Vite, CSS(Grid/Flexbox), Local Storage
-- **AI(프론트)**: `api/ai.js`, AI 지원 모달, 차트·임상노트 등 화면에서의 AI 호출·표시
+### 오수민 (AI, Frontend) — **프론트 구현 지원**
+- **Frontend**: React 18, TypeScript, Vite, CSS(Grid/Flexbox), Local Storage — **김지현이 맞춘 백엔드·게이트웨이에 맞춘 화면 구현**
+- **AI(프론트)**: `api/ai.js`로 게이트웨이를 **경유 호출**하고, 모달·차트·임상노트에 **결과를 반영**한다(추론은 게이트웨이·김지현 측)
 
 ### 송유찬 (Backend, DataBase)
 - **DataBase**: Prisma(`schema.prisma`, migrations), SQLite, 환자·약물 JSON, Python/Node 데이터 스크립트
@@ -119,9 +126,10 @@
 > [!TIP]
 > - 경로는 **저장소 루트** 기준입니다.  
 > - **`[`path`](path)` 형태**는 GitHub·VS Code 등에서 **클릭 시 해당 파일**로 이동합니다.  
-> - 아래 **[개발 순서](#readme-dev)** 의 코드 블록 트리는 **개념 정리용**(링크 없음). 파일을 열 때는 **이 목록의 링크**를 사용하세요.
+> - 아래 **[개발 순서](#readme-dev)** 의 코드 블록 트리는 **개념 정리용**(링크 없음). 파일을 열 때는 **이 목록의 링크**를 사용하세요.  
+> - 이 절에서 **오수민** 항목이 길게 보일 수 있다. 컴포넌트·페이지가 **파일 단위로 잘게 쪼개져** 있기 때문이다. **팀 업무 비중은 김지현이 약 70%**이며, **핵심 판단·API·AI·도메인**은 **`backend/`·`ai-gateway/`** 와 **김지현·송유찬** 절에 모여 있다. 오수민은 **프론트 구현 지원**으로 이를 소비하는 코드가 많다.
 
-### 김지현 (팀장, AI, Backend) 담당 파일
+### 김지현 (팀장, AI, Backend) 담당 파일 — **주 담당(팀 업무 약 70%)**
 
 #### Express 서버·API
 - **[`backend/index.js`](backend/index.js)**
@@ -138,7 +146,7 @@
 
 ---
 
-### 오수민 (AI, Frontend) 담당 파일
+### 오수민 (AI, Frontend) 담당 파일 — **프론트 구현 지원**
 
 | 구분 | 경로 요약 |
 |:---|:---|
@@ -315,11 +323,11 @@
 
 | 담당 | 이 섹션에서 보는 내용 |
 |:---|:---|
-| **김지현** | `backend/src` 모듈 → `index.js` → `ai-gateway` |
+| **김지현** | `backend/src` 모듈 → `index.js` → `ai-gateway` → **처방·검사 도메인과 `exam-flow`/대시보드 계약** |
 | **오수민** | `frontend/src` 기반·데이터·컴포넌트·페이지·API·`App` |
 | **송유찬** | Prisma → `drugDatabase` → 생성기 → JSON/`DataBase/` |
 
-### 김지현 (팀장, AI, Backend) 개발 순서
+### 김지현 (팀장, AI, Backend) 개발 순서 — **주 담당(팀 업무 약 70%)**
 
 #### 1단계: 업무 모듈 (`backend/src/`) (김지현)
 ```
@@ -349,11 +357,28 @@ ai-gateway/
 └── POST /insight/clinical-note, lab-summary, symptom-analysis, prescription-guide, test-analysis
 ```
 
-**개발 순서 요약 (김지현):** 업무 모듈 → 메인 API 서버 → AI Gateway 서버·모델 통합
+<a id="readme-dev-kim-prescription-exam"></a>
+
+#### 5단계: 처방·검사 도메인과 프론트(`exam-flow`·대시보드) 계약 (김지현)
+
+대시보드 **검사 진행**·**검사 관리** UI가 쓰는 `prescriptions`(및 `tests` 등) 표현과, `exam-flow`의 **`ExamOrderItem`** 매핑이 어긋나지 않도록 **백엔드에서 필드·의미를 먼저 고정**한다.
+
+```
+backend/src/
+├── prescriptionManagement.js   # 처방에 실린 검사 목록·오더 표현
+├── testManagement.js         # 검사 요청·결과·통계와의 연계
+└── (정리) index.js           # /api/prescriptions, /api/tests 등에서 위와 동일한 JSON 계약으로 응답
+
+프론트(파일 위치는 `frontend/`이나, **스키마·계약의 기준은 김지현**)
+└── components/exam-flow/prescriptionToExamOrders.ts
+    # 위 백엔드 계약에 맞춰 대시보드 처방 tests → ExamOrderItem[] 변환
+```
+
+**개발 순서 요약 (김지현):** 업무 모듈 → 메인 API 서버 → AI Gateway 서버·모델 통합 → **처방·검사 API 계약으로 `exam-flow`/대시보드와 맞춤**
 
 ---
 
-### 오수민 (AI, Frontend) 개발 순서
+### 오수민 (AI, Frontend) 개발 순서 — **지원·분담**
 
 #### 1단계: 기반 구조 설정 (오수민)
 ```
@@ -406,6 +431,9 @@ frontend/src/components/
 ```
 
 #### 5단계: 기능별 컴포넌트 (오수민)
+
+화면·상호작용 위주. **`ai-support/`**, 차트·등록의 **AI 요약·가이드**는 **텍스트 생성·추론은 AI Gateway(김지현)**, **모달·카드·호출 타이밍·로딩 처리는 오수민**. 검사 오더 **데이터 의미·API 형태**는 [김지현 5단계(처방·검사 계약)](#readme-dev-kim-prescription-exam)와 맞춘다.
+
 ```
 frontend/src/components/
 ├── auth/                      # 인증 관련
@@ -426,14 +454,14 @@ frontend/src/components/
 │   ├── RevisitPatientModal.tsx # 재진 환자 등록
 │   ├── PatientBasicInfo.tsx  # 기본 정보 입력
 │   ├── VitalInput.tsx        # 바이탈 입력
-│   ├── VisitInfo.tsx         # 방문 정보·AI 요약
+│   ├── VisitInfo.tsx         # 방문 정보·AI 요약(UI; 요약 본문은 게이트웨이)
 │   ├── PatientNotes.tsx      # 노트
 │   ├── PatientSummary.tsx    # 요약 그리드
 │   └── index.ts              # 등록 관련 export
-├── exam-flow/                # 검사 관리 플로우 UI
+├── exam-flow/                # 검사 관리 플로우 UI(오더 필드 정의·API 계약은 김지현 5단계)
 │   ├── types.ts              # ExamType, ExamOrderItem, OpsSummary 등 타입
 │   ├── examFlowUtils.ts      # 시간 슬롯, 매트릭스, 운영 요약, 환자별 연결 세그먼트
-│   ├── prescriptionToExamOrders.ts  # 대시보드 처방 tests → ExamOrderItem 변환
+│   ├── prescriptionToExamOrders.ts  # 처방 tests → ExamOrderItem(백엔드 계약 반영 변환)
 │   ├── dummyData.ts          # 날짜별 더미 검사 오더
 │   ├── ExamFlowBoard.tsx     # 시간×검사유형 그리드, SVG 타임라인 연결선
 │   ├── ExamCell.tsx          # 매트릭스 한 칸(슬롯×검사유형)
@@ -441,7 +469,7 @@ frontend/src/components/
 │   ├── PatientDetailPanel.tsx  # 선택 환자 상세(칩·요약·플래그)
 │   ├── OpsSummaryPanel.tsx   # 상단 운영 요약(건수·병목·지연)
 │   └── index.ts              # 타입·유틸·컴포넌트 export
-├── ai-support/               # AI 처방 가이드·증상 분석 모달
+├── ai-support/               # AI 모달 UI(응답은 /insight/* 게이트웨이)
 │   ├── PrescriptionGuideModal.tsx
 │   ├── SymptomAnalysisModal.tsx
 │   └── index.ts
@@ -449,7 +477,7 @@ frontend/src/components/
     ├── PatientChartModal.tsx  # 진료 차트 모달
     ├── MedicalOpinionModal.tsx # 소견서 모달
     ├── VisitHistoryModal.tsx  # 방문 이력 모달
-    ├── ClinicalNoteCard.jsx   # AI 임상 요약 카드
+    ├── ClinicalNoteCard.jsx   # 임상 요약 카드 UI(요약 생성은 게이트웨이)
     └── index.ts               # 차트 관련 export
 ```
 
