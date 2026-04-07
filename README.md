@@ -79,10 +79,6 @@
 | **오수민** | **AI**, **Frontend** | **프론트엔드 구현 지원** — 김지현이 맞춘 API·계약 위에서 **화면·상태·`api` 호출·AI 결과 표시** |
 | **송유찬** | **Backend**, **DataBase** | **데이터 레이어** — **Prisma**, 생성기·JSON, **`drugDatabase`**, `DataBase/` (김지현 백엔드와 맞춤) |
 
-> **업무 비중(팀 3인 기준, 대략)**  
-> - **김지현 약 70%**: 설계·백엔드·AI Gateway·업무 모듈·REST·`/api/ai`·처방·검사 도메인 정리 등 **삼 분의 이상**을 맡는다. **프론트엔드도** 라우팅·연동 기준을 잡고, 필요 시 직접 손보거나 오수민과 나누어 **도움을 준 영역**이다.  
-> - **나머지 약 30%**: **오수민**은 위 전제 하에서 **React UI·컴포넌트·프론트 `api`·대시보드·검사 화면 등 구현을 지원**하고, **송유찬**은 **DB 스키마·시드·약물·생성기** 등 데이터 측을 맡는다.
-
 > **역할 나눔**  
 > - **김지현**: **서버·비즈니스 로직·AI Gateway**를 총괄한다. **추론·모델·폴백·Rate Limit·`/insight/*`** 등 AI **본체**는 `ai-gateway`와 백엔드에 두고, 프론트는 그 **소비·표현**에 가깝다.  
 > - **오수민**: **React 화면·상태·내비게이션**과 **`frontend/src/api/*`·UI**를 **지원·분담**한다. AI는 **게이트웨이 응답을 붙이는 UX**(모달, 차트, 로딩·에러) 중심이다.  
@@ -96,13 +92,13 @@
 
 ## 🛠 기술 스택 (담당과 연계)
 
-### 김지현 (팀장, AI, Backend) — **팀 업무 약 70%**
+### 김지현 (팀장, AI, Backend)
 - **Backend**: Node.js, Express.js, RESTful API, 백엔드 ↔ AI Gateway 연동·프록시
 - **AI**: `ai-gateway` — 다중 LLM(OpenAI, Anthropic, Google), `/insight/*` 라우트, Rate Limit, **실제 LLM 호출·프롬프트·응답 가공의 중심**
 - **DB 연동**: Prisma 클라이언트 사용(스키마·마이그레이션은 송유찬 주도)
 - **프론트와의 관계**: API·검사·처방 **계약과 방향을 먼저 정하고**, 프론트 구현은 **오수민이 지원**하되 필요 시 **직접 보완**하는 역할
 
-### 오수민 (AI, Frontend) — **프론트 구현 지원**
+### 오수민 (AI, Frontend)
 - **Frontend**: React 18, TypeScript, Vite, CSS(Grid/Flexbox), Local Storage — **김지현이 맞춘 백엔드·게이트웨이에 맞춘 화면 구현**
 - **AI(프론트)**: `api/ai.js`로 게이트웨이를 **경유 호출**하고, 모달·차트·임상노트에 **결과를 반영**한다(추론은 게이트웨이·김지현 측)
 
@@ -123,13 +119,7 @@
 
 ## 📁 담당자별 주요 파일 목록
 
-> [!TIP]
-> - 경로는 **저장소 루트** 기준입니다.  
-> - **`[`path`](path)` 형태**는 GitHub·VS Code 등에서 **클릭 시 해당 파일**로 이동합니다.  
-> - 아래 **[개발 순서](#readme-dev)** 의 코드 블록 트리는 **개념 정리용**(링크 없음). 파일을 열 때는 **이 목록의 링크**를 사용하세요.  
-> - 이 절에서 **오수민** 항목이 길게 보일 수 있다. 컴포넌트·페이지가 **파일 단위로 잘게 쪼개져** 있기 때문이다. **팀 업무 비중은 김지현이 약 70%**이며, **핵심 판단·API·AI·도메인**은 **`backend/`·`ai-gateway/`** 와 **김지현·송유찬** 절에 모여 있다. 오수민은 **프론트 구현 지원**으로 이를 소비하는 코드가 많다.
-
-### 김지현 (팀장, AI, Backend) 담당 파일 — **주 담당(팀 업무 약 70%)**
+### 김지현 (팀장, AI, Backend) 담당 파일 
 
 #### Express 서버·API
 - **[`backend/index.js`](backend/index.js)**
@@ -327,9 +317,9 @@
 | **오수민** | `frontend/src` 기반·데이터·컴포넌트·페이지·API·`App` |
 | **송유찬** | Prisma → `drugDatabase` → 생성기 → JSON/`DataBase/` |
 
-### 김지현 (팀장, AI, Backend) 개발 순서 — **주 담당(팀 업무 약 70%)**
+### 김지현 (팀장, AI, Backend) 개발 순서
 
-#### 1단계: 업무 모듈 (`backend/src/`) (김지현)
+#### 1단계: 업무 모듈 (`backend/src/`)
 ```
 backend/src/
 ├── documentManagement.js     # 문서(소견·보고서·처방전·검사요청서) 생성·저장
@@ -337,19 +327,18 @@ backend/src/
 └── prescriptionManagement.js # 처방전·상호작용·이력
 ```
 
-#### 2단계: 메인 서버 (`backend/index.js`) (김지현)
-```
+#### 2단계: 메인 서버 (`backend/index.js`)
 backend/index.js              # Express: CORS, 환자/Observation/문서/검사/처방 API, /api/ai → AI Gateway 프록시
 ```
 
-#### 3단계: AI Gateway 패키지 기본 구조 (김지현)
+#### 3단계: AI Gateway 패키지 기본 구조
 ```
 ai-gateway/
 ├── server.js                 # Express AI Gateway (CORS, Rate Limit, /insight 라우트)
 └── package.json              # OpenAI / Anthropic / Google SDK 등
 ```
 
-#### 4단계: 다중 AI 모델·라우트 (`ai-gateway/server.js` 내부) (김지현)
+#### 4단계: 다중 AI 모델·라우트 (`ai-gateway/server.js` 내부)
 ```
 ├── 모델·ENV 설정             # 벤더별 키·엔드포인트
 ├── callOpenAI / callAnthropic / callGoogle
@@ -359,7 +348,7 @@ ai-gateway/
 
 <a id="readme-dev-kim-prescription-exam"></a>
 
-#### 5단계: 처방·검사 도메인과 프론트(`exam-flow`·대시보드) 계약 (김지현)
+#### 5단계: 처방·검사 도메인과 프론트(`exam-flow`·대시보드) 계약 
 
 대시보드 **검사 진행**·**검사 관리** UI가 쓰는 `prescriptions`(및 `tests` 등) 표현과, `exam-flow`의 **`ExamOrderItem`** 매핑이 어긋나지 않도록 **백엔드에서 필드·의미를 먼저 고정**한다.
 
@@ -374,7 +363,8 @@ backend/src/
     # 위 백엔드 계약에 맞춰 대시보드 처방 tests → ExamOrderItem[] 변환
 ```
 
-**개발 순서 요약 (김지현):** 업무 모듈 → 메인 API 서버 → AI Gateway 서버·모델 통합 → **처방·검사 API 계약으로 `exam-flow`/대시보드와 맞춤**
+**개발 순서 요약 (김지현) : 
+** 업무 모듈 → 메인 API 서버 → AI Gateway 서버·모델 통합 → **처방·검사 API 계약으로 `exam-flow`/대시보드와 맞춤**
 
 ---
 
@@ -432,7 +422,10 @@ frontend/src/components/
 
 #### 5단계: 기능별 컴포넌트 (오수민)
 
-화면·상호작용 위주. **`ai-support/`**, 차트·등록의 **AI 요약·가이드**는 **텍스트 생성·추론은 AI Gateway(김지현)**, **모달·카드·호출 타이밍·로딩 처리는 오수민**. 검사 오더 **데이터 의미·API 형태**는 [김지현 5단계(처방·검사 계약)](#readme-dev-kim-prescription-exam)와 맞춘다.
+화면·상호작용 위주. 
+**`ai-support/`**, 차트·등록의 **AI 요약·가이드**는 **텍스트 생성·추론은 AI Gateway(김지현)**, 
+**모달·카드·호출 타이밍·로딩 처리는 오수민**. 
+검사 오더 **데이터 의미·API 형태**는 [김지현 5단계(처방·검사 계약)](#readme-dev-kim-prescription-exam)와 맞춘다.
 
 ```
 frontend/src/components/
@@ -492,7 +485,10 @@ frontend/src/pages/
 
 #### 7단계: API 연동
 
-트리 안 각 줄의 `# … (김지현, 오수민, …)` 에서 괄호 안은 **연동에 관여한 담당자 전체 이름**(쉼표 구분)입니다. 역할 참고: **김지현** — Express·업무 모듈·AI Gateway / **오수민** — 프론트 `api` 모듈·호출 / **송유찬** — Prisma·시드·`drugDatabase`·JSON
+트리 안 각 줄의 `# … (김지현, 오수민, …)` 에서 괄호 안은 **연동에 관여한 담당자 전체 이름**(쉼표 구분)입니다. 
+역할 참고: **김지현** — Express·업무 모듈·AI Gateway /
+ **오수민** — 프론트 `api` 모듈·호출 / 
+ **송유찬** — Prisma·시드·`drugDatabase`·JSON
 
 ```
 frontend/src/api/
@@ -515,7 +511,8 @@ frontend/src/
 └── main.tsx                   # 앱 진입점
 ```
 
-**개발 순서 요약 (오수민):** 1. 토큰·타입 → 2. 데이터·hooks → 3. 공통 UI → 4. 레이아웃 → 5. 기능 컴포넌트(대시보드·차트·`ai-support`·임상요약 카드 등) → 6. 페이지 → **7. API** (트리 `#` 줄 끝 `(이름, …)` 연동 담당) → 8. `App`·`main` 통합
+**개발 순서 요약 
+** 1. 토큰·타입 → 2. 데이터·hooks → 3. 공통 UI → 4. 레이아웃 → 5. 기능 컴포넌트(대시보드·차트·`ai-support`·임상요약 카드 등) → 6. 페이지 → **7. API** (트리 `#` 줄 끝 `(이름, …)` 연동 담당) → 8. `App`·`main` 통합
 
 #### (참고) AI 프론트 연동 트리
 ```
@@ -527,20 +524,20 @@ frontend/src/components/ai-support/  # PrescriptionGuideModal, SymptomAnalysisMo
 
 ### 송유찬 (Backend, DataBase) 개발 순서
 
-#### 1단계: Prisma 스키마·마이그레이션 (송유찬)
+#### 1단계: Prisma 스키마·마이그레이션 
 ```
 backend/prisma/
 ├── schema.prisma             # User, Patient, Encounter, Observation 등
 └── migrations/               # 예: 20250818073029_add_user, 20250819055332_init_emr, 20250819055950_npx_prisma_studio …
 ```
 
-#### 2단계: 약물 데이터 연동 모듈 (송유찬)
+#### 2단계: 약물 데이터 연동 모듈
 ```
 backend/src/
 └── drugDatabase.js           # DataBase/drug_dataset_500.json 등 로드·검색·상호작용
 ```
 
-#### 3단계: 환자 데이터 생성기 (송유찬)
+#### 3단계: 환자 데이터 생성기
 ```
 backend/src/
 ├── patientDataGenerator.js
@@ -548,10 +545,11 @@ backend/src/
 └── patientDataGenerator50.js
 ```
 
-#### 4단계: 데이터 파일·`DataBase/` 자산 (송유찬)
+#### 4단계: 데이터 파일·`DataBase/` 자산
 ```
 backend/patient_data_50_with_waiting.json
 DataBase/drug_dataset_500.json, *.py, generate_drug_data.js 등
 ```
 
-**개발 순서 요약 (송유찬):** Prisma 스키마·마이그레이션 → `drugDatabase` → 생성기 → JSON·스크립트 검증
+**개발 순서 요약 
+Prisma 스키마·마이그레이션 → `drugDatabase` → 생성기 → JSON·스크립트 검증
